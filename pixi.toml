@@ -16,9 +16,13 @@ pip = "*"
 pandas = ">=2.3.3,<3"
 bokeh = ">=3.8.2,<4"
 ipython = ">=8.37.0,<9"
+ipykernel = ">=7.1.0,<8"
+biopython = ">=1.86,<2"
 
 [pypi-dependencies]
 mkdocs = "*"
 python-dotenv = "*"
 motor_learning_network = { path = ".", editable = true }
 sf-hamilton = {version=">=1.89.0, <2", extras = ["visualization"]}
+pybibx = ">=5.2.8, <6"
+pymedx = ">=0.5.1, <0.6"
