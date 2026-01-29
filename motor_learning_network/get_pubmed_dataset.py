@@ -1,3 +1,4 @@
+import dateutil
 import inspect
 import copy
 from pymedx import PubMed, article
@@ -6,17 +7,27 @@ import pandas as pd
 import pybibx
 from hamilton.io import utils
 from hamilton import driver
-from hamilton.function_modifiers import datasaver
+from hamilton.function_modifiers import datasaver, cache
 import textwrap
 from pathlib import Path
 from hamilton import lifecycle
+import pickle
+from datetime import datetime
 
 DATA_PATH = Path("data","raw")
+DATA_PATH.mkdir(exist_ok=True)
 
+@cache(format='pickle')
 def articles(query: str) -> list[article.PubMedArticle]:
     pubmed = PubMed(tool="MysTool", email="my@esmail.address")
     results = pubmed.query(query, max_results=17000) 
-    return list(results)
+    results = list(results)
+    def clear_xml_from_article(article):
+        if hasattr(article, 'xml'):
+            article.xml = None
+        return article
+    results = [clear_xml_from_article(copy.deepcopy(article)) for article in results]
+    return results
     
 @datasaver()
 def medline_articles(articles: list[article.PubMedArticle]) -> dict:
@@ -44,11 +55,11 @@ def medline_articles(articles: list[article.PubMedArticle]) -> dict:
         pmid = art.pubmed_id or ""
         title = art.title or ""
         authors = art.authors or []
-        journal = art.journal or ""
-        pub_date = article.publication_date or pd.NaT
+        journal = art.journal if hasattr(art, 'journal') else ""
+        pub_date = art.publication_date or pd.NaT
         abstract = art.abstract or ""
-        doi = art.doi.lower() or ""
-        keywords = art.keywords or []
+        doi = art.doi.lower() if art.doi else ""
+        keywords = art.keywords if hasattr(art, 'keywords') else []
         
         # Extract year from publication date
         year = ""
@@ -140,15 +151,17 @@ def bibtex_articles(articles: list[article.PubMedArticle]) -> dict:
     """Convert pymedx articles to BibTeX format"""
     bibtex_entries = []
     # append each entry
-    for i, article in enumerate(articles):
-        pubmed_id = article.pubmed_id or ""
-        title = article.title or ""
-        authors = article.authors or []
-        journal = article.journal or ""
-        pub_date = article.publication_date or pd.NaT
-        abstract = article.abstract or ""
-        doi = article.doi.lower() or ""
-        keywords = article.keywords or []
+    for i, art in enumerate(articles):
+        pubmed_id = art.pubmed_id or ""
+        title = art.title or ""
+        authors = art.authors or []
+        journal = art.journal if hasattr(art, 'journal') else ""
+        pub_date = art.publication_date or pd.NaT
+        if not isinstance(pub_date, datetime):
+            pub_date = dateutil.parser.parse(pub_date)
+        abstract = art.abstract or ""
+        doi = art.doi.lower() if art.doi else ""
+        keywords = art.keywords if hasattr(art, 'keywords') else []
         author_str = " and ".join([f"{author['firstname']} {author['lastname']}" for author in authors]) if authors else ""
 
         bibtex = \
@@ -177,13 +190,6 @@ def bibtex_articles(articles: list[article.PubMedArticle]) -> dict:
 
 @datasaver()
 def pickled_articles(articles: list) -> dict:
-    def clear_xml_from_article(article):
-        article.xml = None
-        return article
-    import pickle
-
-    # Saving
-    articles = [clear_xml_from_article(copy.deepcopy(article)) for article in articles]
     path = DATA_PATH / 'articles.pkl'
     with open(path, 'wb') as f:
         pickle.dump(articles, f)
@@ -192,30 +198,23 @@ def pickled_articles(articles: list) -> dict:
 
 
 if __name__ == "__main__":
-    debug_hook = lifecycle.PDBDebugger(
-        node_filter=lambda n, tags: n == 'bibtex', 
-        after=True
-    )
     query = '("Motor Learning" OR "Skill Acquisition" OR "Motor Adaptation" OR "Motor Sequence Learning" OR "Sport Practice" OR "Motor Skill Learning" OR "Sensorimotor Learning" OR "Motor Memory" OR "Motor Training") AND ("1900/01/01"[Date - Publication] : "2025/12/31"[Date - Publication])'
     import __main__
     dr = (
         driver.Builder()
         .with_modules(__main__)
+        .with_cache()
         # .with_adapters(debug_hook)
         .build()
         )
 
-    outputs = ["bibtex_articles", "medline_articles", "pickled_articles"]
+    outputs = ["pickled_articles","bibtex_articles", "medline_articles"]
     inputs = dict(query=query)
 
     dr.execute(outputs,
                 inputs=inputs,
     )
-    import pickle
-
-    # Loading
-    with open(DATA_PATH/'articles.pkl', 'rb') as f:
-        loaded_list = pickle.load(f)
+    
     # dr.visualize_execution(outputs,
     #                     inputs=inputs,
     #                     output_file_path='node_tree_get_pubmed.png')
