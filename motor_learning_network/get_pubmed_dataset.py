@@ -15,13 +15,11 @@ from hamilton import lifecycle
 import pickle
 from datetime import datetime
 from enum import Enum
+from constants import DATA_PATH
 
 class LoadingFrom(Enum):
     LOCAL = 0
     ONLINE = 1
-
-DATA_PATH = Path("data","raw")
-DATA_PATH.mkdir(exist_ok=True)
 
 def _check_if_db_exists():
     path_exists = Path(DATA_PATH, 'articles.pkl').is_file()
@@ -229,7 +227,6 @@ if __name__ == "__main__":
         .with_config(dict(
             loading_from=loading_from,
         ))
-
         # .with_adapters(debug_hook)
         .build()
         )
