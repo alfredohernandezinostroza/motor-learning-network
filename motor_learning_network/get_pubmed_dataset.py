@@ -1,3 +1,4 @@
+
 import dateutil
 import inspect
 import copy
@@ -7,18 +8,35 @@ import pandas as pd
 import pybibx
 from hamilton.io import utils
 from hamilton import driver
-from hamilton.function_modifiers import datasaver, cache
+from hamilton.function_modifiers import datasaver, cache, config
 import textwrap
 from pathlib import Path
 from hamilton import lifecycle
 import pickle
 from datetime import datetime
+from enum import Enum
+
+class LoadingFrom(Enum):
+    LOCAL = 0
+    ONLINE = 1
 
 DATA_PATH = Path("data","raw")
 DATA_PATH.mkdir(exist_ok=True)
 
+def _check_if_db_exists():
+    path_exists = Path(DATA_PATH, 'articles.pkl').is_file()
+    return path_exists
+
+@config.when(loading_from=LoadingFrom.LOCAL)
+def articles__local() -> list[article.PubMedArticle]:
+    path = DATA_PATH / 'articles.pkl'
+    with open(path, 'rb') as f:
+        articles = pickle.load(f)
+    return articles
+
 @cache(format='pickle')
-def articles(query: str) -> list[article.PubMedArticle]:
+@config.when(loading_from=LoadingFrom.ONLINE)
+def articles__online(query: str) -> list[article.PubMedArticle]:
     pubmed = PubMed(tool="MysTool", email="my@esmail.address")
     results = pubmed.query(query, max_results=17000) 
     results = list(results)
@@ -196,14 +214,22 @@ def pickled_articles(articles: list) -> dict:
     metadata = utils.get_file_metadata(path)
     return metadata
 
-
 if __name__ == "__main__":
     query = '("Motor Learning" OR "Skill Acquisition" OR "Motor Adaptation" OR "Motor Sequence Learning" OR "Sport Practice" OR "Motor Skill Learning" OR "Sensorimotor Learning" OR "Motor Memory" OR "Motor Training") AND ("1900/01/01"[Date - Publication] : "2025/12/31"[Date - Publication])'
+    if _check_if_db_exists():
+        loading_from = LoadingFrom.LOCAL
+    else:
+        loading_from = LoadingFrom.ONLINE
+
     import __main__
     dr = (
         driver.Builder()
         .with_modules(__main__)
         .with_cache()
+        .with_config(dict(
+            loading_from=loading_from,
+        ))
+
         # .with_adapters(debug_hook)
         .build()
         )
