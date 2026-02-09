@@ -12,7 +12,7 @@ import logging
 from motor_learning_network.constants import PROCESSED_DATA_PATH, FIGURES_PATH, EMAIL
 import hamilton.log_setup
 
-hamilton.log_setup.setup_logging(logging.ERROR)
+hamilton.log_setup.setup_logging(logging.INFO)
 
 logger = logging.getLogger(__name__)
 
