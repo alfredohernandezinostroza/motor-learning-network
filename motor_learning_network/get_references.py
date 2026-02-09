@@ -22,8 +22,10 @@ def database(database_path: Path) -> pd.DataFrame:
 
 def cleaned_dois(doi: pd.Series) -> pd.Series:
     """Clean dois. Modify according to your cleaning needs"""
-    cleaned_dois = cleaned_dois.dropna()
-    cleaned_dois = doi[doi['doi'] != "UNKNOWN"]
+    if isinstance(doi, pd.DataFrame): #this shouldn´t be her, but apparently there's a bug with extract fields
+        doi = doi['doi']
+    cleaned_dois = doi.dropna()
+    cleaned_dois = cleaned_dois[cleaned_dois != "UNKNOWN"]
     cleaned_dois = cleaned_dois.str.lower()
     return cleaned_dois
 
@@ -73,9 +75,8 @@ def fetched_references(dois_to_query: pd.Series) -> dict:
 
 @config.when(references_on_disk=True)
 @datasaver()
-def save_references__with_loaded_references(fetched_references: dict[str,list[str]], loaded_references: dict[str,list[str]]) -> dict:
+def save_references__with_loaded_references(fetched_references: dict[str,list[str]], loaded_references: dict[str,list[str]], saving_path: Path) -> dict:
     all_references = fetched_references | loaded_references #merging both dictionaries into one
-    saving_path = PROCESSED_DATA_PATH / "updated_references.pickle"
     with open(saving_path,"wb") as f:
         pickle.dump(all_references, f, pickle.HIGHEST_PROTOCOL)
     metadata = utils.get_file_metadata(saving_path)
@@ -83,8 +84,7 @@ def save_references__with_loaded_references(fetched_references: dict[str,list[st
 
 @config.when(references_on_disk=False)
 @datasaver()
-def save_references__fetched(fetched_references: dict[str,list[str]]) -> dict:
-    saving_path = PROCESSED_DATA_PATH / "references.pickle"
+def save_references__fetched(fetched_references: dict[str,list[str]], saving_path: Path) -> dict:
     with open(saving_path,"wb") as f:
         pickle.dump(fetched_references, f, pickle.HIGHEST_PROTOCOL)
     metadata = utils.get_file_metadata(saving_path)
@@ -99,8 +99,10 @@ if __name__ == "__main__":
     if pickled_file_path.is_file():
         references_on_disk = True
         inputs['pickled_file_path'] = pickled_file_path
+        inputs['saving_path'] = PROCESSED_DATA_PATH / "updated_references.pickle"
     else:
         references_on_disk = False
+        inputs['saving_path'] = PROCESSED_DATA_PATH / "references.pickle"
     logger.info(f"References on disk: {references_on_disk}")
     import __main__
     dr = (
@@ -116,4 +118,4 @@ if __name__ == "__main__":
         )
     dr.validate_execution(outputs, inputs=inputs)
     # dr.display_all_functions(FIGURES_PATH/"get_references.png",keep_dot=True)
-    dr.visualize_execution(outputs, inputs=inputs,output_file_path=FIGURES_PATH/"get_references_run.png",keep_dot=False)
+    # dr.visualize_execution(outputs, inputs=inputs,output_file_path=FIGURES_PATH/"get_references_run.png",keep_dot=False)
