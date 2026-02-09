@@ -1,6 +1,6 @@
 #%%
 from hamilton import driver
-from hamilton.function_modifiers import dataloader, datasaver, config, cache, extract_columns
+from hamilton.function_modifiers import dataloader, datasaver, config, cache, extract_columns, unpack_fields
 from hamilton.io import utils
 from habanero import Crossref
 import time
@@ -49,9 +49,10 @@ def dois_to_query__all_dois(cleaned_dois: pd.Series) -> pd.Series:
     return cleaned_dois
     
 @cache(format='pickle')
-def fetched_references(dois_to_query: pd.Series) -> dict:
+@unpack_fields('fetched_references', "error_references")
+def fetch_references(dois_to_query: pd.Series) -> tuple[dict[str,list[str]],list[str]]:
     fetched_references = {}
-    error_dois = []
+    error_references = []
     cr = Crossref(mailto=EMAIL)
     for i in range(0, len(dois_to_query), 100):
         dois = dois_to_query[i:i+100]
@@ -66,14 +67,29 @@ def fetched_references(dois_to_query: pd.Series) -> dict:
             except Exception as e2:
                 logger.warning(f'Skipping chunk starting at {i} after retry: {e2}')
                 continue
+        found_dois = set([])
         for refs in res:
+            if not refs:
+                continue
             current_doi = refs['message']['DOI']
+            found_dois.add(current_doi)
             list_of_refs = refs['message'].get('reference', [])
             if list_of_refs:
                 list_of_refs = [ref['DOI'] for ref in list_of_refs if 'DOI' in ref] #sometimes the reference does not have a DOI, so we ignore those
             fetched_references[current_doi] = list_of_refs
+        error_references.extend([doi for doi in dois if doi not in found_dois])
         time.sleep(0.1)
-    return fetched_references
+    return fetched_references, error_references
+
+@datasaver()
+def save_error_references(error_references: list[str], saving_path: Path) -> dict:
+    filename = "error_references.txt"
+    with open(saving_path / filename, "w") as f:
+        for doi in error_references:
+            f.write(f"{doi}\n")
+    metadata = utils.get_file_metadata(saving_path / filename)
+    return metadata
+    
 
 @config.when(references_on_disk=True)
 @datasaver()
@@ -106,10 +122,9 @@ if __name__ == "__main__":
     if pickled_file_path.is_file():
         references_on_disk = True
         inputs['pickled_file_path'] = pickled_file_path
-        inputs['saving_path'] = PROCESSED_DATA_PATH / "updated_references.pickle"
+        
     else:
         references_on_disk = False
-        inputs['saving_path'] = PROCESSED_DATA_PATH / "references.pickle"
     logger.info(f"References on disk: {references_on_disk}")
     import __main__
     dr = (
@@ -124,5 +139,6 @@ if __name__ == "__main__":
         .build()
         )
     dr.validate_execution(outputs, inputs=inputs)
-    # dr.display_all_functions(FIGURES_PATH/"get_references.png",keep_dot=True)
-    # dr.visualize_execution(outputs, inputs=inputs,output_file_path=FIGURES_PATH/"get_references_run.png",keep_dot=False)
+    dr.display_all_functions(FIGURES_PATH/"get_references.png",keep_dot=True,)
+    dr.visualize_execution(outputs, inputs=inputs,output_file_path=FIGURES_PATH/"get_references.png",keep_dot=False)
+    dr.execute(outputs, inputs=inputs)
