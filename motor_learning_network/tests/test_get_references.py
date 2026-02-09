@@ -196,16 +196,17 @@ def two_reference_lists(five_reference_lists) -> dict[str,list[str]]:
 def test_fetched_references(five_dois):
     """Test that the references function returns a dictionary with the correct structure."""
     # Act
-    result = fetched_references(five_dois)
+    fetched_references, error_references = fetch_references(five_dois)
     
     # Assert
-    assert isinstance(result, dict)
-    for key, value in result.items():
+    assert not error_references
+    assert isinstance(fetched_references, dict)
+    for key, value in fetched_references.items():
         assert isinstance(key, str)  # DOI should be a string
         assert isinstance(value, list)  # References should be a list
         for ref in value:
             assert isinstance(ref, str)  # Each reference DOI should be a string
-    pprint.pp(result)
+    pprint.pp(fetched_references)
 
 @pytest.mark.unit
 def test_returns_dois_not_in_loaded_references(five_dois, two_reference_lists):
