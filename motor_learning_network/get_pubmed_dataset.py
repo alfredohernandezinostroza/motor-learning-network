@@ -41,6 +41,8 @@ def articles__online(query: str) -> list[article.PubMedArticle]:
     results = pubmed.query(query, max_results=17000) 
     results = list(results)
     def clear_xml_from_article(article):
+    #pickle does not support lxml objects, so we need to remove the xml attribute from the article object before pickling
+    #consider using dill for pickling in the future, which can handle lxml objects, but for now we will just remove the xml attribute
         if hasattr(article, 'xml'):
             article.xml = None
         return article
@@ -206,6 +208,7 @@ def bibtex_articles(articles: list[article.PubMedArticle]) -> dict:
     metadata = utils.get_file_metadata(path)
     return metadata
 
+@config.when(loading_from=LoadingFrom.ONLINE)
 @datasaver()
 def pickled_articles(articles: list) -> dict:
     path = RAW_DATA_PATH / 'articles.pkl'
@@ -216,8 +219,13 @@ def pickled_articles(articles: list) -> dict:
 
 if __name__ == "__main__":
     query = '("Motor Learning" OR "Skill Acquisition" OR "Motor Adaptation" OR "Motor Sequence Learning" OR "Sport Practice" OR "Motor Skill Learning" OR "Sensorimotor Learning" OR "Motor Memory" OR "Motor Training") AND ("1900/01/01"[Date - Publication] : "2025/12/31"[Date - Publication])'
+
+    outputs = ["pickled_articles","bibtex_articles", "medline_articles"]
+    inputs = dict(query=query)
+
     if _check_if_db_exists():
         loading_from = LoadingFrom.LOCAL
+        outputs.remove("pickled_articles")
     else:
         loading_from = LoadingFrom.ONLINE
 
@@ -233,13 +241,14 @@ if __name__ == "__main__":
         .build()
         )
 
-    outputs = ["pickled_articles","bibtex_articles", "medline_articles"]
-    inputs = dict(query=query)
+    dr.validate_execution(outputs, inputs=inputs)
 
-    dr.execute(outputs,
-                inputs=inputs,
-    )
+    # dr.execute(outputs,
+    #             inputs=inputs,
+    # )
     
     # dr.visualize_execution(outputs,
     #                     inputs=inputs,
-    #                     output_file_path='node_tree_get_pubmed.png')
+    #                     output_file_path=FIGURES_PATH/'node_tree_get_pubmed_2.png')
+
+    dr.display_all_functions(FIGURES_PATH/"get_pubmed_dataset.png",keep_dot=True)
