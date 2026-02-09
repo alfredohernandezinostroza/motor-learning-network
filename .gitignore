@@ -190,5 +190,15 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
-# HAmilton Cache
+# Hamilton Cache
 .hamilton_cache/
+
+#vscode
+.vscode/launch.json
+.vscode/settings.json
+
+#reports
+reports/
+
+#notebooks
+notebooks/
