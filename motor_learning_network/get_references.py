@@ -40,7 +40,9 @@ def loaded_references(pickled_file_path: Path) -> tuple[dict, dict]:
 @config.when(references_on_disk=True)
 def dois_to_query__with_loaded_references(cleaned_dois: pd.Series, loaded_references: dict) -> pd.Series:
     loaded_references_lower = [k.lower() for k in loaded_references.keys()]
-    return cleaned_dois[~cleaned_dois.isin(loaded_references_lower)] #only query DOIs that are not already in the loaded references
+    query_dois = cleaned_dois[~cleaned_dois.isin(loaded_references_lower)] #only query DOIs that are not already in the loaded references
+    logger.info(f"Querying {len(query_dois)} out of {len(cleaned_dois)} dois due to the rest already being in the database!")
+    return query_dois
 
 @config.when(references_on_disk=False)
 def dois_to_query__all_dois(cleaned_dois: pd.Series) -> pd.Series:
@@ -53,16 +55,16 @@ def fetched_references(dois_to_query: pd.Series) -> dict:
     cr = Crossref(mailto=EMAIL)
     for i in range(0, len(dois_to_query), 100):
         dois = dois_to_query[i:i+100]
-        logging.info('Retrieving DOIs from {i} to {i+100}...')
+        logger.info(f'Retrieving DOIs from {i} to {i+100}...')
         try:
             res = cr.works(ids=dois.tolist(), warn=True)
         except Exception as e:
-            logging.warning(f"An error occurred: {e}. Retrying in 5 seconds...")
+            logger.warning(f"An error occurred: {e}. Retrying in 5 seconds...")
             time.sleep(5)
             try:
                 res = cr.works(ids=dois.tolist(),)
             except Exception as e2:
-                logging.warning(f'Skipping chunk starting at {i} after retry: {e2}')
+                logger.warning(f'Skipping chunk starting at {i} after retry: {e2}')
                 continue
         for refs in res:
             current_doi = refs['message']['DOI']
