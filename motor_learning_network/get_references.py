@@ -9,8 +9,8 @@ import pickle
 from pathlib import Path
 import pandas as pd
 import logging
-from motor_learning_network.constants  import PROCESSED_DATA_PATH, FIGURES_PATH, EMAIL
-import hamilton
+from motor_learning_network.constants import PROCESSED_DATA_PATH, FIGURES_PATH, EMAIL
+import hamilton.log_setup
 
 hamilton.log_setup.setup_logging(logging.ERROR)
 
@@ -117,5 +117,3 @@ if __name__ == "__main__":
     dr.validate_execution(outputs, inputs=inputs)
     # dr.display_all_functions(FIGURES_PATH/"get_references.png",keep_dot=True)
     dr.visualize_execution(outputs, inputs=inputs,output_file_path=FIGURES_PATH/"get_references_run.png",keep_dot=False)
-    
-# %%
