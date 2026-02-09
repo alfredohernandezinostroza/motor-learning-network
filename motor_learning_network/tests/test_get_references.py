@@ -1,8 +1,9 @@
 import pytest
 import pandas as pd
-from motor_learning_network.get_references import dois_to_query__with_loaded_references, fetched_references
+from motor_learning_network.get_references import dois_to_query__with_loaded_references, fetch_references
 import pprint
-
+import pickle
+from hamilton import driver
 
 @pytest.fixture
 def five_reference_lists() -> dict[str,list[str]]:
@@ -247,3 +248,42 @@ def test_returns_empty_when_complete_overlap(five_dois, five_reference_lists):
 ###########################
 ###### END2END TESTS ######
 ###########################
+
+def test_end_2_end_with_references_on_disk(five_dois, two_reference_lists, five_reference_lists, tmp_path):
+    #Arrange
+    df = pd.DataFrame({'doi': five_dois})
+    df.to_parquet(tmp_path / "database.parquet")
+    with open(tmp_path / "references.pickle", "wb") as f:
+        pickle.dump(two_reference_lists, f, pickle.HIGHEST_PROTOCOL)
+
+    inputs = dict(
+        database_path=tmp_path / 'database.parquet',
+        pickled_file_path  = tmp_path/ 'references.pickle',
+        saving_path = tmp_path
+        )
+    outputs = ["save_references", "save_error_references"]
+
+    import motor_learning_network.get_references
+    dr = (
+        driver.Builder()
+        .with_modules(motor_learning_network.get_references)
+        .with_config(
+            dict(
+                references_on_disk=True
+            )
+        )
+        # .with_cache()
+        .build()
+        )
+    
+    #Act
+    dr.execute(outputs, inputs=inputs)
+
+    #Assert
+    updated_references_path = tmp_path / "updated_references.pickle"
+    error_references_path = tmp_path / "error_references.txt"
+    assert updated_references_path.is_file()
+    assert error_references_path.is_file()
+    with open(updated_references_path, "rb") as f:
+        result = pickle.load(f)
+    assert result == five_reference_lists
