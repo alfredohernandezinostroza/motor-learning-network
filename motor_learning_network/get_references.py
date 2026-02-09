@@ -77,23 +77,28 @@ def fetched_references(dois_to_query: pd.Series) -> dict:
 @datasaver()
 def save_references__with_loaded_references(fetched_references: dict[str,list[str]], loaded_references: dict[str,list[str]], saving_path: Path) -> dict:
     all_references = fetched_references | loaded_references #merging both dictionaries into one
-    with open(saving_path,"wb") as f:
+    filename = "updated_references.pickle"
+    with open(saving_path / filename,"wb") as f:
         pickle.dump(all_references, f, pickle.HIGHEST_PROTOCOL)
-    metadata = utils.get_file_metadata(saving_path)
+    metadata = utils.get_file_metadata(saving_path / filename)
     return metadata
 
 @config.when(references_on_disk=False)
 @datasaver()
 def save_references__fetched(fetched_references: dict[str,list[str]], saving_path: Path) -> dict:
-    with open(saving_path,"wb") as f:
-        pickle.dump(fetched_references, f, pickle.HIGHEST_PROTOCOL)
-    metadata = utils.get_file_metadata(saving_path)
+    filename = "references.pickle"
+    with open(saving_path / filename,"wb") as f:
+        pickle.dump(fetched_references,  f, pickle.HIGHEST_PROTOCOL)
+    metadata = utils.get_file_metadata(saving_path / filename)
     return metadata
 
 if __name__ == "__main__":
 
-    inputs = dict(database_path=PROCESSED_DATA_PATH/'medline_database.parquet')
-    outputs = ["save_references"]
+    inputs = dict(
+            database_path=PROCESSED_DATA_PATH/'medline_database.parquet',
+            saving_path = PROCESSED_DATA_PATH
+                  )
+    outputs = ["save_references", "save_error_references"]
 
     pickled_file_path  = Path(PROCESSED_DATA_PATH,'references.pickle')
     if pickled_file_path.is_file():
