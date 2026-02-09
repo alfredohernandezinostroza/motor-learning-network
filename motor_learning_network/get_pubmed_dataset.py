@@ -15,19 +15,21 @@ from hamilton import lifecycle
 import pickle
 from datetime import datetime
 from enum import Enum
-from constants import DATA_PATH
+from motor_learning_network.constants import RAW_DATA_PATH, FIGURES_PATH, EMAIL
+
+SAVED_DB_PATH = Path(RAW_DATA_PATH, 'articles.pkl')
 
 class LoadingFrom(Enum):
     LOCAL = 0
     ONLINE = 1
 
 def _check_if_db_exists():
-    path_exists = Path(DATA_PATH, 'articles.pkl').is_file()
+    path_exists = SAVED_DB_PATH.is_file()
     return path_exists
 
 @config.when(loading_from=LoadingFrom.LOCAL)
 def articles__local() -> list[article.PubMedArticle]:
-    path = DATA_PATH / 'articles.pkl'
+    path = SAVED_DB_PATH
     with open(path, 'rb') as f:
         articles = pickle.load(f)
     return articles
@@ -35,7 +37,7 @@ def articles__local() -> list[article.PubMedArticle]:
 @cache(format='pickle')
 @config.when(loading_from=LoadingFrom.ONLINE)
 def articles__online(query: str) -> list[article.PubMedArticle]:
-    pubmed = PubMed(tool="MysTool", email="my@esmail.address")
+    pubmed = PubMed(tool="motor-learning-network", email=EMAIL)
     results = pubmed.query(query, max_results=17000) 
     results = list(results)
     def clear_xml_from_article(article):
@@ -156,7 +158,7 @@ def medline_articles(articles: list[article.PubMedArticle]) -> dict:
     medline_content = "\n".join(medline_records)
     
     # Save to file
-    path = DATA_PATH / "medline_articles.txt"
+    path = RAW_DATA_PATH / "medline_articles.txt"
     with open(path, 'w') as f:
         f.write(medline_content)
     metadata = utils.get_file_metadata(path)
@@ -198,7 +200,7 @@ def bibtex_articles(articles: list[article.PubMedArticle]) -> dict:
     # bibtex_content = textwrap.dedent("\n\n".join(bibtex_entries))
     bibtex_content = "\n".join(bibtex_entries)
 
-    path = DATA_PATH / 'pubmed_results.bib'
+    path = RAW_DATA_PATH / 'pubmed_results.bib'
     with open(path, 'w') as f:
         f.write(bibtex_content)
     metadata = utils.get_file_metadata(path)
@@ -206,7 +208,7 @@ def bibtex_articles(articles: list[article.PubMedArticle]) -> dict:
 
 @datasaver()
 def pickled_articles(articles: list) -> dict:
-    path = DATA_PATH / 'articles.pkl'
+    path = RAW_DATA_PATH / 'articles.pkl'
     with open(path, 'wb') as f:
         pickle.dump(articles, f)
     metadata = utils.get_file_metadata(path)
