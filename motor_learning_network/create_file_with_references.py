@@ -27,9 +27,10 @@ SAVED_DB_PATH = Path(RAW_DATA_PATH, 'articles.pkl')
 #     metadata = utils.get_file_metadata(path_to_references)
 #     return metadata\
 
+# @config.when(loading_from=LoadingFrom.LOCAL)
 @datasaver()
 def bibtex_articles_with_references(articles: list[article.PubMedArticle], loaded_references: dict, saving_directory: Path) -> dict:
-    """Convert pymedx articles to BibTeX format"""
+    """Convert pymedx articles to BibTeX format with references in Scopus format"""
     bibtex_entries = []
     # append each entry
     for i, art in enumerate(articles):
@@ -43,25 +44,35 @@ def bibtex_articles_with_references(articles: list[article.PubMedArticle], loade
         abstract = art.abstract or ""
         doi = art.doi.lower() if art.doi else ""
         keywords = art.keywords if hasattr(art, 'keywords') else []
-        author_str = " and ".join([f"{author['firstname']} {author['lastname']}" for author in authors]) if authors else ""
+        author_str = ", ".join([f"{author['lastname']}, {author['firstname'][0]}" for author in authors]) if authors else ""
+        
+        # Get references for this article based on DOI
+        references_str = ""
+        if doi in loaded_references:
+            references_list = loaded_references[doi]
+            references_str = "; ".join(references_list)
 
-        bibtex = \
-        f"""@ARTICLE{{PMID{pubmed_id},
-            title = {{{title}}},
-            author = {{{author_str}}},
-            journal = {{{journal}}},
-            date = {{{pub_date.strftime("%Y-%m-%d") if pub_date else None}}},
-            year = {{{pub_date.year if pub_date and hasattr(pub_date, 'year') else None}}},
-            abstract = {{{abstract}}},
-            keywords = {{{'; '.join(keywords)}}},
-            doi = {{{doi}}},
-            PMID = {{{pubmed_id}}}
-        }}"""
-        bibtex_entries.append(inspect.cleandoc(bibtex))
+        # Build BibTeX entry in Scopus format
+        bibtex_parts = [f"@ARTICLE{{PMID{pubmed_id},"]
+        bibtex_parts.append(f"author={{{author_str}}},")
+        bibtex_parts.append(f"title={{{title}}},")
+        bibtex_parts.append(f"journal={{{journal}}},")
+        if pub_date and hasattr(pub_date, 'year'):
+            bibtex_parts.append(f"year={{{pub_date.year}}},")
+        bibtex_parts.append(f"doi={{{doi}}},")
+        if abstract:
+            bibtex_parts.append(f"abstract={{{abstract}}},")
+        if keywords:
+            bibtex_parts.append(f"keywords={{{'; '.join(keywords)}}},")
+        if references_str:
+            bibtex_parts.append(f"references={{{references_str}}},")
+        bibtex_parts.append("}")
+        
+        bibtex = "\n".join(bibtex_parts)
+        bibtex_entries.append(bibtex)
 
     #saving
-    # bibtex_content = textwrap.dedent("\n\n".join(bibtex_entries))
-    bibtex_content = "\n".join(bibtex_entries)
+    bibtex_content = "\n\n".join(bibtex_entries)
 
     path = saving_directory / 'pubmed_results.bib'
     with open(path, 'w') as f:
@@ -71,7 +82,7 @@ def bibtex_articles_with_references(articles: list[article.PubMedArticle], loade
 
 if __name__ == "__main__":
 
-    outputs = ["bibtex_articles"]
+    outputs = ["bibtex_articles_with_references"]
     
     inputs = dict(
             pickled_file_path=PROCESSED_DATA_PATH/'updated_references.pickle',
@@ -88,7 +99,9 @@ if __name__ == "__main__":
                       motor_learning_network.get_references,
                       __main__)
         .with_config(
-            loading_from=LoadingFrom.LOCAL
+            dict(
+                loading_from=LoadingFrom.LOCAL
+            )
         )
         .build()
         )
