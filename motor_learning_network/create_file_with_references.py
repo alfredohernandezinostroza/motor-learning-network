@@ -18,16 +18,6 @@ from enum import Enum
 from motor_learning_network.constants import RAW_DATA_PATH, FIGURES_PATH, PROCESSED_DATA_PATH
 from motor_learning_network.get_pubmed_dataset import LoadingFrom
 
-SAVED_DB_PATH = Path(RAW_DATA_PATH, 'articles.pkl')
-
-# @dataloader
-# def references(path_to_references: Path) -> dict[str,list[str]]:
-#     with open(path_to_references, "rb") as f:
-#         references = pickle.load(f)
-#     metadata = utils.get_file_metadata(path_to_references)
-#     return metadata\
-
-# @config.when(loading_from=LoadingFrom.LOCAL)
 @datasaver()
 def bibtex_articles_with_references(articles: list[article.PubMedArticle], loaded_references: dict, saving_directory: Path) -> dict:
     """Convert pymedx articles to BibTeX format with references in Scopus format"""
@@ -37,6 +27,14 @@ def bibtex_articles_with_references(articles: list[article.PubMedArticle], loade
         pubmed_id = art.pubmed_id or ""
         title = art.title or ""
         authors = art.authors or []
+
+        # Replace None values in author dicts with empty strings to avoid None in formatted names
+        for auth in authors:
+            for k, v in list(auth.items()):
+                if v is None:
+                    auth[k] = ""
+
+        author_str = " and ".join([f"{author['lastname']}, {author['firstname']}" for author in authors]) if authors else ""
         journal = art.journal if hasattr(art, 'journal') else ""
         pub_date = art.publication_date or pd.NaT
         if not isinstance(pub_date, datetime):
@@ -44,7 +42,6 @@ def bibtex_articles_with_references(articles: list[article.PubMedArticle], loade
         abstract = art.abstract or ""
         doi = art.doi.lower() if art.doi else ""
         keywords = art.keywords if hasattr(art, 'keywords') else []
-        author_str = ", ".join([f"{author['lastname']}, {author['firstname'][0]}" for author in authors]) if authors else ""
         
         # Get references for this article based on DOI
         references_str = ""
@@ -100,6 +97,7 @@ if __name__ == "__main__":
                       __main__)
         .with_config(
             dict(
+                references_on_disk=True,
                 loading_from=LoadingFrom.LOCAL
             )
         )
@@ -108,13 +106,13 @@ if __name__ == "__main__":
 
     dr.validate_execution(outputs, inputs=inputs)
 
-    # dr.execute(outputs,
-    #             inputs=inputs,
-    # )
+    dr.execute(outputs,
+                inputs=inputs,
+    )
     
     dr.visualize_execution(outputs,
                         inputs=inputs,
                         output_file_path=FIGURES_PATH/f"{__file__}.png"
                         )
-
-    dr.display_all_functions(FIGURES_PATH/f"{__file__}_all_functions.png",keep_dot=True)
+    if not (FIGURES_PATH/f"{__file__}_all_functions.png").is_file():
+        dr.display_all_functions(FIGURES_PATH/f"{__file__}_all_functions.png",keep_dot=True)
