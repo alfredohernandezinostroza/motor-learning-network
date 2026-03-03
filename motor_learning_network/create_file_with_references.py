@@ -18,6 +18,8 @@ from enum import Enum
 from motor_learning_network.constants import RAW_DATA_PATH, FIGURES_PATH, PROCESSED_DATA_PATH
 from motor_learning_network.get_pubmed_dataset import LoadingFrom
 
+CURRENT_FILE_NAME = Path(__file__).stem
+
 @datasaver()
 def bibtex_articles_with_references(articles: list[article.PubMedArticle], loaded_references: dict, saving_directory: Path) -> dict:
     """Convert pymedx articles to BibTeX format with references in Scopus format"""
@@ -106,13 +108,13 @@ if __name__ == "__main__":
 
     dr.validate_execution(outputs, inputs=inputs)
 
-    dr.execute(outputs,
-                inputs=inputs,
-    )
+    # dr.execute(outputs,
+    #             inputs=inputs,
+    # )
     
     dr.visualize_execution(outputs,
                         inputs=inputs,
-                        output_file_path=FIGURES_PATH/f"{__file__}.png"
+                        output_file_path=FIGURES_PATH/f"{CURRENT_FILE_NAME}.png"
                         )
-    if not (FIGURES_PATH/f"{__file__}_all_functions.png").is_file():
-        dr.display_all_functions(FIGURES_PATH/f"{__file__}_all_functions.png",keep_dot=True)
+    if not (FIGURES_PATH/f"{CURRENT_FILE_NAME}_all_functions.png").is_file():
+        dr.display_all_functions(FIGURES_PATH/f"{CURRENT_FILE_NAME}_all_functions.png",keep_dot=True)
