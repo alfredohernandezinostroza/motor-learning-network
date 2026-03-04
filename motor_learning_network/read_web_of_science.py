@@ -1,14 +1,22 @@
 from hamilton.function_modifiers import datasaver, parameterize, source, value, group
 from hamilton.io import utils
+from hamilton_sdk import adapters
 from pathlib import Path
 from hamilton import driver
-from motor_learning_network.constants import RAW_DATA_PATH, FIGURES_PATH
+from motor_learning_network.constants import RAW_DATA_PATH, FIGURES_PATH, DEFAULT_UI_USERNAME, DEFAULT_UI_PROJECT_ID, TEAM_NAME
 import pandas as pd
 import hamilton.log_setup
 import logging
 
-CURRENT_FILE_NAME = Path(__file__).stem
 WOS_RAW_PATH = RAW_DATA_PATH / "wos"
+CURRENT_FILE_NAME = Path(__file__).stem
+
+UI_CONFIG = adapters.HamiltonTracker(
+   project_id=DEFAULT_UI_PROJECT_ID,
+   username=DEFAULT_UI_USERNAME,
+   dag_name=CURRENT_FILE_NAME,
+   tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
+)
 
 hamilton.log_setup.setup_logging(logging.INFO)
 logger = logging.getLogger(__name__)
@@ -87,7 +95,7 @@ if __name__ == "__main__":
         driver.Builder()
         .with_modules(__main__)
         # .enable_dynamic_execution(allow_experimental_mode=True)
-
+        .with_adapters(UI_CONFIG)
         .build()
     )
     dr.validate_execution(outputs, inputs=inputs)
