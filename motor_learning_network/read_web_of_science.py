@@ -1,6 +1,5 @@
-from hamilton.function_modifiers import dataloader, datasaver, parameterize, source, value, extract_fields, ParameterizedExtract, group
+from hamilton.function_modifiers import datasaver, parameterize, source, value, group
 from hamilton.io import utils
-from hamilton.htypes import Collect
 from pathlib import Path
 from hamilton import driver
 from motor_learning_network.constants import RAW_DATA_PATH, FIGURES_PATH
@@ -33,8 +32,8 @@ FILE_NAMES = {
     f"dataframe_{i}": {"filename": value(fname)} for i, fname in enumerate(FILENAMES_LIST)
 }
 
-# @dataloader()
 @parameterize(**FILE_NAMES)
+# @dataloader()
 def load_dataframe(wos_data_path: Path, filename: str) -> pd.DataFrame:
 # def loaded_dataframe(wos_data_path: Path, filename: str) -> tuple[pd.DataFrame, dict]:
     """Load a single Web‑of‑Science file.
@@ -74,7 +73,7 @@ def merge_database(loaded_dataframes: list[pd.DataFrame]) -> pd.DataFrame:
 
 @datasaver()
 def saved_merged_database(merged_database: pd.DataFrame) -> dict:
-    filename = "merged_database_45_2.parquet"
+    filename = "merged_database_45.parquet"
     merged_database.astype(str).to_parquet(filename)
     metadata = utils.get_file_metadata(filename)
     return metadata
@@ -88,6 +87,7 @@ if __name__ == "__main__":
         driver.Builder()
         .with_modules(__main__)
         # .enable_dynamic_execution(allow_experimental_mode=True)
+
         .build()
     )
     dr.validate_execution(outputs, inputs=inputs)
