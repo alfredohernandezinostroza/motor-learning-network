@@ -41,7 +41,6 @@ FILE_NAMES = {
 }
 
 @parameterize(**FILE_NAMES)
-# @dataloader()
 def load_dataframe(wos_data_path: Path, filename: str) -> pd.DataFrame:
 # def loaded_dataframe(wos_data_path: Path, filename: str) -> tuple[pd.DataFrame, dict]:
     """Load a single Web‑of‑Science file.
@@ -53,11 +52,10 @@ def load_dataframe(wos_data_path: Path, filename: str) -> pd.DataFrame:
     """
     try:
         return pd.read_csv(wos_data_path / filename, sep="\t", quoting=3, on_bad_lines='warn') #quoting = 3 => quotes are normal characters
-        return pd.read_csv(wos_data_path / filename, sep="\t"), utils.get_file_metadata(wos_data_path / filename)
     except Exception as exception: 
         logger.warning("error reading %s: %s", filename, exception)
         return pd.DataFrame()
-        return pd.DataFrame(), utils.get_file_metadata(wos_data_path / filename)
+        
     
 #Parameterize try
 @parameterize(
