@@ -52,7 +52,7 @@ def load_dataframe(wos_data_path: Path, filename: str) -> pd.DataFrame:
     default.
     """
     try:
-        return pd.read_csv(wos_data_path / filename, sep="\t")
+        return pd.read_csv(wos_data_path / filename, sep="\t", quoting=3, on_bad_lines='warn') #quoting = 3 => quotes are normal characters
         return pd.read_csv(wos_data_path / filename, sep="\t"), utils.get_file_metadata(wos_data_path / filename)
     except Exception as exception: 
         logger.warning("error reading %s: %s", filename, exception)
@@ -102,6 +102,3 @@ if __name__ == "__main__":
     dr.display_all_functions(FIGURES_PATH/f"{CURRENT_FILE_NAME}_all_functions.png",keep_dot=True,deduplicate_inputs=True)
     dr.visualize_execution(outputs, inputs=inputs,output_file_path=FIGURES_PATH/f"{CURRENT_FILE_NAME}_diagram.png",keep_dot=True,deduplicate_inputs=True)
     dr.execute(outputs, inputs=inputs)
-
-
-
