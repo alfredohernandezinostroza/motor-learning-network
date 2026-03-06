@@ -3,12 +3,12 @@ from hamilton.io import utils
 from hamilton_sdk import adapters
 from pathlib import Path
 from hamilton import driver
-from motor_learning_network.constants import RAW_DATA_PATH, FIGURES_PATH, DEFAULT_UI_USERNAME, DEFAULT_UI_PROJECT_ID, TEAM_NAME
+from motor_learning_network.constants import RAW_DATA_PATH, PROCESSED_DATA_PATH, FIGURES_PATH, DEFAULT_UI_USERNAME, DEFAULT_UI_PROJECT_ID, TEAM_NAME
 import pandas as pd
 import hamilton.log_setup
 import logging
 
-WOS_RAW_PATH = RAW_DATA_PATH / "wos"
+WOS_RAW_PATH = RAW_DATA_PATH / "wos_until_mid_2025"
 CURRENT_FILE_NAME = Path(__file__).stem
 
 UI_CONFIG = adapters.HamiltonTracker(
@@ -79,9 +79,9 @@ def merge_database(loaded_dataframes: list[pd.DataFrame]) -> pd.DataFrame:
 
 @datasaver()
 def saved_merged_database(merged_database: pd.DataFrame) -> dict:
-    filename = "merged_database_45.parquet"
-    merged_database.astype(str).to_parquet(filename)
-    metadata = utils.get_file_metadata(filename)
+    filename = "merged_WOS_database_until_mid_2025.parquet"
+    merged_database.astype(str).to_parquet(PROCESSED_DATA_PATH / filename)
+    metadata = utils.get_file_metadata(PROCESSED_DATA_PATH / filename)
     return metadata
 
 if __name__ == "__main__":
@@ -92,7 +92,6 @@ if __name__ == "__main__":
     dr = (
         driver.Builder()
         .with_modules(__main__)
-        # .enable_dynamic_execution(allow_experimental_mode=True)
         .with_adapters(UI_CONFIG)
         .build()
     )
