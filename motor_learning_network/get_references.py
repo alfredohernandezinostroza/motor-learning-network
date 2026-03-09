@@ -1,10 +1,8 @@
-#%%
 from hamilton import driver
 from hamilton.function_modifiers import dataloader, datasaver, config, cache, extract_columns, unpack_fields
 from hamilton.io import utils
 from habanero import Crossref
 import time
-import os 
 import pickle
 from pathlib import Path
 import pandas as pd
@@ -12,6 +10,7 @@ import logging
 from motor_learning_network.constants import PROCESSED_DATA_PATH, FIGURES_PATH, EMAIL
 import hamilton.log_setup
 
+CURRENT_FILE_NAME = Path(__file__).stem
 hamilton.log_setup.setup_logging(logging.INFO)
 
 logger = logging.getLogger(__name__)
@@ -139,6 +138,6 @@ if __name__ == "__main__":
         .build()
         )
     dr.validate_execution(outputs, inputs=inputs)
-    dr.display_all_functions(FIGURES_PATH/"get_references.png",keep_dot=True,)
-    dr.visualize_execution(outputs, inputs=inputs,output_file_path=FIGURES_PATH/"get_references.png",keep_dot=False)
+    dr.display_all_functions(FIGURES_PATH/f"{CURRENT_FILE_NAME}_all_functions.png",keep_dot=True)
+    dr.visualize_execution(outputs, inputs=inputs,output_file_path=FIGURES_PATH/f"{CURRENT_FILE_NAME}.png",keep_dot=False)
     dr.execute(outputs, inputs=inputs)
