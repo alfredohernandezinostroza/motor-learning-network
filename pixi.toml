@@ -40,6 +40,7 @@ pyarrow = "*"
 dvc = ">=3.66.1, <4"
 dvc-gdrive = ">=3.0.1, <4"
 pandera = ">=0.29.0, <0.30"
+rispy = ">=0.10.0, <0.11"
 
 [feature.simple.dependencies]
 python = "3.12.12.*"
