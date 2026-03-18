@@ -42,7 +42,7 @@ def main() -> int:
             keywords=pa.Column(str),
             journal=pa.Column(str),
             source_database=pa.Column(str),
-            doi=pa.Column(str),
+            doi=pa.Column(str, pa.Check(lambda s: s.islower())), #dois have to be normalized to lowercase
             date=pa.Column(pa.Date),
         ),
         strict=True,  # validation will fail if there are columns not defined in the schema
