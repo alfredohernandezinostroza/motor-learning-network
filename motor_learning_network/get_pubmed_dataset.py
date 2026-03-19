@@ -11,11 +11,23 @@ from hamilton import driver
 from hamilton.function_modifiers import datasaver, cache, config
 import textwrap
 from pathlib import Path
-from hamilton import lifecycle
 import pickle
 from datetime import datetime
 from enum import Enum
-from motor_learning_network.constants import RAW_DATA_PATH, PROCESSED_DATA_PATH, FIGURES_PATH, EMAIL
+from motor_learning_network.constants import RAW_DATA_PATH, PROCESSED_DATA_PATH, FIGURES_PATH, EMAIL, DEFAULT_UI_PROJECT_ID, DEFAULT_UI_USERNAME, TEAM_NAME
+from hamilton_sdk import adapters
+
+###################
+##   Constants   ##
+###################
+CURRENT_FILE_NAME = Path(__file__).stem
+UI_CONFIG = adapters.HamiltonTracker(
+    project_id=DEFAULT_UI_PROJECT_ID,
+    username=DEFAULT_UI_USERNAME,
+    dag_name=CURRENT_FILE_NAME,
+    tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
+    
+)
 
 SAVED_DB_PATH = Path(RAW_DATA_PATH, 'articles.pkl')
 
@@ -244,7 +256,7 @@ if __name__ == "__main__":
         .with_config(dict(
             loading_from=loading_from,
         ))
-        # .with_adapters(debug_hook)
+        .with_adapters(UI_CONFIG)
         .build()
         )
 
