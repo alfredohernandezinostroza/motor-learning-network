@@ -15,7 +15,7 @@ from hamilton import lifecycle
 import pickle
 from datetime import datetime
 from enum import Enum
-from motor_learning_network.constants import RAW_DATA_PATH, FIGURES_PATH, EMAIL
+from motor_learning_network.constants import RAW_DATA_PATH, PROCESSED_DATA_PATH, FIGURES_PATH, EMAIL
 
 SAVED_DB_PATH = Path(RAW_DATA_PATH, 'articles.pkl')
 
@@ -49,6 +49,13 @@ def articles__online(query: str) -> list[article.PubMedArticle]:
     results = [clear_xml_from_article(copy.deepcopy(article)) for article in results]
     return results
     
+@datasaver()
+def medline_articles_parquet(articles: list[article.PubMedArticle]) -> dict:
+    path = PROCESSED_DATA_PATH / "medline_database.parquet"
+    articles.to_parquet(path)
+    metadata = utils.get_file_metadata(path)
+    return metadata
+
 @datasaver()
 def medline_articles(articles: list[article.PubMedArticle]) -> dict:
     """Convert pymedx articles to MEDLINE format"""
@@ -243,12 +250,12 @@ if __name__ == "__main__":
 
     dr.validate_execution(outputs, inputs=inputs)
 
-    # dr.execute(outputs,
-    #             inputs=inputs,
-    # )
+    dr.execute(outputs,
+                inputs=inputs,
+    )
     
-    # dr.visualize_execution(outputs,
-    #                     inputs=inputs,
-    #                     output_file_path=FIGURES_PATH/'node_tree_get_pubmed_2.png')
+    dr.visualize_execution(outputs,
+                        inputs=inputs,
+                        output_file_path=FIGURES_PATH/'node_tree_get_pubmed_2.png')
 
     dr.display_all_functions(FIGURES_PATH/"get_pubmed_dataset.png",keep_dot=True)
