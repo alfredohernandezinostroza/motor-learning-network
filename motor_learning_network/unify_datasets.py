@@ -221,6 +221,14 @@ def pubmed_df_clean(
     pubmed_df = pubmed_df[list(unified_database_schema.columns.keys())]  #keep only the columns defined in the schema
     pubmed_df["authors"] = _get_authors_from_series(pubmed_df["authors"])
     pubmed_df["pubmed_id"] = pd.to_numeric(pubmed_df["pubmed_id"]).astype("Int64")
+    for idx in pubmed_df.index[pubmed_df["keywords"].isna()]:
+        pubmed_df.at[idx, "keywords"] = []
+    pubmed_df["keywords"]=pubmed_df["keywords"].map(lambda s: s.tolist() if not isinstance(s, list) else s)
+    pubmed_df.loc[pubmed_df["journal"].isna(),"journal"] = ""
+    pubmed_df.loc[pubmed_df["doi"].isna(),"doi"] = ""
+    pubmed_df["doi"] = pubmed_df["doi"].str.lower()
+    pubmed_df["year"] = pubmed_df["year"].str[:4]
+    pubmed_df["year"] = pd.to_numeric(pubmed_df["year"]).astype("Int64")
     unified_database_schema.validate(pubmed_df)
     return pubmed_df
 
@@ -233,7 +241,7 @@ def ebsco_df_clean(
         # "title": "title",
         "contributors": "authors",
         # "abstract": "abstract",
-        "subject": "keywords",
+        "subjects": "keywords",
         "source": "journal",
         "longDBName": "source_database",
         # "doi": "doi",
@@ -241,15 +249,24 @@ def ebsco_df_clean(
         "publicationDate": "year",
     }
     ebsco_df = ebsco_df.rename(columns=renaming_columns_map)
+    ebsco_df[ "pubmed_id"] = pd.NA
+    ebsco_df[ "pubmed_id"] = ebsco_df[ "pubmed_id"].astype("Int64")
     ebsco_df = ebsco_df[list(unified_database_schema.columns.keys())]  #keep only the columns defined in the schema
     ebsco_df["doi"] = ebsco_df["doi"].str.lower()
+    ebsco_df["doi"] = ebsco_df["doi"].fillna('')
     ebsco_df = ebsco_df.replace("nan", "")
+    ebsco_df["abstract"] = ebsco_df["abstract"].fillna('')
     ebsco_df["keywords"] = ebsco_df["keywords"].str.split('; ')
-    ebsco_df["pubmed_id"] = pd.to_numeric(ebsco_df["pubmed_id"]).astype("Int64")
-    ebsco_df["year"] = pd.to_numeric(ebsco_df["year"]).astype("Int64")
-    ebsco_df["authors"] = ebsco_df["authors"].str.replace(pat=" \(.*?\)", repl="", regex=True)
-    ebsco_df["authors"] = ebsco_df["authors"].str.split("; ")
+    for idx in ebsco_df.index[ebsco_df["keywords"].isna()]:
+        ebsco_df.at[idx, "keywords"] = []
+    ebsco_df["authors"] = ebsco_df["authors"].str.split('; ') #fix this
+    ebsco_df["year"] = ebsco_df["year"].apply(str) #first convert year to str
+    ebsco_df["year"] = ebsco_df["year"].str[:4] #keep first four digits, which is the year
+    ebsco_df["year"] = pd.to_numeric(ebsco_df["year"]).astype("Int64") #convert back t int
+    for idx in ebsco_df.index[ebsco_df["authors"].isna()]:
+        ebsco_df.at[idx, "authors"] = []
     unified_database_schema.validate(ebsco_df)
+    return ebsco_df
 
 
 def merged_dataframes(
@@ -258,7 +275,7 @@ def merged_dataframes(
     pubmed_df_clean: pd.DataFrame,
     ebsco_df_clean: pd.DataFrame,
 ) -> pd.DataFrame:
-    merged_dataframes = pd.concat(scopus_df_clean, wos_df_clean, pubmed_df_clean, ebsco_df_clean)
+    merged_dataframes = pd.concat([scopus_df_clean, wos_df_clean, pubmed_df_clean, ebsco_df_clean])
     return merged_dataframes
 
 
