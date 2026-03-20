@@ -50,7 +50,7 @@ def _main() -> int:
     ## Inputs and Outputs ##
     ########################
     query = '("Motor Learning" OR "Skill Acquisition" OR "Motor Adaptation" OR "Motor Sequence Learning" OR "Sport Practice" OR "Motor Skill Learning" OR "Sensorimotor Learning" OR "Motor Memory" OR "Motor Training") AND ("1900/01/01"[Date - Publication] : "2025/12/31"[Date - Publication])'
-    outputs = ["pickled_articles", "bibtex_articles", "medline_articles"]
+    outputs = ["pickled_articles", "bibtex_articles", "medline_articles_txt", "medline_database_parquet"]
     inputs = dict(query=query)
 
     if SAVED_DB_PATH.is_file():  # check if db exists locally
@@ -126,15 +126,17 @@ def articles__online(query: str) -> list[article.PubMedArticle]:
 
 
 @datasaver()
-def medline_articles_parquet(articles: list[article.PubMedArticle]) -> dict:
-    path = PROCESSED_DATA_PATH / "medline_database.parquet"
-    articles.to_parquet(path)
-    metadata = utils.get_file_metadata(path)
+def medline_database_parquet(articles: list[article.PubMedArticle]) -> dict:
+    path_to_save_parquet = PROCESSED_DATA_PATH / "medline_database.parquet"
+    df = pd.DataFrame([{col: getattr(article, col) for col in article.__slots__} for article in articles])
+    df['publication_date'] = df['publication_date'].astype(str)
+    df.to_parquet(path_to_save_parquet)
+    metadata = utils.get_file_metadata(path_to_save_parquet)
     return metadata
 
 
 @datasaver()
-def medline_articles(articles: list[article.PubMedArticle]) -> dict:
+def medline_articles_txt(articles: list[article.PubMedArticle]) -> dict:
     """Convert pymedx articles to MEDLINE format"""
 
     def _wrap_medline_field(text: str, width: int = 80) -> str:
