@@ -99,6 +99,9 @@ def _main() -> int:
     )
 
 
+#########################
+##    DAG Definition   ##
+#########################
 @config.when(loading_from=LoadingFrom.LOCAL)
 def articles__local() -> list[article.PubMedArticle]:
     path = SAVED_DB_PATH

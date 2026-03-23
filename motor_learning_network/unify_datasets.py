@@ -15,6 +15,7 @@ from motor_learning_network.constants import (
 from pathlib import Path
 from hamilton.io.materialization import from_, to
 from typing import List
+
 ###################
 ##   Constants   ##
 ###################
@@ -26,6 +27,13 @@ UI_CONFIG = adapters.HamiltonTracker(
     tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
 )
 
+#####################
+##  Aux Functions  ##
+#####################
+
+##################
+##     Main     ##
+##################
 
 def _main() -> int:
     """
@@ -109,6 +117,9 @@ def _main() -> int:
     return 0
 
 
+#########################
+##    DAG Definition   ##
+#########################
 def scopus_author_ids(scopus_df: pd.DataFrame) -> pd.DataFrame:
     """Saves author ids to a dataframe. Some of them will be missing because there rows without the same number of
     ids vs number of rows (this is a problem from Scopus, the missing authors can be added manually, but it would take some time"""
