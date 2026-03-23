@@ -1,0 +1,19 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	loading_from [label=<<b>loading_from</b><br /><br /><i>LoadingFrom.LOCAL</i>> fontname=Helvetica shape=note style=filled]
+	medline_database_parquet [label=<<b>medline_database_parquet</b><br /><br /><i>medline_database_parquet()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	articles [label=<<b>articles: loading_from</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	medline_articles_txt [label=<<b>medline_articles_txt</b><br /><br /><i>medline_articles_txt()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	bibtex_articles [label=<<b>bibtex_articles</b><br /><br /><i>bibtex_articles()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	articles -> medline_database_parquet
+	articles -> medline_articles_txt
+	articles -> bibtex_articles
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		config [fontname=Helvetica shape=note style=filled]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}

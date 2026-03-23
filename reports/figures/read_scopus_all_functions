@@ -1,0 +1,21 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	scopus_1895_2014 [label=<<b>scopus_1895_2014</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_scopus_database [label=<<b>save_scopus_database</b><br /><br /><i>save_scopus_database()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	scopus_2015_2025 [label=<<b>scopus_2015_2025</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	merge_databases [label=<<b>merge_databases</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	_scopus_1895_2014_inputs [label=<<table border="0"><tr><td>scopus_data_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_scopus_1895_2014_inputs -> scopus_1895_2014
+	merge_databases -> save_scopus_database
+	_scopus_1895_2014_inputs -> scopus_2015_2025
+	scopus_1895_2014 -> merge_databases
+	scopus_2015_2025 -> merge_databases
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}

@@ -1,0 +1,97 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	dataframe_core_13 [label=<<b>dataframe_core_13</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_24 [label=<<b>dataframe_core_24</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_25 [label=<<b>dataframe_core_25</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_20 [label=<<b>dataframe_core_20</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_23 [label=<<b>dataframe_core_23</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_15 [label=<<b>dataframe_core_15</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_8 [label=<<b>dataframe_core_8</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_biosis_10 [label=<<b>dataframe_biosis_10</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_kci_0 [label=<<b>dataframe_kci_0</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_19 [label=<<b>dataframe_core_19</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	merge_core_database [label=<<b>merge_core_database</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_biosis_4 [label=<<b>dataframe_biosis_4</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_6 [label=<<b>dataframe_core_6</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_17 [label=<<b>dataframe_core_17</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_12 [label=<<b>dataframe_core_12</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_4 [label=<<b>dataframe_core_4</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_10 [label=<<b>dataframe_core_10</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_biosis_2 [label=<<b>dataframe_biosis_2</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_1 [label=<<b>dataframe_core_1</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_biosis_0 [label=<<b>dataframe_biosis_0</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_biosis_11 [label=<<b>dataframe_biosis_11</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	merge_all_databases [label=<<b>merge_all_databases</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_2 [label=<<b>dataframe_core_2</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_biosis_5 [label=<<b>dataframe_biosis_5</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_biosis_8 [label=<<b>dataframe_biosis_8</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_biosis_9 [label=<<b>dataframe_biosis_9</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_5 [label=<<b>dataframe_core_5</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_21 [label=<<b>dataframe_core_21</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_3 [label=<<b>dataframe_core_3</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_14 [label=<<b>dataframe_core_14</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_biosis_1 [label=<<b>dataframe_biosis_1</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_11 [label=<<b>dataframe_core_11</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_biosis_6 [label=<<b>dataframe_biosis_6</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_biosis_3 [label=<<b>dataframe_biosis_3</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_biosis_7 [label=<<b>dataframe_biosis_7</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_wos_database [label=<<b>save_wos_database</b><br /><br /><i>save_wos_database()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	dataframe_core_22 [label=<<b>dataframe_core_22</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	merge_biosis_database [label=<<b>merge_biosis_database</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_0 [label=<<b>dataframe_core_0</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_7 [label=<<b>dataframe_core_7</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_16 [label=<<b>dataframe_core_16</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_9 [label=<<b>dataframe_core_9</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_18 [label=<<b>dataframe_core_18</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	merge_kci_database [label=<<b>merge_kci_database</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dataframe_core_0 -> merge_core_database
+	dataframe_core_1 -> merge_core_database
+	dataframe_core_2 -> merge_core_database
+	dataframe_core_3 -> merge_core_database
+	dataframe_core_4 -> merge_core_database
+	dataframe_core_5 -> merge_core_database
+	dataframe_core_6 -> merge_core_database
+	dataframe_core_7 -> merge_core_database
+	dataframe_core_8 -> merge_core_database
+	dataframe_core_9 -> merge_core_database
+	dataframe_core_10 -> merge_core_database
+	dataframe_core_11 -> merge_core_database
+	dataframe_core_12 -> merge_core_database
+	dataframe_core_13 -> merge_core_database
+	dataframe_core_14 -> merge_core_database
+	dataframe_core_15 -> merge_core_database
+	dataframe_core_16 -> merge_core_database
+	dataframe_core_17 -> merge_core_database
+	dataframe_core_18 -> merge_core_database
+	dataframe_core_19 -> merge_core_database
+	dataframe_core_20 -> merge_core_database
+	dataframe_core_21 -> merge_core_database
+	dataframe_core_22 -> merge_core_database
+	dataframe_core_23 -> merge_core_database
+	dataframe_core_24 -> merge_core_database
+	dataframe_core_25 -> merge_core_database
+	merge_kci_database -> merge_all_databases
+	merge_biosis_database -> merge_all_databases
+	merge_core_database -> merge_all_databases
+	merge_all_databases -> save_wos_database
+	dataframe_biosis_0 -> merge_biosis_database
+	dataframe_biosis_1 -> merge_biosis_database
+	dataframe_biosis_2 -> merge_biosis_database
+	dataframe_biosis_3 -> merge_biosis_database
+	dataframe_biosis_4 -> merge_biosis_database
+	dataframe_biosis_5 -> merge_biosis_database
+	dataframe_biosis_6 -> merge_biosis_database
+	dataframe_biosis_7 -> merge_biosis_database
+	dataframe_biosis_8 -> merge_biosis_database
+	dataframe_biosis_9 -> merge_biosis_database
+	dataframe_biosis_10 -> merge_biosis_database
+	dataframe_biosis_11 -> merge_biosis_database
+	dataframe_kci_0 -> merge_kci_database
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}

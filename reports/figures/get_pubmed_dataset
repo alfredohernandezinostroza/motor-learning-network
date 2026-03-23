@@ -1,0 +1,17 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	loading_from [label=<<b>loading_from</b><br /><br /><i>LoadingFrom.LOCAL</i>> fontname=Helvetica shape=note style=filled]
+	articles [label=<<b>articles: loading_from</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	bibtex_articles [label=<<b>bibtex_articles</b><br /><br /><i>bibtex_articles()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	medline_articles [label=<<b>medline_articles</b><br /><br /><i>medline_articles()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	articles -> bibtex_articles
+	articles -> medline_articles
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		config [fontname=Helvetica shape=note style=filled]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}

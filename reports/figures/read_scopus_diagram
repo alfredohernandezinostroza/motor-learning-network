@@ -1,0 +1,18 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	scopus_1895_2014 [label=<<b>scopus_1895_2014</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	scopus_2015_2025 [label=<<b>scopus_2015_2025</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_scopus_database [label=<<b>save_scopus_database</b><br /><br /><i>save_scopus_database()</i>> fillcolor="#FFC857" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	merge_databases [label=<<b>merge_databases</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	merge_databases -> save_scopus_database
+	scopus_1895_2014 -> merge_databases
+	scopus_2015_2025 -> merge_databases
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		output [fillcolor="#FFC857" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}

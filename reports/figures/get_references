@@ -1,0 +1,43 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	references_on_disk [label=<<b>references_on_disk</b><br /><br /><i>True</i>> fontname=Helvetica shape=note style=filled]
+	cleaned_dois [label=<<b>cleaned_dois</b><br /><br /><i>Series</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	database [label=<<b>database</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	dois_to_query [label=<<b>dois_to_query: references_on_disk</b><br /><br /><i>Series</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"loaded_references.loader" [label=<<b>loaded_references.loader</b><br /><br /><i>loaded_references()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	loaded_references [label=<<b>loaded_references</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_references [label=<<b>save_references</b><br /><br /><i>save_references()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	save_error_references [label=<<b>save_error_references</b><br /><br /><i>save_error_references()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	fetch_references [label=<<b>fetch_references</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	fetched_references [label=<<b>fetched_references</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	error_references [label=<<b>error_references</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	doi [label=<<b>doi</b><br /><br /><i>Series</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	doi -> cleaned_dois
+	_database_inputs [label=<<table border="0"><tr><td>database_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_database_inputs -> database
+	cleaned_dois -> dois_to_query
+	loaded_references -> dois_to_query
+	"_loaded_references.loader_inputs" [label=<<table border="0"><tr><td>pickled_file_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_loaded_references.loader_inputs" -> "loaded_references.loader"
+	"loaded_references.loader" -> loaded_references
+	fetched_references -> save_references
+	loaded_references -> save_references
+	_save_references_inputs [label=<<table border="0"><tr><td>saving_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_references_inputs -> save_references
+	error_references -> save_error_references
+	_save_error_references_inputs [label=<<table border="0"><tr><td>saving_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_error_references_inputs -> save_error_references
+	dois_to_query -> fetch_references
+	fetch_references -> fetched_references
+	fetch_references -> error_references
+	database -> doi
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		config [fontname=Helvetica shape=note style=filled]
+		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}

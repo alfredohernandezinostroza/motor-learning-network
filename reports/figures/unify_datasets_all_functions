@@ -1,0 +1,47 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	"load_data.wos_df" [label=<<b>load_data.wos_df</b><br /><br /><i>PandasParquetReader</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	ebsco_df [label=<<b>ebsco_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	pubmed_df [label=<<b>pubmed_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	scopus_df [label=<<b>scopus_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"load_data.pubmed_df" [label=<<b>load_data.pubmed_df</b><br /><br /><i>PandasParquetReader</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	wos_df_clean [label=<<b>wos_df_clean</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	wos_df [label=<<b>wos_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"load_data.scopus_df" [label=<<b>load_data.scopus_df</b><br /><br /><i>PandasParquetReader</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"load_data.ebsco_df" [label=<<b>load_data.ebsco_df</b><br /><br /><i>PandasCSVReader</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	scopus_df_clean [label=<<b>scopus_df_clean</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	scopus_author_ids [label=<<b>scopus_author_ids</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	scopus_author_ids__parquet [label=<<b>scopus_author_ids__parquet</b><br /><br /><i>PandasParquetWriter</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	pubmed_df_clean [label=<<b>pubmed_df_clean</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	merged_dataframes [label=<<b>merged_dataframes</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	merged_dataframes__parquet [label=<<b>merged_dataframes__parquet</b><br /><br /><i>PandasParquetWriter</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	ebsco_df_clean [label=<<b>ebsco_df_clean</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"load_data.ebsco_df" -> ebsco_df
+	"load_data.pubmed_df" -> pubmed_df
+	"load_data.scopus_df" -> scopus_df
+	wos_df -> wos_df_clean
+	_wos_df_clean_inputs [label=<<table border="0"><tr><td>unified_database_schema</td><td>DataFrameSchema</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_wos_df_clean_inputs -> wos_df_clean
+	"load_data.wos_df" -> wos_df
+	scopus_df -> scopus_df_clean
+	_wos_df_clean_inputs -> scopus_df_clean
+	scopus_df -> scopus_author_ids
+	scopus_author_ids -> scopus_author_ids__parquet
+	pubmed_df -> pubmed_df_clean
+	_wos_df_clean_inputs -> pubmed_df_clean
+	scopus_df_clean -> merged_dataframes
+	wos_df_clean -> merged_dataframes
+	pubmed_df_clean -> merged_dataframes
+	ebsco_df_clean -> merged_dataframes
+	merged_dataframes -> merged_dataframes__parquet
+	ebsco_df -> ebsco_df_clean
+	_wos_df_clean_inputs -> ebsco_df_clean
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}

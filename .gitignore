@@ -199,7 +199,7 @@ cython_debug/
 .vscode/settings.json
 
 #reports
-reports/
+# reports/
 
 #notebooks
 notebooks/
