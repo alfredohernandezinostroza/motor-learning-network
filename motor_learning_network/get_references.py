@@ -54,10 +54,10 @@ def _main() -> int:
                   )
     outputs = ["save_references", "save_error_references"]
 
-    pickled_file_path  = Path(PROCESSED_DATA_PATH,'references.pickle')
-    if pickled_file_path.is_file():
+    references_pickled_file_path  = Path(PROCESSED_DATA_PATH,'references.pickle')
+    if references_pickled_file_path.is_file():
         references_on_disk = True
-        inputs['pickled_file_path'] = pickled_file_path
+        inputs['references_pickled_file_path'] = references_pickled_file_path
         
     else:
         references_on_disk = False
@@ -106,11 +106,11 @@ def cleaned_dois(doi: pd.Series) -> pd.Series:
 
 @config.when(references_on_disk=True)
 @dataloader()
-def loaded_references(pickled_file_path: Path) -> tuple[dict, dict]:
-    logger.info(f"Loading references from {pickled_file_path}...")
-    with open(pickled_file_path, 'rb') as f:
+def loaded_references(references_pickled_file_path: Path) -> tuple[dict, dict]:
+    logger.info(f"Loading references from {references_pickled_file_path}...")
+    with open(references_pickled_file_path, 'rb') as f:
         loaded_references = pickle.load(f)
-        return loaded_references, utils.get_file_metadata(pickled_file_path)
+        return loaded_references, utils.get_file_metadata(references_pickled_file_path)
 
 @config.when(references_on_disk=True)
 def dois_to_query__with_loaded_references(cleaned_dois: pd.Series, loaded_references: dict) -> pd.Series:
@@ -179,7 +179,7 @@ def save_error_references(error_references: list[str], saving_path: Path) -> dic
 @datasaver()
 def save_references__with_loaded_references(fetched_references: dict[str,list[str]], loaded_references: dict[str,list[str]], saving_path: Path) -> dict:
     all_references = fetched_references | loaded_references #merging both dictionaries into one
-    filename = "updated_references.pickle"
+    filename = "references.pickle"
     with open(saving_path / filename,"wb") as f:
         pickle.dump(all_references, f, pickle.HIGHEST_PROTOCOL)
     metadata = utils.get_file_metadata(saving_path / filename)
