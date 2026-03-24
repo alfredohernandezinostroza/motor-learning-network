@@ -17,6 +17,14 @@ import requests
 ###################
 ##   Constants   ##
 ###################
+CURRENT_FILE_NAME = Path(__file__).stem
+hamilton.log_setup.setup_logging(logging.INFO)
+
+logger = logging.getLogger(__name__)
+
+EXECUTE = True
+if EXECUTE:
+    logger.info("Executing the DAG!")
 
 CURRENT_FILE_NAME = Path(__file__).stem
 UI_CONFIG = adapters.HamiltonTracker(
@@ -25,11 +33,6 @@ UI_CONFIG = adapters.HamiltonTracker(
     dag_name=CURRENT_FILE_NAME,
     tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
 )
-CURRENT_FILE_NAME = Path(__file__).stem
-hamilton.log_setup.setup_logging(logging.INFO)
-
-logger = logging.getLogger(__name__)
-
 #####################
 ##  Aux Functions  ##
 #####################
@@ -43,7 +46,9 @@ def _main() -> int:
     It will build the DAG to get the citations for a database with a column that contain the DOIs
     Inputs:
         - database_path: path of the parquet file to be loaded
-        - saving_path: directory where the resulting 
+        - saving_path: directory where the resulting references will be loaded
+        - references_file_path: (if exist) path of the references pickle file
+        when references_file_path exist, the references will be loaded 
     """
     ########################
     ## Inputs and Outputs ##
@@ -72,6 +77,7 @@ def _main() -> int:
             )
         )
         .with_cache()
+        .with_adapters(UI_CONFIG)
         .build()
         )
     
@@ -85,8 +91,9 @@ def _main() -> int:
     ###################
     ##   Execution   ##
     ###################
-    dr.execute(outputs, inputs=inputs)
-
+    if EXECUTE:
+        dr.execute(outputs, inputs=inputs)
+    return 0
 
 #########################
 ##    DAG Definition   ##
@@ -122,14 +129,15 @@ def dois_to_query__with_loaded_references(cleaned_dois: pd.Series, loaded_refere
 @config.when(references_on_disk=False)
 def dois_to_query__all_dois(cleaned_dois: pd.Series) -> pd.Series:
     return cleaned_dois
-    
+
+@cache(format='pickle')
 def fetch_references_with_opencitations(dois_to_query: pd.Series) -> tuple[dict[str,list[str]],list[str]]:
     fetched_references = {}
     error_references = []
-    API_CALL = "https://api.opencitations.net/index/v2/references/doi:10.1186/1756-8722-6-59"
+    api_call = "https://api.opencitations.net/index/v2/references/doi{doi}"
     HTTP_HEADERS = {"authorization": OPENCITATIONS_ACCESS_TOKEN}
 
-    results = requests.get(API_CALL, headers=HTTP_HEADERS)
+    results = requests.get(api_call, headers=HTTP_HEADERS)
     json.loads(results.content)
 
 @cache(format='pickle')
