@@ -1,0 +1,6 @@
+outs:
+- md5: 98d267e185bdd60038b55c0203f132c7.dir
+  size: 44531369
+  nfiles: 1
+  hash: md5
+  path: bibtex_with_references

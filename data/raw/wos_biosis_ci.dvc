@@ -1,0 +1,6 @@
+outs:
+- md5: cff5437a1e712b6f6de4d7702863ba36.dir
+  size: 63434373
+  nfiles: 12
+  hash: md5
+  path: wos_biosis_ci

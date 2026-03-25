@@ -1,0 +1,5 @@
+outs:
+- md5: b242f40fc4f15bb39220838d625f27cf
+  size: 16954942
+  hash: md5
+  path: medline_database.parquet

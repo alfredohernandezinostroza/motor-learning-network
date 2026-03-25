@@ -1,0 +1,5 @@
+outs:
+- md5: 49384c423cb653be95c0e160f46b4e4f
+  size: 38527656
+  hash: md5
+  path: articles.pkl

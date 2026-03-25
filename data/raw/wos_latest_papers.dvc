@@ -1,0 +1,6 @@
+outs:
+- md5: 4a45bbe0ae685c33f224d911c2d8f95c.dir
+  size: 5807783
+  nfiles: 3
+  hash: md5
+  path: wos_latest_papers

@@ -1,0 +1,5 @@
+outs:
+- md5: 71b378c2f5db2eb6f3549a47890099aa
+  size: 29973970
+  hash: md5
+  path: medline_articles.txt

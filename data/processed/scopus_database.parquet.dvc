@@ -1,0 +1,5 @@
+outs:
+- md5: 08c5948a901eab632f449fb7374f4362
+  size: 77698975
+  hash: md5
+  path: scopus_database.parquet

@@ -1,0 +1,6 @@
+outs:
+- md5: 31729a2ae5c18ff70efa813ef0b4c6f0.dir
+  size: 75761737
+  nfiles: 45
+  hash: md5
+  path: wos_until_mid_2025

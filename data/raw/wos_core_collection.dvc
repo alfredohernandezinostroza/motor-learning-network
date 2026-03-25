@@ -1,0 +1,6 @@
+outs:
+- md5: 639be489f98ecfbaad681d77e6485f25.dir
+  size: 168474891
+  nfiles: 26
+  hash: md5
+  path: wos_core_collection

@@ -1,0 +1,6 @@
+outs:
+- md5: 862fb57c8d98d0eab18fcc462244328a.dir
+  size: 1370313
+  nfiles: 1
+  hash: md5
+  path: wos_kci

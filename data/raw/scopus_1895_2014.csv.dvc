@@ -1,0 +1,5 @@
+outs:
+- md5: d7ea79cbcda03906fce5999b3cccd44f
+  size: 52923834
+  hash: md5
+  path: scopus_1895_2014.csv

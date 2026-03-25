@@ -1,0 +1,5 @@
+outs:
+- md5: cda61dfe5236de2b8e9a0a44cb807e7d
+  size: 120917766
+  hash: md5
+  path: wos_database.parquet
