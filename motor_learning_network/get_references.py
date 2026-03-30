@@ -1,3 +1,4 @@
+import time
 import sys
 from hamilton_sdk import adapters
 from hamilton import driver
@@ -27,12 +28,12 @@ if EXECUTE:
     logger.info("Executing the DAG!")
 
 CURRENT_FILE_NAME = Path(__file__).stem
-UI_CONFIG = adapters.HamiltonTracker(
-    project_id=DEFAULT_UI_PROJECT_ID,
-    username=DEFAULT_UI_USERNAME,
-    dag_name=CURRENT_FILE_NAME,
-    tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
-)
+# UI_CONFIG = adapters.HamiltonTracker(
+#     project_id=DEFAULT_UI_PROJECT_ID,
+#     username=DEFAULT_UI_USERNAME,
+#     dag_name=CURRENT_FILE_NAME,
+#     tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
+# )
 #####################
 ##  Aux Functions  ##
 #####################
@@ -54,10 +55,12 @@ def _main() -> int:
     ## Inputs and Outputs ##
     ########################
     inputs = dict(
-            database_path=PROCESSED_DATA_PATH/'medline_database.parquet',
-            saving_path = PROCESSED_DATA_PATH
+            database_path=PROCESSED_DATA_PATH/'clean_unified_database.parquet',
+            path_save_error_references = PROCESSED_DATA_PATH/"error_references_opencitations.parquet",
+            path_save_references = PROCESSED_DATA_PATH/"references_opencitations.parquet",
                   )
-    outputs = ["save_references", "save_error_references"]
+    outputs = ["save_references_from_open_citations", "save_error_references_from_open_citations"]
+    # outputs = ["save_references", "save_error_references"]
 
     references_pickled_file_path  = Path(PROCESSED_DATA_PATH,'references.pickle')
     if references_pickled_file_path.is_file():
@@ -76,8 +79,8 @@ def _main() -> int:
                 references_on_disk=references_on_disk
             )
         )
-        .with_cache()
-        .with_adapters(UI_CONFIG)
+        # .with_cache()
+        # .with_adapters(UI_CONFIG)
         .build()
         )
     
@@ -98,9 +101,17 @@ def _main() -> int:
 #########################
 ##    DAG Definition   ##
 #########################
-@extract_columns('doi')
+# @extract_columns('doi')
+def doi(database: pd.DataFrame) -> pd.Series:
+    return database['doi']
+
 def database(database_path: Path) -> pd.DataFrame:
-    return pd.read_parquet(database_path)
+    db = pd.read_parquet(database_path)
+    # Convert all list columns back to Python lists
+    list_columns = ['keywords', 'authors']  # specify your list columns
+    for col in list_columns:
+        db[col] = db[col].apply(tuple)
+    return db
 
 def cleaned_dois(doi: pd.Series) -> pd.Series:
     """Clean dois. Modify according to your cleaning needs"""
@@ -130,15 +141,107 @@ def dois_to_query__with_loaded_references(cleaned_dois: pd.Series, loaded_refere
 def dois_to_query__all_dois(cleaned_dois: pd.Series) -> pd.Series:
     return cleaned_dois
 
-@cache(format='pickle')
-def fetch_references_with_opencitations(dois_to_query: pd.Series) -> tuple[dict[str,list[str]],list[str]]:
-    fetched_references = {}
+# @cache(format='pickle')
+# def fetch_references_with_opencitations(dois_to_query: pd.Series) -> tuple[dict[str,list[str]],list[str]]:
+#     fetched_references = {}
+#     error_references = []
+#     api_call = "https://api.opencitations.net/index/v2/references/doi:{doi}"
+#     HTTP_HEADERS = {"authorization": OPENCITATIONS_ACCESS_TOKEN}
+#     for doi in dois_to_query:
+#         result = requests.get(api_call.format(doi=doi), headers=HTTP_HEADERS)
+#         if result.status_code == 200:
+#             result_df = pd.DataFrame.from_dict(json.loads(result.content))
+#             result_df['doi'] = result_df['cited'].str.extract(r'doi:([\S]+)')
+#             fetched_references[doi] = result_df
+#         else:
+#             error_references.append("doi")
+#         time.sleep(0.5)
+#     return fetched_references, error_references
+    
+@unpack_fields('fetched_references_df', "error_references_df")
+def fetch_references_with_opencitations(dois_to_query: pd.Series) -> tuple[pd.DataFrame,pd.DataFrame]:
+    """
+    Fetch citation data from OpenCitations API using DOIs.
+    
+    Args:
+        dois_to_query: Series of DOIs to query
+    
+    Returns:
+        tuple of (fetched_references_df, error_references_df)
+        - fetched_references_df: columns [citing_omid, citing_doi, cited_dois, cited_omids]
+        - error_references_df: columns [error_omid, error_doi]
+    """
+    fetched_references = []
     error_references = []
-    api_call = "https://api.opencitations.net/index/v2/references/doi{doi}"
+    api_call = "https://api.opencitations.net/index/v2/references/doi:{doi}"
     HTTP_HEADERS = {"authorization": OPENCITATIONS_ACCESS_TOKEN}
+    
+    for i, doi in enumerate(dois_to_query):
+        if i > 5:
+            break
+        result = requests.get(api_call.format(doi=doi), headers=HTTP_HEADERS)
+        if result.status_code == 200:
+            try:
+                result_df = pd.DataFrame.from_dict(json.loads(result.content))
+                if not result_df.empty:
+                    # Extract OMID from the 'citing' field (the paper we queried)
+                    citing_omid = result_df['citing'].iloc[0] if 'citing' in result_df.columns else None
+                    if citing_omid:
+                        citing_omid = pd.Series([citing_omid]).str.extract(r'omid:([\S]+)', expand=False).iloc[0]
+                    
+                    # Extract cited DOIs and OMIDs from the 'cited' field
+                    result_df['cited_doi'] = result_df['cited'].str.extract(r'doi:([\S]+)', expand=False)
+                    result_df['cited_omid'] = result_df['cited'].str.extract(r'omid:([\S]+)', expand=False)
+                    
+                    # Aggregate into lists
+                    cited_dois = result_df['cited_doi'].dropna().tolist()
+                    cited_omids = result_df['cited_omid'].dropna().tolist()
+                    
+                    fetched_references.append({
+                        'citing_omid': citing_omid,  # OMID extracted from API response
+                        'citing_doi': doi,            # DOI we used to query
+                        #these ones are tuples because we need them hashable
+                        'cited_dois': tuple(cited_dois),     # DOIs it cites
+                        'cited_omids': tuple(cited_omids)    # OMIDs it cites
+                    })
+                else:
+                    # Empty response - no citations found
+                    fetched_references.append({
+                        'citing_omid': None,
+                        'citing_doi': doi,
+                        'cited_dois': (),
+                        'cited_omids': ()
+                    })
+            except Exception as e:
+                print(f"Error processing {doi}: {e}")
+                error_references.append({
+                    'error_omid': None,
+                    'error_doi': doi
+                })
+        else:
+            error_references.append({
+                'error_omid': None,
+                'error_doi': doi
+            })
+        
+        time.sleep(0.5)
+    
+    # Convert to DataFrames
+    fetched_references_df = pd.DataFrame(fetched_references)
+    error_references_df = pd.DataFrame(error_references)
+    return fetched_references_df, error_references_df
 
-    results = requests.get(api_call, headers=HTTP_HEADERS)
-    json.loads(results.content)
+@datasaver()
+def save_error_references_from_open_citations(path_save_error_references: Path, error_references_df: pd.DataFrame) -> dict:
+    error_references_df.to_parquet(path_save_error_references)
+    metadata = utils.get_file_metadata(path_save_error_references)
+    return metadata
+
+@datasaver()
+def save_references_from_open_citations(path_save_references: Path, fetched_references_df: pd.DataFrame) -> dict:
+    fetched_references_df.to_parquet(path_save_references)
+    metadata = utils.get_file_metadata(path_save_references)
+    return metadata
 
 @cache(format='pickle')
 @unpack_fields('fetched_references', "error_references")
