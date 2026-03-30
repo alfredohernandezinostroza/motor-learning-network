@@ -7,3 +7,4 @@
 /unified_database.parquet
 /updated_references.pickle
 /wos_database.parquet
+/clean_unified_database.parquet
