@@ -1,4 +1,4 @@
-[project]
+[workspace]
 name = "motor-learning-network"
 description = "A short description of the project."
 version = "0.1.0"
