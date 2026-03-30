@@ -1,11 +1,8 @@
 /bibtex_with_references
-/error_references.txt
 /medline_database.parquet
 /merged_WOS_database_until_mid_2025.parquet
-/references.pickle
 /scopus_database.parquet
 /unified_database.parquet
-/updated_references.pickle
 /wos_database.parquet
 /clean_unified_database.parquet
 /error_references_opencitations.parquet
