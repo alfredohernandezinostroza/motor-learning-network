@@ -1,0 +1,22 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	save_clean_merged_dataframes [label=<<b>save_clean_merged_dataframes</b><br /><br /><i>save_clean_merged_dataframes()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	clean_merged_dataframes [label=<<b>clean_merged_dataframes</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"unified_database.loader" [label=<<b>unified_database.loader</b><br /><br /><i>unified_database()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	unified_database [label=<<b>unified_database</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	clean_merged_dataframes -> save_clean_merged_dataframes
+	_save_clean_merged_dataframes_inputs [label=<<table border="0"><tr><td>clean_merged_dataframes_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_clean_merged_dataframes_inputs -> save_clean_merged_dataframes
+	unified_database -> clean_merged_dataframes
+	"_unified_database.loader_inputs" [label=<<table border="0"><tr><td>merged_dataframes_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_unified_database.loader_inputs" -> "unified_database.loader"
+	"unified_database.loader" -> unified_database
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}
