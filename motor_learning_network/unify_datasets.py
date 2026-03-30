@@ -279,7 +279,6 @@ def ebsco_df_clean(
     unified_database_schema.validate(ebsco_df)
     return ebsco_df
 
-
 def merged_dataframes(
     scopus_df_clean: pd.DataFrame,
     wos_df_clean: pd.DataFrame,
@@ -287,8 +286,8 @@ def merged_dataframes(
     ebsco_df_clean: pd.DataFrame,
 ) -> pd.DataFrame:
     merged_dataframes = pd.concat([scopus_df_clean, wos_df_clean, pubmed_df_clean, ebsco_df_clean])
+    merged_dataframes = merged_dataframes.reset_index()
     return merged_dataframes
-
 
 if __name__ == "__main__":
     sys.exit(_main())
