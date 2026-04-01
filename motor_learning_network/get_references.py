@@ -1,3 +1,4 @@
+from tqdm import tqdm
 import time
 import sys
 from hamilton_sdk import adapters
@@ -176,54 +177,64 @@ def fetch_references_with_opencitations(dois_to_query: pd.Series) -> tuple[pd.Da
     api_call = "https://api.opencitations.net/index/v2/references/doi:{doi}"
     HTTP_HEADERS = {"authorization": OPENCITATIONS_ACCESS_TOKEN}
     
-    for i, doi in enumerate(dois_to_query):
-        if i > 5:
-            break
-        result = requests.get(api_call.format(doi=doi), headers=HTTP_HEADERS)
-        if result.status_code == 200:
-            try:
-                result_df = pd.DataFrame.from_dict(json.loads(result.content))
-                if not result_df.empty:
-                    # Extract OMID from the 'citing' field (the paper we queried)
-                    citing_omid = result_df['citing'].iloc[0] if 'citing' in result_df.columns else None
-                    if citing_omid:
-                        citing_omid = pd.Series([citing_omid]).str.extract(r'omid:([\S]+)', expand=False).iloc[0]
-                    
-                    # Extract cited DOIs and OMIDs from the 'cited' field
-                    result_df['cited_doi'] = result_df['cited'].str.extract(r'doi:([\S]+)', expand=False)
-                    result_df['cited_omid'] = result_df['cited'].str.extract(r'omid:([\S]+)', expand=False)
-                    
-                    # Aggregate into lists
-                    cited_dois = result_df['cited_doi'].dropna().tolist()
-                    cited_omids = result_df['cited_omid'].dropna().tolist()
-                    
-                    fetched_references.append({
-                        'citing_omid': citing_omid,  # OMID extracted from API response
-                        'citing_doi': doi,            # DOI we used to query
-                        #these ones are tuples because we need them hashable
-                        'cited_dois': tuple(cited_dois),     # DOIs it cites
-                        'cited_omids': tuple(cited_omids)    # OMIDs it cites
+    for doi in tqdm(dois_to_query):
+        try:
+            result = requests.get(api_call.format(doi=doi), headers=HTTP_HEADERS)
+            if result.status_code == 200:
+                try:
+                    result_df = pd.DataFrame.from_dict(json.loads(result.content))
+                    if not result_df.empty:
+                        # Extract OMID from the 'citing' field (the paper we queried)
+                        citing_omid = result_df['citing'].iloc[0] if 'citing' in result_df.columns else None
+                        if citing_omid:
+                            citing_omid = pd.Series([citing_omid]).str.extract(r'omid:([\S]+)', expand=False).iloc[0]
+                        
+                        # Extract cited DOIs and OMIDs from the 'cited' field
+                        result_df['cited_doi'] = result_df['cited'].str.extract(r'doi:([\S]+)', expand=False)
+                        result_df['cited_omid'] = result_df['cited'].str.extract(r'omid:([\S]+)', expand=False)
+                        
+                        # Aggregate into lists
+                        cited_dois = result_df['cited_doi'].dropna().tolist()
+                        cited_omids = result_df['cited_omid'].dropna().tolist()
+                        
+                        fetched_references.append({
+                            'citing_omid': citing_omid,  # OMID extracted from API response
+                            'citing_doi': doi,            # DOI we used to query
+                            #these ones are tuples because we need them hashable
+                            'cited_dois': tuple(cited_dois),     # DOIs it cites
+                            'cited_omids': tuple(cited_omids)    # OMIDs it cites
+                        })
+                    else:
+                        # Empty response - no citations found
+                        fetched_references.append({
+                            'citing_omid': None,
+                            'citing_doi': doi,
+                            'cited_dois': (),
+                            'cited_omids': ()
+                        })
+                except Exception as e:
+                    error_message = f"Error processing of {doi}: {e}"
+                    logger.warning(error_message)
+                    error_references.append({
+                        'error_omid': None,
+                        'error_doi': doi,
+                        'error_message': error_message
                     })
-                else:
-                    # Empty response - no citations found
-                    fetched_references.append({
-                        'citing_omid': None,
-                        'citing_doi': doi,
-                        'cited_dois': (),
-                        'cited_omids': ()
-                    })
-            except Exception as e:
-                print(f"Error processing {doi}: {e}")
+            else:
                 error_references.append({
                     'error_omid': None,
-                    'error_doi': doi
+                    'error_doi': doi,
+                    'error_message': f'got status code {result.status_code}  during fetch '
                 })
-        else:
+        except Exception as e:
+            error_message = f"Error during retrieval of {doi}: {e}"
+            logger.warning(error_message)
             error_references.append({
                 'error_omid': None,
-                'error_doi': doi
+                'error_doi': doi,
+                'error_message': error_message
             })
-        
+            
         time.sleep(0.5)
     
     # Convert to DataFrames
