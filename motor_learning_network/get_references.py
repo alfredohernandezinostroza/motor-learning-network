@@ -1,3 +1,4 @@
+from enum import Enum
 from tqdm import tqdm
 import time
 import sys
@@ -19,6 +20,12 @@ import requests
 ###################
 ##   Constants   ##
 ###################
+class ReferencesSource(Enum):
+    OPENCITATIONS = 0
+    CROSSREF = 1
+
+REFERENCES_SOURCE = ReferencesSource.OPENCITATIONS
+
 CURRENT_FILE_NAME = Path(__file__).stem
 hamilton.log_setup.setup_logging(logging.INFO)
 
@@ -29,12 +36,12 @@ if EXECUTE:
     logger.info("Executing the DAG!")
 
 CURRENT_FILE_NAME = Path(__file__).stem
-# UI_CONFIG = adapters.HamiltonTracker(
-#     project_id=DEFAULT_UI_PROJECT_ID,
-#     username=DEFAULT_UI_USERNAME,
-#     dag_name=CURRENT_FILE_NAME,
-#     tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
-# )
+UI_CONFIG = adapters.HamiltonTracker(
+    project_id=DEFAULT_UI_PROJECT_ID,
+    username=DEFAULT_UI_USERNAME,
+    dag_name=CURRENT_FILE_NAME,
+    tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
+)
 #####################
 ##  Aux Functions  ##
 #####################
@@ -55,21 +62,22 @@ def _main() -> int:
     ########################
     ## Inputs and Outputs ##
     ########################
+    references_file_path  = PROCESSED_DATA_PATH/'references_opencitations.parquet'
+    error_references_file_path  = PROCESSED_DATA_PATH/"error_references_opencitations.parquet"
     inputs = dict(
             database_path=PROCESSED_DATA_PATH/'clean_unified_database.parquet',
-            path_save_error_references = PROCESSED_DATA_PATH/"error_references_opencitations.parquet",
-            path_save_references = PROCESSED_DATA_PATH/"references_opencitations.parquet",
+            references_file_path = references_file_path,
+            error_references_file_path = error_references_file_path,
                   )
     outputs = ["save_references_from_open_citations", "save_error_references_from_open_citations"]
     # outputs = ["save_references", "save_error_references"]
 
-    references_pickled_file_path  = Path(PROCESSED_DATA_PATH,'references.pickle')
-    if references_pickled_file_path.is_file():
+    #the DAG wil change according to if we have already have results saved on disk
+    if references_file_path.is_file():
         references_on_disk = True
-        inputs['references_pickled_file_path'] = references_pickled_file_path
-        
     else:
         references_on_disk = False
+
     logger.info(f"References on disk: {references_on_disk}")
     import __main__
     dr = (
@@ -77,11 +85,12 @@ def _main() -> int:
         .with_modules(__main__)
         .with_config(
             dict(
-                references_on_disk=references_on_disk
+                references_on_disk=references_on_disk,
+                references_source=REFERENCES_SOURCE
             )
         )
         # .with_cache()
-        # .with_adapters(UI_CONFIG)
+        .with_adapters(UI_CONFIG)
         .build()
         )
     
@@ -102,7 +111,7 @@ def _main() -> int:
 #########################
 ##    DAG Definition   ##
 #########################
-# @extract_columns('doi')
+
 def doi(database: pd.DataFrame) -> pd.Series:
     return database['doi']
 
@@ -116,7 +125,7 @@ def database(database_path: Path) -> pd.DataFrame:
 
 def cleaned_dois(doi: pd.Series) -> pd.Series:
     """Clean dois. Modify according to your cleaning needs"""
-    if isinstance(doi, pd.DataFrame): #this shouldn´t be her, but apparently there's a bug with extract fields
+    if isinstance(doi, pd.DataFrame): #this shouldn't be here, but apparently there's a bug with extract fields
         doi = doi['doi']
     cleaned_dois = doi.dropna()
     cleaned_dois = cleaned_dois[cleaned_dois != "UNKNOWN"]
@@ -125,16 +134,33 @@ def cleaned_dois(doi: pd.Series) -> pd.Series:
 
 @config.when(references_on_disk=True)
 @dataloader()
-def loaded_references(references_pickled_file_path: Path) -> tuple[dict, dict]:
-    logger.info(f"Loading references from {references_pickled_file_path}...")
-    with open(references_pickled_file_path, 'rb') as f:
-        loaded_references = pickle.load(f)
-        return loaded_references, utils.get_file_metadata(references_pickled_file_path)
+def loaded_references_df(references_file_path: Path) -> tuple[pd.DataFrame, dict]:
+    logger.info(f"Loading references from {references_file_path}...")
+    loaded_references = pd.read_parquet(references_file_path)
+    loaded_references = loaded_references
+    return loaded_references, utils.get_file_metadata(references_file_path)
 
 @config.when(references_on_disk=True)
-def dois_to_query__with_loaded_references(cleaned_dois: pd.Series, loaded_references: dict) -> pd.Series:
-    loaded_references_lower = [k.lower() for k in loaded_references.keys()]
-    query_dois = cleaned_dois[~cleaned_dois.isin(loaded_references_lower)] #only query DOIs that are not already in the loaded references
+def loaded_references(loaded_references_df: pd.DataFrame) -> pd.Series:
+    loaded_references = loaded_references_df['citing_doi'].str.lower()
+    return loaded_references
+
+@config.when(references_on_disk=True)
+@dataloader()
+def loaded_error_references(error_references_file_path: Path) -> tuple[pd.Series, dict]:
+    logger.info(f"Loading references from {error_references_file_path}...")
+    if error_references_file_path.suffix == ".parquet":
+        loaded_error_references = pd.read_parquet(error_references_file_path)
+        loaded_error_references = loaded_error_references['error_doi']
+    else:
+        raise ValueError("Accepted file formats are pickle and parquet.")
+    return loaded_error_references, utils.get_file_metadata(error_references_file_path)
+    
+@config.when(references_on_disk=True)
+def dois_to_query__with_loaded_references(cleaned_dois: pd.Series, loaded_references: pd.Series, loaded_error_references: pd.Series) -> pd.Series:
+    query_dois = cleaned_dois[~cleaned_dois.isin(loaded_references)] #only query DOIs that are not already in the loaded references
+    if (set(loaded_error_references) != set(query_dois)):
+        logger.warning("The set of dois to be queried are not identical to error dois!")
     logger.info(f"Querying {len(query_dois)} out of {len(cleaned_dois)} dois due to the rest already being in the database!")
     return query_dois
 
@@ -158,7 +184,7 @@ def dois_to_query__all_dois(cleaned_dois: pd.Series) -> pd.Series:
 #             error_references.append("doi")
 #         time.sleep(0.5)
 #     return fetched_references, error_references
-    
+@config.when(references_source=ReferencesSource.OPENCITATIONS)
 @unpack_fields('fetched_references_df', "error_references_df")
 def fetch_references_with_opencitations(dois_to_query: pd.Series) -> tuple[pd.DataFrame,pd.DataFrame]:
     """
@@ -243,19 +269,24 @@ def fetch_references_with_opencitations(dois_to_query: pd.Series) -> tuple[pd.Da
     return fetched_references_df, error_references_df
 
 @datasaver()
-def save_error_references_from_open_citations(path_save_error_references: Path, error_references_df: pd.DataFrame) -> dict:
-    error_references_df.to_parquet(path_save_error_references)
-    metadata = utils.get_file_metadata(path_save_error_references)
+@config.when(references_source=ReferencesSource.OPENCITATIONS)
+def save_error_references_from_open_citations(error_references_file_path: Path, error_references_df: pd.DataFrame) -> dict:
+    error_references_df.to_parquet(error_references_file_path)
+    metadata = utils.get_file_metadata(error_references_file_path)
     return metadata
 
 @datasaver()
-def save_references_from_open_citations(path_save_references: Path, fetched_references_df: pd.DataFrame) -> dict:
-    fetched_references_df.to_parquet(path_save_references)
-    metadata = utils.get_file_metadata(path_save_references)
+@config.when(references_source=ReferencesSource.OPENCITATIONS)
+def save_references_from_open_citations(references_file_path: Path, fetched_references_df: pd.DataFrame, loaded_references_df: pd.DataFrame = pd.DataFrame()) -> dict:
+    if not loaded_references_df.empty:
+        fetched_references_df = pd.concat([loaded_references_df, fetched_references_df])
+    fetched_references_df.to_parquet(references_file_path)
+    metadata = utils.get_file_metadata(references_file_path)
     return metadata
 
 @cache(format='pickle')
 @unpack_fields('fetched_references', "error_references")
+@config.when(references_source=ReferencesSource.CROSSREF)
 def fetch_references_with_crossref(dois_to_query: pd.Series) -> tuple[dict[str,list[str]],list[str]]:
     fetched_references = {}
     error_references = []
@@ -287,8 +318,9 @@ def fetch_references_with_crossref(dois_to_query: pd.Series) -> tuple[dict[str,l
         time.sleep(0.1)
     return fetched_references, error_references
 
+@config.when(references_source=ReferencesSource.CROSSREF)
 @datasaver()
-def save_error_references(error_references: list[str], saving_path: Path) -> dict:
+def save_error_references_from_crossref(error_references: list[str], saving_path: Path) -> dict:
     filename = "error_references.txt"
     with open(saving_path / filename, "w") as f:
         for doi in error_references:
@@ -297,9 +329,9 @@ def save_error_references(error_references: list[str], saving_path: Path) -> dic
     return metadata
     
 
-@config.when(references_on_disk=True)
+@config.when(references_on_disk=True, references_source=ReferencesSource.CROSSREF)
 @datasaver()
-def save_references__with_loaded_references(fetched_references: dict[str,list[str]], loaded_references: dict[str,list[str]], saving_path: Path) -> dict:
+def save_references_from_crossref__with_loaded_references(fetched_references: dict[str,list[str]], loaded_references: dict[str,list[str]], saving_path: Path) -> dict:
     all_references = fetched_references | loaded_references #merging both dictionaries into one
     filename = "references.pickle"
     with open(saving_path / filename,"wb") as f:
@@ -307,9 +339,9 @@ def save_references__with_loaded_references(fetched_references: dict[str,list[st
     metadata = utils.get_file_metadata(saving_path / filename)
     return metadata
 
-@config.when(references_on_disk=False)
+@config.when(references_on_disk=False, references_source=ReferencesSource.CROSSREF)
 @datasaver()
-def save_references__fetched(fetched_references: dict[str,list[str]], saving_path: Path) -> dict:
+def save_references_from_crossref__fetched(fetched_references: dict[str,list[str]], saving_path: Path) -> dict:
     filename = "references.pickle"
     with open(saving_path / filename,"wb") as f:
         pickle.dump(fetched_references,  f, pickle.HIGHEST_PROTOCOL)
