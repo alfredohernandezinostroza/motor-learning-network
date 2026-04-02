@@ -1,0 +1,5 @@
+outs:
+- md5: 34791f921ff7a228e3ef95859d60c7b7
+  size: 14209269
+  hash: md5
+  path: citation_network.graphml
