@@ -1,15 +1,17 @@
+import leidenalg
+import numpy as np
 import pandas as pd
 import cdlib
 import pickle
 import igraph as ig
 import sys
-from hamilton.function_modifiers import dataloader, datasaver
+from hamilton.function_modifiers import dataloader, datasaver, value, source, group, parameterize
 from hamilton.io import utils
 from hamilton_sdk import adapters
 from hamilton import driver
 from pathlib import Path
 import logging
-from motor_learning_network.constants import PROCESSED_DATA_PATH, FIGURES_PATH, EMAIL, OPENCITATIONS_ACCESS_TOKEN, DEFAULT_UI_PROJECT_ID, DEFAULT_UI_USERNAME, TEAM_NAME
+from motor_learning_network.constants import GRAPH_LEVEL_DATA_PATH, FIGURES_PATH, EMAIL, OPENCITATIONS_ACCESS_TOKEN, DEFAULT_UI_PROJECT_ID, DEFAULT_UI_USERNAME, TEAM_NAME
 import hamilton.log_setup
 
 ###################
@@ -31,6 +33,8 @@ UI_CONFIG = adapters.HamiltonTracker(
     dag_name=CURRENT_FILE_NAME,
     tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
 )
+step = 0.1
+resolutions = np.arange(0.01, 0.1 + step, step) #[0.01, ..., 0.1]
 #####################
 ##  Aux Functions  ##
 #####################
@@ -44,8 +48,13 @@ def _main() -> int:
     ########################
     ## Inputs and Outputs ##
     ########################
-    inputs = dict()
-    outputs = []
+    inputs = dict(
+        citation_network_path=GRAPH_LEVEL_DATA_PATH/"citation_network.graphml",
+        resolutions=resolutions,
+        seed=0,
+        n_iterations=10
+    )
+    outputs = [f"leiden_with_resolution_{resolution}" for resolution in resolutions]
     import __main__
     dr = (
         driver.Builder()
@@ -75,70 +84,98 @@ def _main() -> int:
 #########################
 
 @dataloader()
-def graph(graph_path: Path) -> tuple[ig.Graph, dict]:
-    with open(graph_path, "rb") as f:
-        network: ig.Graph = pickle.read(f)
-    metadata = utils.get_file_metadata(graph_path)
-    return network, metadata
+def citation_network(citation_network_path: Path) -> tuple[ig.Graph, dict]:
+    citation_network = ig.Graph.Read(citation_network_path)
+    metadata = utils.get_file_metadata(citation_network_path)
+    return citation_network, metadata
 
-def leiden_cpm_communities(citation_network: ig.Graph, resolutions: list[float]) -> cdlib.NodeClustering:
-    """Detect communities in the citation network using the Leiden algorithm.
-
-    Passes the directed graph directly to cdlib, which uses leidenalg under
-    the hood and supports directed graphs natively.
-
+@parameterize(**{f"leiden_with_resolution_{resolution}": {"resolution": value(resolution)} for resolution in resolutions})
+def leiden_cpm_communities(citation_network: ig.Graph, resolution: list[float], n_iterations: int, seed: int) -> cdlib.NodeClustering:
+    """Detect communities in the citation network using the Leiden algorithm and the constant potts model.
     Args:
         citation_network: Directed igraph citation network.
-        leiden_resolution: Resolution parameter for the Leiden algorithm.
+        resolution: Resolution parameter for the Leiden algorithm.
             Higher values yield more, smaller communities; lower values
-            yield fewer, larger communities. Default is 1.0.
+            yield fewer, larger communities.
 
     Returns:
         A cdlib NodeClustering object with the detected communities.
     """
-    for resolution in resolutions:
-        logger.info(
-            f"Running Leiden with resolution={resolution} on directed graph "
-            f"({citation_network.vcount()} vertices, {citation_network.ecount()} edges)."
-        )
-        communities = cdlib.algorithms.cpm(
-            citation_network,
-            weights=None,
-            initial_membership=None,
-            resolution_parameter=resolution,
-        )
-        logger.info(f"Leiden detected {len(communities.communities)} communities.")
+    logger.info(
+        f"Running Leiden with resolution={resolution} on directed graph "
+        f"({citation_network.vcount()} vertices, {citation_network.ecount()} edges)."
+    )
+
+    partition = leidenalg.find_partition(
+        citation_network,
+        leidenalg.CPMVertexPartition, #constant potts model
+        resolution_parameter=resolution,
+        initial_membership=None,
+        weights=None,
+        node_sizes=None,
+        seed=seed,
+        n_iterations=n_iterations
+    )
+    coms = [citation_network.vs[x]["name"] for x in partition]
+    communities = cdlib.NodeClustering(
+        coms,
+        citation_network,
+        "CPM",
+        method_parameters={
+            "initial_membership": None,
+            "weights": None,
+            "node_sizes": None,
+            "resolution_parameter": None,
+            # "n_iterations": n_iterations,
+        },
+    )
+    logger.info(f"Leiden detected {len(communities.communities)} communities.")
     return communities
 
+@parameterize(communities_per_resolution = {"communities": group([source(f"leiden_with_resolution_{resolution}") for resolution in resolutions])})
+def communities_df(communities: )
 
-def communities_dataframe(
-    leiden_communities: cdlib.NodeClustering, citation_network: ig.Graph
-) -> pd.DataFrame:
-    """Convert Leiden community assignments to a tidy DataFrame.
+# @dataloader()
+# def clean_unified_database(clean_unified_database_path: Path) -> pd.DataFrame:
+#     pass
+    
+def citation_network_with_attributes(citation_network: ig.Graph, clean_unified_database: pd.DataFrame) -> ig.Graph:
+    columns = clean_unified_database.columns.to_list()
+    clean_unified_database = clean_unified_database.set_index("doi")
+    for col in columns:
+        citation_network.vs[col] = clean_unified_database.loc[citation_network.vs["name"], col].tolist()
+    citation_network.vs["keywords"] = ["|".join(keywords) if keywords else "" for keywords in citation_network.vs["keywords"]]
+    citation_network.vs["authors"] = ["|".join(authors) if authors else "" for authors in citation_network.vs["authors"]]
+    return citation_network
 
-    Columns:
-        - doi: paper DOI (vertex name)
-        - community_id: integer community index (0-based)
-        - community_size: number of members in the community
-    """
-    doi_names = citation_network.vs["name"]
-    records = []
-    for community_id, members in enumerate(leiden_communities.communities):
-        size = len(members)
-        for vertex_idx in members:
-            records.append(
-                {
-                    "doi": doi_names[vertex_idx],
-                    "community_id": community_id,
-                    "community_size": size,
-                }
-            )
-    df = pd.DataFrame(records).sort_values(["community_id", "doi"]).reset_index(drop=True)
-    logger.info(
-        f"Communities dataframe: {len(df)} rows, "
-        f"{df['community_id'].nunique()} unique communities."
-    )
-    return df
+# def communities_dataframe(
+#     leiden_communities: cdlib.NodeClustering, citation_network_with_attributes: ig.Graph
+# ) -> pd.DataFrame:
+#     """Convert Leiden community assignments to a tidy DataFrame.
+
+#     Columns:
+#         - doi: paper DOI (vertex name)
+#         - community_id: integer community index (0-based)
+#         - community_size: number of members in the community
+#     """
+#     doi_names = citation_network.vs["name"]
+#     records = []
+#     for community_id, members in enumerate(leiden_communities.communities):
+#         size = len(members)
+#         for vertex_idx in members:
+#             records.append(
+#                 {
+#                     "doi": doi_names[vertex_idx],
+#                     "community_id": community_id,
+#                     "community_size": size,
+#                 }
+#             )
+#     df = pd.DataFrame(records).sort_values(["community_id", "doi"]).reset_index(drop=True)
+#     logger.info(
+#         f"Communities dataframe: {len(df)} rows, "
+#         f"{df['community_id'].nunique()} unique communities."
+#     )
+#     return df
 
 @datasaver()
 def save_communities(communities_dataframe: pd.DataFrame, communities_path: Path) -> dict:
