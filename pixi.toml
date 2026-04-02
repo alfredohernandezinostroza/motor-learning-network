@@ -42,6 +42,9 @@ dvc-gdrive = ">=3.0.1, <4"
 pandera = ">=0.29.0, <0.30"
 rispy = ">=0.10.0, <0.11"
 duckdb = ">=1.5.1, <2"
+igraph = ">=1.0.0, <2"
+fa2 = ">=1.1.2, <2"
+cython = ">=3.2.4, <4"
 
 [feature.simple.dependencies]
 python = "3.12.12.*"
