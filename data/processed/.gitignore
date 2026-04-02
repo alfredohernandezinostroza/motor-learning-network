@@ -7,4 +7,3 @@
 /clean_unified_database.parquet
 /error_references_opencitations.parquet
 /references_opencitations.parquet
-/citation_network.graphml
