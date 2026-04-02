@@ -1,0 +1,43 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	save_citation_network_as_graphml [label=<<b>save_citation_network_as_graphml</b><br /><br /><i>save_citation_network_as_graphml()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	citation_edges [label=<<b>citation_edges</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	citation_network_with_layout [label=<<b>citation_network_with_layout</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	citation_network [label=<<b>citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	references_df [label=<<b>references_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_citation_network_as_pickle [label=<<b>save_citation_network_as_pickle</b><br /><br /><i>save_citation_network_as_pickle()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	plot_citation_network [label=<<b>plot_citation_network</b><br /><br /><i>plot_citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"unified_database.loader" [label=<<b>unified_database.loader</b><br /><br /><i>unified_database()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	unified_database [label=<<b>unified_database</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	valid_dois [label=<<b>valid_dois</b><br /><br /><i>set</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"references_df.loader" [label=<<b>references_df.loader</b><br /><br /><i>references_df()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	citation_network_with_layout -> save_citation_network_as_graphml
+	_save_citation_network_as_graphml_inputs [label=<<table border="0"><tr><td>citation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_citation_network_as_graphml_inputs -> save_citation_network_as_graphml
+	references_df -> citation_edges
+	valid_dois -> citation_edges
+	citation_network -> citation_network_with_layout
+	citation_edges -> citation_network
+	valid_dois -> citation_network
+	"references_df.loader" -> references_df
+	citation_network_with_layout -> save_citation_network_as_pickle
+	_save_citation_network_as_pickle_inputs [label=<<table border="0"><tr><td>citation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_citation_network_as_pickle_inputs -> save_citation_network_as_pickle
+	citation_network_with_layout -> plot_citation_network
+	_plot_citation_network_inputs [label=<<table border="0"><tr><td>citation_network_plot_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_plot_citation_network_inputs -> plot_citation_network
+	"_unified_database.loader_inputs" [label=<<table border="0"><tr><td>unified_database_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_unified_database.loader_inputs" -> "unified_database.loader"
+	"unified_database.loader" -> unified_database
+	unified_database -> valid_dois
+	"_references_df.loader_inputs" [label=<<table border="0"><tr><td>references_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_references_df.loader_inputs" -> "references_df.loader"
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}
