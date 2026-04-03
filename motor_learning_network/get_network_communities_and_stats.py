@@ -33,7 +33,7 @@ UI_CONFIG = adapters.HamiltonTracker(
     dag_name=CURRENT_FILE_NAME,
     tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
 )
-resolutions = [round(0.1 + i * 0.1, 2) for i in range(1, 9)] #[0.01, ..., 0.1]
+resolutions = [round( i * 0.001, 3) for i in range(1, 10)] #[0.01, ..., 0.1]
 logger.info(resolutions)
 #####################
 ##  Aux Functions  ##
@@ -56,8 +56,8 @@ def _main() -> int:
         citation_network_path=GRAPH_LEVEL_DATA_PATH/"citation_network.graphml",
         clean_unified_database_path=PROCESSED_DATA_PATH / "clean_unified_database.parquet",
         #output paths
-        clean_unified_database_with_communities_path=GRAPH_LEVEL_DATA_PATH / "clean_unified_database_with_communities_high_res.parquet",
-        new_citation_network_path=GRAPH_LEVEL_DATA_PATH / "citation_network_full_high_res.graphml",
+        clean_unified_database_with_communities_path=GRAPH_LEVEL_DATA_PATH / "clean_unified_database_with_communities_low_res.parquet",
+        new_citation_network_path=GRAPH_LEVEL_DATA_PATH / "citation_network_full_low_res.graphml",
     )
     outputs = ["save_citation_network_as_graphml", "save_database_with_communities"]
     # outputs = [f"leiden_with_resolution_{resolution}" for resolution in resolutions]

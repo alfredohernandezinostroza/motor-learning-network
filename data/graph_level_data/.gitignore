@@ -3,3 +3,5 @@
 /clean_unified_database_with_communities.parquet
 /citation_network_full_high_res.graphml
 /clean_unified_database_with_communities_high_res.parquet
+/citation_network_full_low_res.graphml
+/clean_unified_database_with_communities_low_res.parquet

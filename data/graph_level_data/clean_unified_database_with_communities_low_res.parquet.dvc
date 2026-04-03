@@ -1,0 +1,5 @@
+outs:
+- md5: bde8556dbaca22713b15cff73524f4f5
+  size: 21749499
+  hash: md5
+  path: clean_unified_database_with_communities_low_res.parquet
