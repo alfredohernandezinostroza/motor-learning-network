@@ -1,0 +1,5 @@
+outs:
+- md5: fccd07fb067f099d31a6ac706c9fb24f
+  size: 72623420
+  hash: md5
+  path: citation_network_full_high_res.graphml

@@ -1,3 +1,5 @@
 /citation_network.graphml
 /citation_network_full.graphml
 /clean_unified_database_with_communities.parquet
+/citation_network_full_high_res.graphml
+/clean_unified_database_with_communities_high_res.parquet
