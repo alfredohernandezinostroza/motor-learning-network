@@ -1,0 +1,5 @@
+outs:
+- md5: 30b4c53e19aa4ba8c87343488daedf4f
+  size: 486825236
+  hash: md5
+  path: bibliographic_coupling.graphml

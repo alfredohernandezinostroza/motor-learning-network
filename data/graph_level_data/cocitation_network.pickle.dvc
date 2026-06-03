@@ -1,0 +1,5 @@
+outs:
+- md5: 485ea9633e3a63f0feeb2b0cb675a526
+  size: 17163342
+  hash: md5
+  path: cocitation_network.pickle

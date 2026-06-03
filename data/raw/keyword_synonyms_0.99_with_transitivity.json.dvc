@@ -1,0 +1,5 @@
+outs:
+- md5: b56c0dece056f61ee1d94037a58c0b21
+  size: 69944
+  hash: md5
+  path: keyword_synonyms_0.99_with_transitivity.json

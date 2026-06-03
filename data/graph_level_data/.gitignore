@@ -5,3 +5,11 @@
 /clean_unified_database_with_communities_high_res.parquet
 /citation_network_full_low_res.graphml
 /clean_unified_database_with_communities_low_res.parquet
+/bibliographic_coupling_without_layout.graphml
+/bibliographic_coupling.graphml
+/bibliographic_coupling.pickle
+/citation_network_with_topics_new.graphml
+/citation_network_with_topics_new.parquet
+/cocitation_network_without_layout.graphml
+/cocitation_network.pickle
+/cocitation_network.graphml

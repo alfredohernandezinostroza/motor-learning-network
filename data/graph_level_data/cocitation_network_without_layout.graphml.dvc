@@ -1,0 +1,5 @@
+outs:
+- md5: 8f2bf7241b67b549911ce1fa71035607
+  size: 126942951
+  hash: md5
+  path: cocitation_network_without_layout.graphml

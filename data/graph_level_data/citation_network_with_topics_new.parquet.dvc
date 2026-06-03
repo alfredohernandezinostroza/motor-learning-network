@@ -1,0 +1,5 @@
+outs:
+- md5: d0933ad50b296b878bddc68d9aa68c72
+  size: 14196082
+  hash: md5
+  path: citation_network_with_topics_new.parquet
