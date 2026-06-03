@@ -2,126 +2,76 @@
 digraph {
 	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
 	node [fillcolor="#ffffff"]
-	"leiden_with_resolution_0.18" [label=<<b>leiden_with_resolution_0.18</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"leiden_with_resolution_0.07" [label=<<b>leiden_with_resolution_0.07</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	save_database_with_communities [label=<<b>save_database_with_communities</b><br /><br /><i>save_database_with_communities()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	"leiden_with_resolution_0.19" [label=<<b>leiden_with_resolution_0.19</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"leiden_with_resolution_0.14" [label=<<b>leiden_with_resolution_0.14</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"leiden_with_resolution_0.02" [label=<<b>leiden_with_resolution_0.02</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	clean_unified_database [label=<<b>clean_unified_database</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"leiden_with_resolution_0.08" [label=<<b>leiden_with_resolution_0.08</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	citation_network [label=<<b>citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"clean_unified_database.loader" [label=<<b>clean_unified_database.loader</b><br /><br /><i>clean_unified_database()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	"leiden_with_resolution_0.04" [label=<<b>leiden_with_resolution_0.04</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	clean_unified_database_with_communities [label=<<b>clean_unified_database_with_communities</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"leiden_with_resolution_0.11" [label=<<b>leiden_with_resolution_0.11</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.001" [label=<<b>leiden_with_resolution_0.001</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	save_citation_network_as_graphml [label=<<b>save_citation_network_as_graphml</b><br /><br /><i>save_citation_network_as_graphml()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	citation_network_with_attributes_and_communities [label=<<b>citation_network_with_attributes_and_communities</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"leiden_with_resolution_0.1" [label=<<b>leiden_with_resolution_0.1</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"leiden_with_resolution_0.09" [label=<<b>leiden_with_resolution_0.09</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"leiden_with_resolution_0.13" [label=<<b>leiden_with_resolution_0.13</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"leiden_with_resolution_0.01" [label=<<b>leiden_with_resolution_0.01</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"leiden_with_resolution_0.05" [label=<<b>leiden_with_resolution_0.05</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"leiden_with_resolution_0.03" [label=<<b>leiden_with_resolution_0.03</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"leiden_with_resolution_0.15" [label=<<b>leiden_with_resolution_0.15</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"leiden_with_resolution_0.16" [label=<<b>leiden_with_resolution_0.16</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"leiden_with_resolution_0.17" [label=<<b>leiden_with_resolution_0.17</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	communities_per_resolution_df [label=<<b>communities_per_resolution_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"leiden_with_resolution_0.06" [label=<<b>leiden_with_resolution_0.06</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	clean_unified_database_with_communities [label=<<b>clean_unified_database_with_communities</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"clean_unified_database.loader" [label=<<b>clean_unified_database.loader</b><br /><br /><i>clean_unified_database()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"leiden_with_resolution_0.004" [label=<<b>leiden_with_resolution_0.004</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	"citation_network.loader" [label=<<b>citation_network.loader</b><br /><br /><i>citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	"leiden_with_resolution_0.12" [label=<<b>leiden_with_resolution_0.12</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	citation_network -> "leiden_with_resolution_0.18"
-	"_leiden_with_resolution_0.18_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.18_inputs" -> "leiden_with_resolution_0.18"
-	citation_network -> "leiden_with_resolution_0.07"
-	"_leiden_with_resolution_0.07_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.07_inputs" -> "leiden_with_resolution_0.07"
-	clean_unified_database_with_communities -> save_database_with_communities
-	_save_database_with_communities_inputs [label=<<table border="0"><tr><td>clean_unified_database_with_communities_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	_save_database_with_communities_inputs -> save_database_with_communities
-	citation_network -> "leiden_with_resolution_0.19"
-	"_leiden_with_resolution_0.19_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.19_inputs" -> "leiden_with_resolution_0.19"
-	citation_network -> "leiden_with_resolution_0.14"
-	"_leiden_with_resolution_0.14_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.14_inputs" -> "leiden_with_resolution_0.14"
-	citation_network -> "leiden_with_resolution_0.02"
-	"_leiden_with_resolution_0.02_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.02_inputs" -> "leiden_with_resolution_0.02"
-	"clean_unified_database.loader" -> clean_unified_database
-	citation_network -> "leiden_with_resolution_0.08"
-	"_leiden_with_resolution_0.08_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.08_inputs" -> "leiden_with_resolution_0.08"
-	"citation_network.loader" -> citation_network
-	"_clean_unified_database.loader_inputs" [label=<<table border="0"><tr><td>clean_unified_database_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_clean_unified_database.loader_inputs" -> "clean_unified_database.loader"
-	citation_network -> "leiden_with_resolution_0.04"
-	"_leiden_with_resolution_0.04_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.04_inputs" -> "leiden_with_resolution_0.04"
-	clean_unified_database -> clean_unified_database_with_communities
-	communities_per_resolution_df -> clean_unified_database_with_communities
-	citation_network -> "leiden_with_resolution_0.11"
-	"_leiden_with_resolution_0.11_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.11_inputs" -> "leiden_with_resolution_0.11"
+	"leiden_with_resolution_0.005" [label=<<b>leiden_with_resolution_0.005</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.003" [label=<<b>leiden_with_resolution_0.003</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	citation_network_with_attributes_and_communities [label=<<b>citation_network_with_attributes_and_communities</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.002" [label=<<b>leiden_with_resolution_0.002</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	communities_per_resolution_df [label=<<b>communities_per_resolution_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	citation_network [label=<<b>citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.008" [label=<<b>leiden_with_resolution_0.008</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_database_with_communities [label=<<b>save_database_with_communities</b><br /><br /><i>save_database_with_communities()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"leiden_with_resolution_0.006" [label=<<b>leiden_with_resolution_0.006</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	clean_unified_database [label=<<b>clean_unified_database</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.009" [label=<<b>leiden_with_resolution_0.009</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.007" [label=<<b>leiden_with_resolution_0.007</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	citation_network -> "leiden_with_resolution_0.001"
+	"_leiden_with_resolution_0.001_inputs" [label=<<table border="0"><tr><td>seed</td><td>int</td></tr><tr><td>n_iterations</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_leiden_with_resolution_0.001_inputs" -> "leiden_with_resolution_0.001"
 	citation_network_with_attributes_and_communities -> save_citation_network_as_graphml
 	_save_citation_network_as_graphml_inputs [label=<<table border="0"><tr><td>new_citation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
 	_save_citation_network_as_graphml_inputs -> save_citation_network_as_graphml
-	citation_network -> citation_network_with_attributes_and_communities
-	clean_unified_database_with_communities -> citation_network_with_attributes_and_communities
-	citation_network -> "leiden_with_resolution_0.1"
-	"_leiden_with_resolution_0.1_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.1_inputs" -> "leiden_with_resolution_0.1"
-	citation_network -> "leiden_with_resolution_0.09"
-	"_leiden_with_resolution_0.09_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.09"
-	citation_network -> "leiden_with_resolution_0.13"
-	"_leiden_with_resolution_0.13_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.13_inputs" -> "leiden_with_resolution_0.13"
-	citation_network -> "leiden_with_resolution_0.01"
-	"_leiden_with_resolution_0.01_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.01_inputs" -> "leiden_with_resolution_0.01"
-	citation_network -> "leiden_with_resolution_0.05"
-	"_leiden_with_resolution_0.05_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.05_inputs" -> "leiden_with_resolution_0.05"
-	citation_network -> "leiden_with_resolution_0.03"
-	"_leiden_with_resolution_0.03_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.03_inputs" -> "leiden_with_resolution_0.03"
-	citation_network -> "leiden_with_resolution_0.15"
-	"_leiden_with_resolution_0.15_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.15_inputs" -> "leiden_with_resolution_0.15"
-	citation_network -> "leiden_with_resolution_0.16"
-	"_leiden_with_resolution_0.16_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.16_inputs" -> "leiden_with_resolution_0.16"
-	citation_network -> "leiden_with_resolution_0.17"
-	"_leiden_with_resolution_0.17_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.17_inputs" -> "leiden_with_resolution_0.17"
-	"leiden_with_resolution_0.01" -> communities_per_resolution_df
-	"leiden_with_resolution_0.02" -> communities_per_resolution_df
-	"leiden_with_resolution_0.03" -> communities_per_resolution_df
-	"leiden_with_resolution_0.04" -> communities_per_resolution_df
-	"leiden_with_resolution_0.05" -> communities_per_resolution_df
-	"leiden_with_resolution_0.06" -> communities_per_resolution_df
-	"leiden_with_resolution_0.07" -> communities_per_resolution_df
-	"leiden_with_resolution_0.08" -> communities_per_resolution_df
-	"leiden_with_resolution_0.09" -> communities_per_resolution_df
-	"leiden_with_resolution_0.1" -> communities_per_resolution_df
-	"leiden_with_resolution_0.11" -> communities_per_resolution_df
-	"leiden_with_resolution_0.12" -> communities_per_resolution_df
-	"leiden_with_resolution_0.13" -> communities_per_resolution_df
-	"leiden_with_resolution_0.14" -> communities_per_resolution_df
-	"leiden_with_resolution_0.15" -> communities_per_resolution_df
-	"leiden_with_resolution_0.16" -> communities_per_resolution_df
-	"leiden_with_resolution_0.17" -> communities_per_resolution_df
-	"leiden_with_resolution_0.18" -> communities_per_resolution_df
-	"leiden_with_resolution_0.19" -> communities_per_resolution_df
-	citation_network -> "leiden_with_resolution_0.06"
-	"_leiden_with_resolution_0.06_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.06_inputs" -> "leiden_with_resolution_0.06"
+	clean_unified_database -> clean_unified_database_with_communities
+	communities_per_resolution_df -> clean_unified_database_with_communities
+	"_clean_unified_database.loader_inputs" [label=<<table border="0"><tr><td>clean_unified_database_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_clean_unified_database.loader_inputs" -> "clean_unified_database.loader"
+	citation_network -> "leiden_with_resolution_0.004"
+	"_leiden_with_resolution_0.004_inputs" [label=<<table border="0"><tr><td>seed</td><td>int</td></tr><tr><td>n_iterations</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_leiden_with_resolution_0.004_inputs" -> "leiden_with_resolution_0.004"
 	"_citation_network.loader_inputs" [label=<<table border="0"><tr><td>citation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
 	"_citation_network.loader_inputs" -> "citation_network.loader"
-	citation_network -> "leiden_with_resolution_0.12"
-	"_leiden_with_resolution_0.12_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_leiden_with_resolution_0.12_inputs" -> "leiden_with_resolution_0.12"
+	citation_network -> "leiden_with_resolution_0.005"
+	"_leiden_with_resolution_0.005_inputs" [label=<<table border="0"><tr><td>seed</td><td>int</td></tr><tr><td>n_iterations</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_leiden_with_resolution_0.005_inputs" -> "leiden_with_resolution_0.005"
+	citation_network -> "leiden_with_resolution_0.003"
+	"_leiden_with_resolution_0.003_inputs" [label=<<table border="0"><tr><td>seed</td><td>int</td></tr><tr><td>n_iterations</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_leiden_with_resolution_0.003_inputs" -> "leiden_with_resolution_0.003"
+	citation_network -> citation_network_with_attributes_and_communities
+	clean_unified_database_with_communities -> citation_network_with_attributes_and_communities
+	citation_network -> "leiden_with_resolution_0.002"
+	"_leiden_with_resolution_0.002_inputs" [label=<<table border="0"><tr><td>seed</td><td>int</td></tr><tr><td>n_iterations</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_leiden_with_resolution_0.002_inputs" -> "leiden_with_resolution_0.002"
+	"leiden_with_resolution_0.001" -> communities_per_resolution_df
+	"leiden_with_resolution_0.002" -> communities_per_resolution_df
+	"leiden_with_resolution_0.003" -> communities_per_resolution_df
+	"leiden_with_resolution_0.004" -> communities_per_resolution_df
+	"leiden_with_resolution_0.005" -> communities_per_resolution_df
+	"leiden_with_resolution_0.006" -> communities_per_resolution_df
+	"leiden_with_resolution_0.007" -> communities_per_resolution_df
+	"leiden_with_resolution_0.008" -> communities_per_resolution_df
+	"leiden_with_resolution_0.009" -> communities_per_resolution_df
+	"citation_network.loader" -> citation_network
+	citation_network -> "leiden_with_resolution_0.008"
+	"_leiden_with_resolution_0.008_inputs" [label=<<table border="0"><tr><td>seed</td><td>int</td></tr><tr><td>n_iterations</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_leiden_with_resolution_0.008_inputs" -> "leiden_with_resolution_0.008"
+	clean_unified_database_with_communities -> save_database_with_communities
+	_save_database_with_communities_inputs [label=<<table border="0"><tr><td>clean_unified_database_with_communities_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_database_with_communities_inputs -> save_database_with_communities
+	citation_network -> "leiden_with_resolution_0.006"
+	"_leiden_with_resolution_0.006_inputs" [label=<<table border="0"><tr><td>seed</td><td>int</td></tr><tr><td>n_iterations</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_leiden_with_resolution_0.006_inputs" -> "leiden_with_resolution_0.006"
+	"clean_unified_database.loader" -> clean_unified_database
+	citation_network -> "leiden_with_resolution_0.009"
+	"_leiden_with_resolution_0.009_inputs" [label=<<table border="0"><tr><td>seed</td><td>int</td></tr><tr><td>n_iterations</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_leiden_with_resolution_0.009_inputs" -> "leiden_with_resolution_0.009"
+	citation_network -> "leiden_with_resolution_0.007"
+	"_leiden_with_resolution_0.007_inputs" [label=<<table border="0"><tr><td>seed</td><td>int</td></tr><tr><td>n_iterations</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_leiden_with_resolution_0.007_inputs" -> "leiden_with_resolution_0.007"
 	subgraph cluster__legend {
 		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
 		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
