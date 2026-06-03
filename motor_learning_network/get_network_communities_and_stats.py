@@ -75,8 +75,8 @@ def _main() -> int:
     ##   Sanity checks   ##
     #######################
     dr.validate_execution(outputs, inputs=inputs)
-    dr.display_all_functions(FIGURES_PATH/f"{CURRENT_FILE_NAME}_all_functions.png",keep_dot=True)
-    dr.visualize_execution(outputs, inputs=inputs,output_file_path=FIGURES_PATH/f"{CURRENT_FILE_NAME}.png",keep_dot=False)
+    dr.display_all_functions(FIGURES_PATH/f"{CURRENT_FILE_NAME}_all_functions.png",keep_dot=True,deduplicate_inputs=True)
+    dr.visualize_execution(outputs, inputs=inputs,output_file_path=FIGURES_PATH/f"{CURRENT_FILE_NAME}.png",keep_dot=False,deduplicate_inputs=True)
 
     ###################
     ##   Execution   ##
