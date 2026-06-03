@@ -1,0 +1,48 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	save_bibliographic_coupling_as_pickle [label=<<b>save_bibliographic_coupling_as_pickle</b><br /><br /><i>save_bibliographic_coupling_as_pickle()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	citation_network [label=<<b>citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_bibliographic_coupling_as_graphml [label=<<b>save_bibliographic_coupling_as_graphml</b><br /><br /><i>save_bibliographic_coupling_as_graphml()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"citation_network.loader" [label=<<b>citation_network.loader</b><br /><br /><i>citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	bibliographic_coupling_with_layout [label=<<b>bibliographic_coupling_with_layout</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	cocitation_with_layout [label=<<b>cocitation_with_layout</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_bibliographic_coupling_as_graphml_without_layout [label=<<b>save_bibliographic_coupling_as_graphml_without_layout</b><br /><br /><i>save_bibliographic_coupling_as_graphml_without_layout()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	save_cocitation_network_as_pickle [label=<<b>save_cocitation_network_as_pickle</b><br /><br /><i>save_cocitation_network_as_pickle()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	bibliographic_coupling_network [label=<<b>bibliographic_coupling_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_cocitation_network_as_graphml_without_layout [label=<<b>save_cocitation_network_as_graphml_without_layout</b><br /><br /><i>save_cocitation_network_as_graphml_without_layout()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	cocitation_network [label=<<b>cocitation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_cocitation_network_as_graphml [label=<<b>save_cocitation_network_as_graphml</b><br /><br /><i>save_cocitation_network_as_graphml()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	bibliographic_coupling_with_layout -> save_bibliographic_coupling_as_pickle
+	_save_bibliographic_coupling_as_pickle_inputs [label=<<table border="0"><tr><td>bibliographic_coupling_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_bibliographic_coupling_as_pickle_inputs -> save_bibliographic_coupling_as_pickle
+	"citation_network.loader" -> citation_network
+	bibliographic_coupling_with_layout -> save_bibliographic_coupling_as_graphml
+	_save_bibliographic_coupling_as_graphml_inputs [label=<<table border="0"><tr><td>bibliographic_coupling_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_bibliographic_coupling_as_graphml_inputs -> save_bibliographic_coupling_as_graphml
+	"_citation_network.loader_inputs" [label=<<table border="0"><tr><td>citation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_citation_network.loader_inputs" -> "citation_network.loader"
+	bibliographic_coupling_network -> bibliographic_coupling_with_layout
+	cocitation_network -> cocitation_with_layout
+	bibliographic_coupling_network -> save_bibliographic_coupling_as_graphml_without_layout
+	_save_bibliographic_coupling_as_graphml_without_layout_inputs [label=<<table border="0"><tr><td>bibliographic_coupling_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_bibliographic_coupling_as_graphml_without_layout_inputs -> save_bibliographic_coupling_as_graphml_without_layout
+	cocitation_with_layout -> save_cocitation_network_as_pickle
+	_save_cocitation_network_as_pickle_inputs [label=<<table border="0"><tr><td>cocitation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_cocitation_network_as_pickle_inputs -> save_cocitation_network_as_pickle
+	citation_network -> bibliographic_coupling_network
+	cocitation_network -> save_cocitation_network_as_graphml_without_layout
+	_save_cocitation_network_as_graphml_without_layout_inputs [label=<<table border="0"><tr><td>cocitation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_cocitation_network_as_graphml_without_layout_inputs -> save_cocitation_network_as_graphml_without_layout
+	citation_network -> cocitation_network
+	cocitation_with_layout -> save_cocitation_network_as_graphml
+	_save_cocitation_network_as_graphml_inputs [label=<<table border="0"><tr><td>cocitation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_cocitation_network_as_graphml_inputs -> save_cocitation_network_as_graphml
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}
