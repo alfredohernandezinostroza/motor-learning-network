@@ -18,8 +18,6 @@ EXECUTE = True
 if EXECUTE:
     logger.info("Executing the DAG!")
 
-CURRENT_FILE_NAME = Path(__file__).stem
-
 #####################
 ##  Aux Functions  ##
 #####################
