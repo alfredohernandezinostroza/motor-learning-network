@@ -3,29 +3,29 @@ digraph {
 	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
 	node [fillcolor="#ffffff"]
 	"loaded_citations.loader" [label=<<b>loaded_citations.loader</b><br /><br /><i>loaded_citations()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	updated_loaded_citations [label=<<b>updated_loaded_citations</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	save_updated_loaded_citations [label=<<b>save_updated_loaded_citations</b><br /><br /><i>save_updated_loaded_citations()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	loaded_citations [label=<<b>loaded_citations</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	missing_citations_dois [label=<<b>missing_citations_dois</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	failed_fetches [label=<<b>failed_fetches</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	save_missing_citations_openalex_ids_errors [label=<<b>save_missing_citations_openalex_ids_errors</b><br /><br /><i>save_missing_citations_openalex_ids_errors()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	missing_citations_openalex_ids [label=<<b>missing_citations_openalex_ids</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	get_missing_citations_openalex_ids [label=<<b>get_missing_citations_openalex_ids</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	updated_loaded_citations [label=<<b>updated_loaded_citations</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	save_missing_citations_openalex_ids [label=<<b>save_missing_citations_openalex_ids</b><br /><br /><i>save_missing_citations_openalex_ids()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	loaded_citations [label=<<b>loaded_citations</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_missing_citations_openalex_ids_errors [label=<<b>save_missing_citations_openalex_ids_errors</b><br /><br /><i>save_missing_citations_openalex_ids_errors()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	save_updated_loaded_citations [label=<<b>save_updated_loaded_citations</b><br /><br /><i>save_updated_loaded_citations()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	missing_citations_dois [label=<<b>missing_citations_dois</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	get_missing_citations_openalex_ids [label=<<b>get_missing_citations_openalex_ids</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	missing_citations_openalex_ids [label=<<b>missing_citations_openalex_ids</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	"_loaded_citations.loader_inputs" [label=<<table border="0"><tr><td>references_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
 	"_loaded_citations.loader_inputs" -> "loaded_citations.loader"
+	get_missing_citations_openalex_ids -> failed_fetches
 	loaded_citations -> updated_loaded_citations
 	missing_citations_dois -> updated_loaded_citations
+	missing_citations_openalex_ids -> save_missing_citations_openalex_ids
+	"loaded_citations.loader" -> loaded_citations
+	failed_fetches -> save_missing_citations_openalex_ids_errors
 	updated_loaded_citations -> save_updated_loaded_citations
 	_save_updated_loaded_citations_inputs [label=<<table border="0"><tr><td>updated_loaded_citations_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
 	_save_updated_loaded_citations_inputs -> save_updated_loaded_citations
-	"loaded_citations.loader" -> loaded_citations
 	missing_citations_openalex_ids -> missing_citations_dois
-	get_missing_citations_openalex_ids -> failed_fetches
-	failed_fetches -> save_missing_citations_openalex_ids_errors
-	get_missing_citations_openalex_ids -> missing_citations_openalex_ids
 	loaded_citations -> get_missing_citations_openalex_ids
-	missing_citations_openalex_ids -> save_missing_citations_openalex_ids
+	get_missing_citations_openalex_ids -> missing_citations_openalex_ids
 	subgraph cluster__legend {
 		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
 		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
