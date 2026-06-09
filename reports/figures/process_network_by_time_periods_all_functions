@@ -1,0 +1,47 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	citation_network_until_1960_with_communities [label=<<b>citation_network_until_1960_with_communities</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	citation_network_until_2026 [label=<<b>citation_network_until_2026</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	citation_network_until_1980 [label=<<b>citation_network_until_1980</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_citation_network_until_2026 [label=<<b>save_citation_network_until_2026</b><br /><br /><i>save_citation_network_as_graphml()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	save_citation_network_until_1980 [label=<<b>save_citation_network_until_1980</b><br /><br /><i>save_citation_network_as_graphml()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	citation_network [label=<<b>citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	citation_network_filtered_by_degree [label=<<b>citation_network_filtered_by_degree</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	citation_network_until_1960 [label=<<b>citation_network_until_1960</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	citation_network_until_1980_with_communities [label=<<b>citation_network_until_1980_with_communities</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	citation_network_until_2026_with_communities [label=<<b>citation_network_until_2026_with_communities</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	citation_network_until_2000_with_communities [label=<<b>citation_network_until_2000_with_communities</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_citation_network_until_1960 [label=<<b>save_citation_network_until_1960</b><br /><br /><i>save_citation_network_as_graphml()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"citation_network.loader" [label=<<b>citation_network.loader</b><br /><br /><i>citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	citation_network_until_2000 [label=<<b>citation_network_until_2000</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_citation_network_until_2000 [label=<<b>save_citation_network_until_2000</b><br /><br /><i>save_citation_network_as_graphml()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	citation_network_until_1960 -> citation_network_until_1960_with_communities
+	_citation_network_until_1960_with_communities_inputs [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr><tr><td>resolutions</td><td>list</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_citation_network_until_1960_with_communities_inputs -> citation_network_until_1960_with_communities
+	citation_network_filtered_by_degree -> citation_network_until_2026
+	citation_network_filtered_by_degree -> citation_network_until_1980
+	citation_network_until_2026_with_communities -> save_citation_network_until_2026
+	citation_network_until_1980_with_communities -> save_citation_network_until_1980
+	"citation_network.loader" -> citation_network
+	citation_network -> citation_network_filtered_by_degree
+	citation_network_filtered_by_degree -> citation_network_until_1960
+	citation_network_until_1980 -> citation_network_until_1980_with_communities
+	_citation_network_until_1960_with_communities_inputs -> citation_network_until_1980_with_communities
+	citation_network_until_2026 -> citation_network_until_2026_with_communities
+	_citation_network_until_1960_with_communities_inputs -> citation_network_until_2026_with_communities
+	citation_network_until_2000 -> citation_network_until_2000_with_communities
+	_citation_network_until_1960_with_communities_inputs -> citation_network_until_2000_with_communities
+	citation_network_until_1960_with_communities -> save_citation_network_until_1960
+	"_citation_network.loader_inputs" [label=<<table border="0"><tr><td>citation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_citation_network.loader_inputs" -> "citation_network.loader"
+	citation_network_filtered_by_degree -> citation_network_until_2000
+	citation_network_until_2000_with_communities -> save_citation_network_until_2000
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}
