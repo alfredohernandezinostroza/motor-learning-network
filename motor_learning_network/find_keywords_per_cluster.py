@@ -49,10 +49,10 @@ if EXECUTE:
     logger.info("Executing the DAG!")
 
 # ── Resolution sweep ──────────────────────────────────────────────────────────
-YEAR = 2000
+YEAR = 2005
 TD_IDF_SAVING_PATH = KEYWORDS_LEVEL_DATA_PATH / f"until_{YEAR}"
 TD_IDF_SAVING_PATH.mkdir(parents=True,exist_ok=True)
-RESOLUTIONS: list[float] = [0.003, 0.014]
+RESOLUTIONS: list[float] = [0.003, 0.007]
 # RESOLUTIONS: list[float] = [round(0.001 + i * 0.001, 3) for i in range(1, 9)]
 # e.g. [0.002, 0.003, ..., 0.009]
 

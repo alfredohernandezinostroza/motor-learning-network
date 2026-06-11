@@ -2,35 +2,21 @@
 digraph {
 	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
 	node [fillcolor="#ffffff"]
-	citation_network_until_2015_with_communities [label=<<b>citation_network_until_2015_with_communities</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	save_citation_network_until_2010 [label=<<b>save_citation_network_until_2010</b><br /><br /><i>save_citation_network_as_graphml()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	save_citation_network_until_2015 [label=<<b>save_citation_network_until_2015</b><br /><br /><i>save_citation_network_as_graphml()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	citation_network_until_2010_with_communities [label=<<b>citation_network_until_2010_with_communities</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	citation_network_until_2015 [label=<<b>citation_network_until_2015</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	citation_network_until_2020 [label=<<b>citation_network_until_2020</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"citation_network.loader" [label=<<b>citation_network.loader</b><br /><br /><i>citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	citation_network [label=<<b>citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	citation_network_until_2010 [label=<<b>citation_network_until_2010</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	save_citation_network_until_2020 [label=<<b>save_citation_network_until_2020</b><br /><br /><i>save_citation_network_as_graphml()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	citation_network_until_2020_with_communities [label=<<b>citation_network_until_2020_with_communities</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	citation_network_until_1990 [label=<<b>citation_network_until_1990</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	citation_network_filtered_by_degree [label=<<b>citation_network_filtered_by_degree</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	citation_network_until_2015 -> citation_network_until_2015_with_communities
-	_citation_network_until_2015_with_communities_inputs [label=<<table border="0"><tr><td>resolutions</td><td>list</td></tr><tr><td>seed</td><td>int</td></tr><tr><td>n_iterations</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	_citation_network_until_2015_with_communities_inputs -> citation_network_until_2015_with_communities
-	citation_network_until_2010_with_communities -> save_citation_network_until_2010
-	citation_network_until_2015_with_communities -> save_citation_network_until_2015
-	citation_network_until_2010 -> citation_network_until_2010_with_communities
-	_citation_network_until_2015_with_communities_inputs -> citation_network_until_2010_with_communities
-	citation_network_filtered_by_degree -> citation_network_until_2015
-	citation_network_filtered_by_degree -> citation_network_until_2020
+	citation_network_until_1990_with_communities [label=<<b>citation_network_until_1990_with_communities</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	citation_network [label=<<b>citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_citation_network_until_1990 [label=<<b>save_citation_network_until_1990</b><br /><br /><i>save_citation_network_as_graphml()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"citation_network.loader" [label=<<b>citation_network.loader</b><br /><br /><i>citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	citation_network_filtered_by_degree -> citation_network_until_1990
+	citation_network -> citation_network_filtered_by_degree
+	citation_network_until_1990 -> citation_network_until_1990_with_communities
+	_citation_network_until_1990_with_communities_inputs [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr><tr><td>resolutions</td><td>list</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_citation_network_until_1990_with_communities_inputs -> citation_network_until_1990_with_communities
+	"citation_network.loader" -> citation_network
+	citation_network_until_1990_with_communities -> save_citation_network_until_1990
 	"_citation_network.loader_inputs" [label=<<table border="0"><tr><td>citation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
 	"_citation_network.loader_inputs" -> "citation_network.loader"
-	"citation_network.loader" -> citation_network
-	citation_network_filtered_by_degree -> citation_network_until_2010
-	citation_network_until_2020_with_communities -> save_citation_network_until_2020
-	citation_network_until_2020 -> citation_network_until_2020_with_communities
-	_citation_network_until_2015_with_communities_inputs -> citation_network_until_2020_with_communities
-	citation_network -> citation_network_filtered_by_degree
 	subgraph cluster__legend {
 		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
 		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]

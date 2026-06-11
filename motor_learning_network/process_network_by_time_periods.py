@@ -30,7 +30,8 @@ if EXECUTE:
     logger.info("Executing the DAG!")
 
 # year_ranges = (1960,1980,2000,2026)
-year_ranges = (2010,2015,2020)
+# year_ranges = (2010,2015,2020)
+year_ranges = (2005,)
 citation_networks_output_names = [f"citation_network_until_{year}" for year in year_ranges]
 resolutions = [round( i * 0.0001, 4) for i in range(1, 10)] #[0.001, ..., 0.040]
 resolutions.extend([round( i * 0.001, 3) for i in range(1, 40)]) #[0.001, ..., 0.040]
