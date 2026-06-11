@@ -49,10 +49,10 @@ if EXECUTE:
     logger.info("Executing the DAG!")
 
 # ── Resolution sweep ──────────────────────────────────────────────────────────
-YEAR = 1960
-TD_IDF_SAVING_PATH = KEYWORDS_LEVEL_DATA_PATH / f"until_{YEAR}_test"
+YEAR = 1980
+TD_IDF_SAVING_PATH = KEYWORDS_LEVEL_DATA_PATH / f"until_{YEAR}"
 TD_IDF_SAVING_PATH.mkdir(parents=True,exist_ok=True)
-RESOLUTIONS: list[float] = [0.005]
+RESOLUTIONS: list[float] = [0.001, 0.012]
 # RESOLUTIONS: list[float] = [round(0.001 + i * 0.001, 3) for i in range(1, 9)]
 # e.g. [0.002, 0.003, ..., 0.009]
 
@@ -102,7 +102,7 @@ def _main() -> int:
         norm=NORM,
         idf_bias=IDF_BIAS,
         synonyms_threshold=SYNONYMS_THRESHOLD,
-        citation_network_path=GRAPH_LEVEL_DATA_PATH/"citation_network_until_1960.graphml",
+        citation_network_path=GRAPH_LEVEL_DATA_PATH/f"citation_network_until_{YEAR}.graphml",
         synonym_dict_path=RAW_DATA_PATH/f"keyword_synonyms_{SYNONYMS_THRESHOLD}_with_transitivity.json",
         top_n_histogram=40,
         keyword_dividing_character="|"
