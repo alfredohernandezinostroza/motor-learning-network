@@ -2,31 +2,31 @@
 digraph {
 	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
 	node [fillcolor="#ffffff"]
-	synonym_map [label=<<b>synonym_map</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"citation_network.loader" [label=<<b>citation_network.loader</b><br /><br /><i>citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	filtered_df_res_0_005 [label=<<b>filtered_df_res_0_005</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	citation_network [label=<<b>citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	save_combined_plot_res_0_005 [label=<<b>save_combined_plot_res_0_005</b><br /><br /><i>save_combined_plot()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
 	tfidf_matrix_res_0_005 [label=<<b>tfidf_matrix_res_0_005</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	citation_network [label=<<b>citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	synonym_dict [label=<<b>synonym_dict</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"synonym_dict.loader" [label=<<b>synonym_dict.loader</b><br /><br /><i>synonym_dict()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
 	canonical_corpus_res_0_005 [label=<<b>canonical_corpus_res_0_005</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	synonym_dict -> synonym_map
-	"_citation_network.loader_inputs" [label=<<table border="0"><tr><td>citation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_citation_network.loader_inputs" -> "citation_network.loader"
-	citation_network -> filtered_df_res_0_005
-	_filtered_df_res_0_005_inputs [label=<<table border="0"><tr><td>keyword_dividing_character</td><td>str</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	_filtered_df_res_0_005_inputs -> filtered_df_res_0_005
+	synonym_dict [label=<<b>synonym_dict</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	filtered_df_res_0_005 [label=<<b>filtered_df_res_0_005</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"citation_network.loader" [label=<<b>citation_network.loader</b><br /><br /><i>citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"synonym_dict.loader" [label=<<b>synonym_dict.loader</b><br /><br /><i>synonym_dict()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	synonym_map [label=<<b>synonym_map</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"citation_network.loader" -> citation_network
 	tfidf_matrix_res_0_005 -> save_combined_plot_res_0_005
 	_save_combined_plot_res_0_005_inputs [label=<<table border="0"><tr><td>top_n_histogram</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
 	_save_combined_plot_res_0_005_inputs -> save_combined_plot_res_0_005
 	canonical_corpus_res_0_005 -> tfidf_matrix_res_0_005
-	"citation_network.loader" -> citation_network
-	"synonym_dict.loader" -> synonym_dict
-	"_synonym_dict.loader_inputs" [label=<<table border="0"><tr><td>synonym_dict_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_synonym_dict.loader_inputs" -> "synonym_dict.loader"
 	filtered_df_res_0_005 -> canonical_corpus_res_0_005
 	synonym_map -> canonical_corpus_res_0_005
+	"synonym_dict.loader" -> synonym_dict
+	citation_network -> filtered_df_res_0_005
+	_filtered_df_res_0_005_inputs [label=<<table border="0"><tr><td>keyword_dividing_character</td><td>str</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_filtered_df_res_0_005_inputs -> filtered_df_res_0_005
+	"_citation_network.loader_inputs" [label=<<table border="0"><tr><td>citation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_citation_network.loader_inputs" -> "citation_network.loader"
+	"_synonym_dict.loader_inputs" [label=<<table border="0"><tr><td>synonym_dict_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_synonym_dict.loader_inputs" -> "synonym_dict.loader"
+	synonym_dict -> synonym_map
 	subgraph cluster__legend {
 		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
 		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
