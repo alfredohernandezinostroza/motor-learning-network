@@ -2,42 +2,42 @@
 digraph {
 	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
 	node [fillcolor="#ffffff"]
-	citation_network [label=<<b>citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	filtered_df_res_0_012 [label=<<b>filtered_df_res_0_012</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	canonical_corpus_res_0_001 [label=<<b>canonical_corpus_res_0_001</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	canonical_corpus_res_0_012 [label=<<b>canonical_corpus_res_0_012</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"citation_network.loader" [label=<<b>citation_network.loader</b><br /><br /><i>citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	"synonym_dict.loader" [label=<<b>synonym_dict.loader</b><br /><br /><i>synonym_dict()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	save_combined_plot_res_0_001 [label=<<b>save_combined_plot_res_0_001</b><br /><br /><i>save_combined_plot()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	tfidf_matrix_res_0_001 [label=<<b>tfidf_matrix_res_0_001</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	synonym_map [label=<<b>synonym_map</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	tfidf_matrix_res_0_014 [label=<<b>tfidf_matrix_res_0_014</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	canonical_corpus_res_0_003 [label=<<b>canonical_corpus_res_0_003</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	synonym_dict [label=<<b>synonym_dict</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	tfidf_matrix_res_0_012 [label=<<b>tfidf_matrix_res_0_012</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	filtered_df_res_0_001 [label=<<b>filtered_df_res_0_001</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	save_combined_plot_res_0_012 [label=<<b>save_combined_plot_res_0_012</b><br /><br /><i>save_combined_plot()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	"citation_network.loader" -> citation_network
-	citation_network -> filtered_df_res_0_012
-	_filtered_df_res_0_012_inputs [label=<<table border="0"><tr><td>keyword_dividing_character</td><td>str</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	_filtered_df_res_0_012_inputs -> filtered_df_res_0_012
-	filtered_df_res_0_001 -> canonical_corpus_res_0_001
-	synonym_map -> canonical_corpus_res_0_001
-	filtered_df_res_0_012 -> canonical_corpus_res_0_012
-	synonym_map -> canonical_corpus_res_0_012
+	filtered_df_res_0_003 [label=<<b>filtered_df_res_0_003</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	tfidf_matrix_res_0_003 [label=<<b>tfidf_matrix_res_0_003</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"citation_network.loader" [label=<<b>citation_network.loader</b><br /><br /><i>citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	filtered_df_res_0_014 [label=<<b>filtered_df_res_0_014</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_combined_plot_res_0_003 [label=<<b>save_combined_plot_res_0_003</b><br /><br /><i>save_combined_plot()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	canonical_corpus_res_0_014 [label=<<b>canonical_corpus_res_0_014</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"synonym_dict.loader" [label=<<b>synonym_dict.loader</b><br /><br /><i>synonym_dict()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	citation_network [label=<<b>citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	synonym_map [label=<<b>synonym_map</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_combined_plot_res_0_014 [label=<<b>save_combined_plot_res_0_014</b><br /><br /><i>save_combined_plot()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	canonical_corpus_res_0_014 -> tfidf_matrix_res_0_014
+	filtered_df_res_0_003 -> canonical_corpus_res_0_003
+	synonym_map -> canonical_corpus_res_0_003
+	"synonym_dict.loader" -> synonym_dict
+	citation_network -> filtered_df_res_0_003
+	_filtered_df_res_0_003_inputs [label=<<table border="0"><tr><td>keyword_dividing_character</td><td>str</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_filtered_df_res_0_003_inputs -> filtered_df_res_0_003
+	canonical_corpus_res_0_003 -> tfidf_matrix_res_0_003
 	"_citation_network.loader_inputs" [label=<<table border="0"><tr><td>citation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
 	"_citation_network.loader_inputs" -> "citation_network.loader"
+	citation_network -> filtered_df_res_0_014
+	_filtered_df_res_0_003_inputs -> filtered_df_res_0_014
+	tfidf_matrix_res_0_003 -> save_combined_plot_res_0_003
+	_save_combined_plot_res_0_003_inputs [label=<<table border="0"><tr><td>top_n_histogram</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_combined_plot_res_0_003_inputs -> save_combined_plot_res_0_003
+	filtered_df_res_0_014 -> canonical_corpus_res_0_014
+	synonym_map -> canonical_corpus_res_0_014
 	"_synonym_dict.loader_inputs" [label=<<table border="0"><tr><td>synonym_dict_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
 	"_synonym_dict.loader_inputs" -> "synonym_dict.loader"
-	tfidf_matrix_res_0_001 -> save_combined_plot_res_0_001
-	_save_combined_plot_res_0_001_inputs [label=<<table border="0"><tr><td>top_n_histogram</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	_save_combined_plot_res_0_001_inputs -> save_combined_plot_res_0_001
-	canonical_corpus_res_0_001 -> tfidf_matrix_res_0_001
+	"citation_network.loader" -> citation_network
 	synonym_dict -> synonym_map
-	"synonym_dict.loader" -> synonym_dict
-	canonical_corpus_res_0_012 -> tfidf_matrix_res_0_012
-	citation_network -> filtered_df_res_0_001
-	_filtered_df_res_0_012_inputs -> filtered_df_res_0_001
-	tfidf_matrix_res_0_012 -> save_combined_plot_res_0_012
-	_save_combined_plot_res_0_001_inputs -> save_combined_plot_res_0_012
+	tfidf_matrix_res_0_014 -> save_combined_plot_res_0_014
+	_save_combined_plot_res_0_003_inputs -> save_combined_plot_res_0_014
 	subgraph cluster__legend {
 		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
 		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
