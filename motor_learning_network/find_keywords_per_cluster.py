@@ -53,7 +53,7 @@ if EXECUTE:
 
 # ── Resolution sweep ──────────────────────────────────────────────────────────
 YEAR = 1990
-TD_IDF_SAVING_PATH = KEYWORDS_LEVEL_DATA_PATH / f"until_{YEAR}_test_7"
+TD_IDF_SAVING_PATH = KEYWORDS_LEVEL_DATA_PATH / f"until_{YEAR}_test_8"
 TD_IDF_SAVING_PATH.mkdir(parents=True, exist_ok=True)
 TOP_N_CLUSTERS = 5
 RESOLUTIONS: list[float] = [0.001, 0.002]
@@ -739,7 +739,6 @@ def save_wordcloud_figure(
     # Background: all nodes as a faint scatter
     ax.scatter(all_x, all_y, s=2, c="#cccccc", alpha=0.4, zorder=1, linewidths=0)
     
-    # Calculate mapping from Matplotlib data coordinates to font points for accurate sizing
     fig_width_pts = 18 * 72 
     xlim = ax.get_xlim()
     data_range_x = xlim[1] - xlim[0]
@@ -747,25 +746,31 @@ def save_wordcloud_figure(
 
     scale = 3 
 
-    # --- THE FIX ---
-    # 1. Find the absolute highest TF-IDF score across all drawable clusters
     global_max_tfidf = float(max(
         sc for cid in drawable for sc in cluster_freqs[cid].values()
     ))
-
-    # 2. Establish a constant geometric baseline for the bounding boxes
-    # This prevents spatially large clusters from stretching their text
     global_base_radius = float(np.median([layout_data[cid]["radius"] for cid in drawable]))
+
+    # --- NEW: Load modularity metadata to get cluster colors ---
+    modularity_meta = _modularity_meta(resolution)
 
     for cid in drawable:
         info = layout_data[cid]
         cx, cy, actual_r = info["cx"], info["cy"], info["radius"]
         freqs = cluster_freqs[cid]
         
-        # Find the max score specific to this cluster
+        # --- NEW: Determine the single color for this cluster ---
+        meta = modularity_meta.get(cid, {})
+        cluster_color = meta.get("color", "#AAAAAA")
+        
+        # If your metadata is returning the default gray, automatically assign a distinct tab10 color
+        if cluster_color == "#AAAAAA":
+            # cid is typically a float like 0.0, 1.0, so cast to int for modulo math
+            cluster_color = plt.get_cmap("tab10")(int(cid) % 10)
+            
         local_max = max(freqs.values())
 
-        # Initialize Wordcloud with relative_scaling=1.0 for proportional sizing
+        # (Colormap parameter is removed as we override it manually)
         wc = WordCloud(
             width=wordcloud_width,
             height=wordcloud_height,
@@ -773,30 +778,20 @@ def save_wordcloud_figure(
             mode="RGBA",
             prefer_horizontal=0.9,
             max_words=top_n_words,
-            colormap="tab10",
             relative_scaling=1.0, 
         ).generate_from_frequencies(freqs)
 
-        # 3. Scale the Matplotlib bounding box based on how this cluster compares to the global max.
-        # This shrinks lower-scoring clusters, naturally scaling down their font sizes while keeping words tightly packed.
         ratio = local_max / global_max_tfidf
         cluster_adjusted_radius = global_base_radius * ratio
         
         data_w = 2 * scale * cluster_adjusted_radius
         data_h = 2 * scale * cluster_adjusted_radius
-        
-        # Scaling factor to translate PIL canvas pixels to Matplotlib font points
         pt_scale_factor = (data_w * pts_per_data_unit) / wordcloud_width
 
-        # Bypass rasterization and extract vector layout
         for item in wc.layout_:
-            (word, count), f_size, (y_px, x_px), orientation, color = item
+            # Unpack layout. We capture PIL's color in the `_` variable to ignore it.
+            (word, count), f_size, (y_px, x_px), orientation, _ = item
             
-            if isinstance(color, str) and color.startswith("rgb("):
-                r_val, g_val, b_val = [int(c.strip()) for c in color.strip("rgb()").split(",")]
-                color = f"#{r_val:02x}{g_val:02x}{b_val:02x}"
-
-            # Map coordinates using the adjusted uniform radius
             x_data = (cx - scale * cluster_adjusted_radius) + (x_px / wordcloud_width) * data_w
             y_data = (cy + scale * cluster_adjusted_radius) - (y_px / wordcloud_height) * data_h
             
@@ -806,17 +801,16 @@ def save_wordcloud_figure(
             ax.text(
                 x_data, y_data, word,
                 fontsize=mpl_fontsize,
-                color=color,               
+                color=cluster_color,   # <--- FORCE THE ENTIRE CLOUD TO USE THIS COLOR         
                 rotation=rot,
                 ha='left',
                 va='top',
                 zorder=2
             )
             
-        # Mark the centroid
         ax.scatter(cx, cy, s=50, c="black", zorder=3, linewidths=0)
         logger.info(
-            f"[res={resolution}] Rendered vector wordcloud for cluster {cid} "
+            f"[res={resolution}] Rendered monochromatic vector wordcloud for cluster {cid} "
             f"at centroid ({cx:.1f}, {cy:.1f}), adjusted_radius={cluster_adjusted_radius:.1f}"
         )
 
@@ -824,7 +818,6 @@ def save_wordcloud_figure(
     ax.set_title(f"Cluster wordclouds  |  resolution={resolution}", fontsize=14, pad=12)
     plt.tight_layout()
 
-    # Save as an SVG file
     svg_path = out_dir / f"cluster_wordclouds_at_{resolution}.svg"
     fig.savefig(svg_path, format="svg", bbox_inches="tight")
     plt.close(fig)
