@@ -49,10 +49,10 @@ if EXECUTE:
     logger.info("Executing the DAG!")
 
 # ── Resolution sweep ──────────────────────────────────────────────────────────
-YEAR = 2005
-TD_IDF_SAVING_PATH = KEYWORDS_LEVEL_DATA_PATH / f"until_{YEAR}"
+YEAR = 1990
+TD_IDF_SAVING_PATH = KEYWORDS_LEVEL_DATA_PATH / f"until_{YEAR}_test"
 TD_IDF_SAVING_PATH.mkdir(parents=True,exist_ok=True)
-RESOLUTIONS: list[float] = [0.003, 0.007]
+RESOLUTIONS: list[float] = [0.001, 0.002]
 # RESOLUTIONS: list[float] = [round(0.001 + i * 0.001, 3) for i in range(1, 9)]
 # e.g. [0.002, 0.003, ..., 0.009]
 
@@ -442,8 +442,11 @@ def tfidf_matrix(
         cluster_ids  – ordered list of cluster IDs corresponding to X rows
     """
     corpus_str, _ = canonical_corpus
-    cluster_ids = list(corpus_str.keys())
-    documents = list(corpus_str.values())
+    # cluster_ids = list(corpus_str.keys())
+    # documents = list(corpus_str.values())
+
+    cluster_ids = [x for x in corpus_str.keys() if corpus_str[x]]
+    documents = [x for x in corpus_str.values() if x]
 
     vectorizer = TfidfVectorizer(
         tokenizer=lambda x: x.split("\t"),
