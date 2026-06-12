@@ -53,7 +53,7 @@ if EXECUTE:
 
 # ── Resolution sweep ──────────────────────────────────────────────────────────
 YEAR = 1990
-TD_IDF_SAVING_PATH = KEYWORDS_LEVEL_DATA_PATH / f"until_{YEAR}_test_5"
+TD_IDF_SAVING_PATH = KEYWORDS_LEVEL_DATA_PATH / f"until_{YEAR}_test_6"
 TD_IDF_SAVING_PATH.mkdir(parents=True, exist_ok=True)
 TOP_N_CLUSTERS = 5
 RESOLUTIONS: list[float] = [0.001, 0.002]
@@ -747,13 +747,14 @@ def save_wordcloud_figure(
     data_range_x = xlim[1] - xlim[0]
     pts_per_data_unit = fig_width_pts / data_range_x if data_range_x > 0 else 1
 
-    scale = 3 # Kept from your original 'sacale = 3'
+    scale = 3 
 
     for cid in drawable:
         info = layout_data[cid]
         cx, cy, r = info["cx"], info["cy"], info["radius"]
         freqs = cluster_freqs[cid]
 
+        # Initialize Wordcloud with relative_scaling=1.0 for proportional sizing
         wc = WordCloud(
             width=wordcloud_width,
             height=wordcloud_height,
@@ -762,6 +763,7 @@ def save_wordcloud_figure(
             prefer_horizontal=0.9,
             max_words=top_n_words,
             colormap="tab10",
+            relative_scaling=1.0, # <-- This enforces strictly linear mapping to TF-IDF score
         ).generate_from_frequencies(freqs)
 
         # Matplotlib data space boundaries for this wordcloud extent
@@ -776,11 +778,10 @@ def save_wordcloud_figure(
             # Unpack the layout tuple
             (word, count), f_size, (y_px, x_px), orientation, color = item
             
-            # --- NEW CODE: Convert 'rgb(r, g, b)' to hex ---
+            # Convert 'rgb(r, g, b)' string from PIL into Matplotlib Hex
             if isinstance(color, str) and color.startswith("rgb("):
-                r, g, b = [int(c.strip()) for c in color.strip("rgb()").split(",")]
-                color = f"#{r:02x}{g:02x}{b:02x}"
-            # -----------------------------------------------
+                r_val, g_val, b_val = [int(c.strip()) for c in color.strip("rgb()").split(",")]
+                color = f"#{r_val:02x}{g_val:02x}{b_val:02x}"
 
             # 1. Map Wordcloud pixel origin (top-left) to Matplotlib data origin
             x_data = (cx - scale * r) + (x_px / wordcloud_width) * data_w
@@ -796,7 +797,7 @@ def save_wordcloud_figure(
             ax.text(
                 x_data, y_data, word,
                 fontsize=mpl_fontsize,
-                color=color,               # Now using the converted hex color
+                color=color,               
                 rotation=rot,
                 ha='left',
                 va='top',
