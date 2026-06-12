@@ -53,7 +53,7 @@ if EXECUTE:
 
 # ── Resolution sweep ──────────────────────────────────────────────────────────
 YEAR = 1990
-TD_IDF_SAVING_PATH = KEYWORDS_LEVEL_DATA_PATH / f"until_{YEAR}_test_6"
+TD_IDF_SAVING_PATH = KEYWORDS_LEVEL_DATA_PATH / f"until_{YEAR}_test_7"
 TD_IDF_SAVING_PATH.mkdir(parents=True, exist_ok=True)
 TOP_N_CLUSTERS = 5
 RESOLUTIONS: list[float] = [0.001, 0.002]
@@ -740,19 +740,30 @@ def save_wordcloud_figure(
     ax.scatter(all_x, all_y, s=2, c="#cccccc", alpha=0.4, zorder=1, linewidths=0)
     
     # Calculate mapping from Matplotlib data coordinates to font points for accurate sizing
-    # Figure is 18x18 inches; 1 inch = 72 points
     fig_width_pts = 18 * 72 
-    # Force Matplotlib to calculate data limits based on the scatter plot
     xlim = ax.get_xlim()
     data_range_x = xlim[1] - xlim[0]
     pts_per_data_unit = fig_width_pts / data_range_x if data_range_x > 0 else 1
 
     scale = 3 
 
+    # --- THE FIX ---
+    # 1. Find the absolute highest TF-IDF score across all drawable clusters
+    global_max_tfidf = float(max(
+        sc for cid in drawable for sc in cluster_freqs[cid].values()
+    ))
+
+    # 2. Establish a constant geometric baseline for the bounding boxes
+    # This prevents spatially large clusters from stretching their text
+    global_base_radius = float(np.median([layout_data[cid]["radius"] for cid in drawable]))
+
     for cid in drawable:
         info = layout_data[cid]
-        cx, cy, r = info["cx"], info["cy"], info["radius"]
+        cx, cy, actual_r = info["cx"], info["cy"], info["radius"]
         freqs = cluster_freqs[cid]
+        
+        # Find the max score specific to this cluster
+        local_max = max(freqs.values())
 
         # Initialize Wordcloud with relative_scaling=1.0 for proportional sizing
         wc = WordCloud(
@@ -763,37 +774,35 @@ def save_wordcloud_figure(
             prefer_horizontal=0.9,
             max_words=top_n_words,
             colormap="tab10",
-            relative_scaling=1.0, # <-- This enforces strictly linear mapping to TF-IDF score
+            relative_scaling=1.0, 
         ).generate_from_frequencies(freqs)
 
-        # Matplotlib data space boundaries for this wordcloud extent
-        data_w = 2 * scale * r
-        data_h = 2 * scale * r
+        # 3. Scale the Matplotlib bounding box based on how this cluster compares to the global max.
+        # This shrinks lower-scoring clusters, naturally scaling down their font sizes while keeping words tightly packed.
+        ratio = local_max / global_max_tfidf
+        cluster_adjusted_radius = global_base_radius * ratio
+        
+        data_w = 2 * scale * cluster_adjusted_radius
+        data_h = 2 * scale * cluster_adjusted_radius
         
         # Scaling factor to translate PIL canvas pixels to Matplotlib font points
         pt_scale_factor = (data_w * pts_per_data_unit) / wordcloud_width
 
         # Bypass rasterization and extract vector layout
         for item in wc.layout_:
-            # Unpack the layout tuple
             (word, count), f_size, (y_px, x_px), orientation, color = item
             
-            # Convert 'rgb(r, g, b)' string from PIL into Matplotlib Hex
             if isinstance(color, str) and color.startswith("rgb("):
                 r_val, g_val, b_val = [int(c.strip()) for c in color.strip("rgb()").split(",")]
                 color = f"#{r_val:02x}{g_val:02x}{b_val:02x}"
 
-            # 1. Map Wordcloud pixel origin (top-left) to Matplotlib data origin
-            x_data = (cx - scale * r) + (x_px / wordcloud_width) * data_w
-            y_data = (cy + scale * r) - (y_px / wordcloud_height) * data_h
+            # Map coordinates using the adjusted uniform radius
+            x_data = (cx - scale * cluster_adjusted_radius) + (x_px / wordcloud_width) * data_w
+            y_data = (cy + scale * cluster_adjusted_radius) - (y_px / wordcloud_height) * data_h
             
-            # 2. Scale font size geometrically
             mpl_fontsize = f_size * pt_scale_factor
-            
-            # 3. Handle rotation
             rot = 90 if orientation is not None else 0
             
-            # 4. Render as native Matplotlib vector text
             ax.text(
                 x_data, y_data, word,
                 fontsize=mpl_fontsize,
@@ -803,11 +812,12 @@ def save_wordcloud_figure(
                 va='top',
                 zorder=2
             )
+            
         # Mark the centroid
         ax.scatter(cx, cy, s=50, c="black", zorder=3, linewidths=0)
         logger.info(
             f"[res={resolution}] Rendered vector wordcloud for cluster {cid} "
-            f"at centroid ({cx:.1f}, {cy:.1f}), radius={r:.1f}"
+            f"at centroid ({cx:.1f}, {cy:.1f}), adjusted_radius={cluster_adjusted_radius:.1f}"
         )
 
     ax.axis("off")
