@@ -53,7 +53,7 @@ if EXECUTE:
 
 # ── Resolution sweep ──────────────────────────────────────────────────────────
 YEAR = 1990
-TD_IDF_SAVING_PATH = KEYWORDS_LEVEL_DATA_PATH / f"until_{YEAR}_test"
+TD_IDF_SAVING_PATH = KEYWORDS_LEVEL_DATA_PATH / f"until_{YEAR}_test_5"
 TD_IDF_SAVING_PATH.mkdir(parents=True, exist_ok=True)
 TOP_N_CLUSTERS = 5
 RESOLUTIONS: list[float] = [0.001, 0.002]
@@ -688,14 +688,7 @@ def save_wordcloud_figure(
     Render one figure per resolution:
       - faint scatter of all graph nodes as spatial background
       - one wordcloud per top-N cluster (by node count), centred on its centroid
-        with size proportional to tfidf_score
-      - saved as a PNG inside _out_dir(resolution)
-
-    The wordcloud box half-width is derived from the 75th-percentile distance
-    of each cluster's nodes from their centroid, so clouds scale naturally with
-    cluster spread.
-
-    Returns file-metadata dict (datasaver contract).
+      - saved as a native vector SVG inside _out_dir(resolution)
     """
     X, vectorizer, cluster_ids = tfidf_matrix
     feature_names = vectorizer.get_feature_names_out()
@@ -713,41 +706,27 @@ def save_wordcloud_figure(
 
     if not cluster_freqs:
         logger.warning(f"[res={resolution}] No non-empty cluster frequency dicts. Skipping wordcloud.")
-        metadata = utils.get_file_metadata(out_dir)
-        return metadata
+        return utils.get_file_metadata(out_dir)
 
     # ── Select top N clusters by node count ───────────────────────────────────
     if cluster_attr not in citation_network_with_layout.vs.attribute_names():
-        logger.warning(
-            f"[res={resolution}] Vertex attribute '{cluster_attr}' not found in graph. "
-            f"Skipping wordcloud figure."
-        )
-        metadata = utils.get_file_metadata(out_dir)
-        return metadata
+        logger.warning(f"[res={resolution}] Vertex attribute '{cluster_attr}' not found in graph.")
+        return utils.get_file_metadata(out_dir)
 
     memberships = np.array(citation_network_with_layout.vs[cluster_attr], dtype=float)
     unique_ids, counts = np.unique(memberships, return_counts=True)
     top_indices = np.argsort(counts)[::-1][:top_n_clusters]
     top_cluster_ids = set(unique_ids[top_indices].tolist())
 
-    # Keep only clusters that have both layout data and tfidf scores
     drawable = sorted(top_cluster_ids & set(cluster_freqs.keys()))
     if not drawable:
-        logger.warning(
-            f"[res={resolution}] No overlap between top-{top_n_clusters} clusters by size "
-            f"and clusters with TF-IDF scores. Skipping wordcloud figure."
-        )
-        metadata = utils.get_file_metadata(out_dir)
-        return metadata
+        logger.warning(f"[res={resolution}] No overlap between top clusters and TF-IDF scores.")
+        return utils.get_file_metadata(out_dir)
 
-    logger.info(
-        f"[res={resolution}] Drawing wordclouds for {len(drawable)} clusters: {drawable}"
-    )
+    logger.info(f"[res={resolution}] Drawing vector wordclouds for {len(drawable)} clusters: {drawable}")
 
     # ── Compute centroids and radii for drawable clusters ─────────────────────
-    layout_data = _cluster_centroids_and_radii(
-        citation_network_with_layout, cluster_attr
-    )
+    layout_data = _cluster_centroids_and_radii(citation_network_with_layout, cluster_attr)
 
     # ── Render ────────────────────────────────────────────────────────────────
     all_x = np.array(citation_network_with_layout.vs["x"], dtype=float)
@@ -759,6 +738,16 @@ def save_wordcloud_figure(
 
     # Background: all nodes as a faint scatter
     ax.scatter(all_x, all_y, s=2, c="#cccccc", alpha=0.4, zorder=1, linewidths=0)
+    
+    # Calculate mapping from Matplotlib data coordinates to font points for accurate sizing
+    # Figure is 18x18 inches; 1 inch = 72 points
+    fig_width_pts = 18 * 72 
+    # Force Matplotlib to calculate data limits based on the scatter plot
+    xlim = ax.get_xlim()
+    data_range_x = xlim[1] - xlim[0]
+    pts_per_data_unit = fig_width_pts / data_range_x if data_range_x > 0 else 1
+
+    scale = 3 # Kept from your original 'sacale = 3'
 
     for cid in drawable:
         info = layout_data[cid]
@@ -775,21 +764,48 @@ def save_wordcloud_figure(
             colormap="tab10",
         ).generate_from_frequencies(freqs)
 
-        img = wc.to_array()
+        # Matplotlib data space boundaries for this wordcloud extent
+        data_w = 2 * scale * r
+        data_h = 2 * scale * r
+        
+        # Scaling factor to translate PIL canvas pixels to Matplotlib font points
+        pt_scale_factor = (data_w * pts_per_data_unit) / wordcloud_width
 
-        # Place the wordcloud centred on (cx, cy); extent uses data coordinates
-        ax.imshow(
-            img,
-            extent=(cx - r, cx + r, cy - r, cy + r),
-            origin="upper",
-            aspect="auto",
-            zorder=2,
-            interpolation="bilinear",
-        )
+        # Bypass rasterization and extract vector layout
+        for item in wc.layout_:
+            # Unpack the layout tuple
+            (word, count), f_size, (y_px, x_px), orientation, color = item
+            
+            # --- NEW CODE: Convert 'rgb(r, g, b)' to hex ---
+            if isinstance(color, str) and color.startswith("rgb("):
+                r, g, b = [int(c.strip()) for c in color.strip("rgb()").split(",")]
+                color = f"#{r:02x}{g:02x}{b:02x}"
+            # -----------------------------------------------
+
+            # 1. Map Wordcloud pixel origin (top-left) to Matplotlib data origin
+            x_data = (cx - scale * r) + (x_px / wordcloud_width) * data_w
+            y_data = (cy + scale * r) - (y_px / wordcloud_height) * data_h
+            
+            # 2. Scale font size geometrically
+            mpl_fontsize = f_size * pt_scale_factor
+            
+            # 3. Handle rotation
+            rot = 90 if orientation is not None else 0
+            
+            # 4. Render as native Matplotlib vector text
+            ax.text(
+                x_data, y_data, word,
+                fontsize=mpl_fontsize,
+                color=color,               # Now using the converted hex color
+                rotation=rot,
+                ha='left',
+                va='top',
+                zorder=2
+            )
         # Mark the centroid
         ax.scatter(cx, cy, s=50, c="black", zorder=3, linewidths=0)
         logger.info(
-            f"[res={resolution}] Rendered wordcloud for cluster {cid} "
+            f"[res={resolution}] Rendered vector wordcloud for cluster {cid} "
             f"at centroid ({cx:.1f}, {cy:.1f}), radius={r:.1f}"
         )
 
@@ -797,13 +813,143 @@ def save_wordcloud_figure(
     ax.set_title(f"Cluster wordclouds  |  resolution={resolution}", fontsize=14, pad=12)
     plt.tight_layout()
 
-    png_path = out_dir / f"cluster_wordclouds_at_{resolution}.resolution.png"
-    fig.savefig(png_path, dpi=300, bbox_inches="tight")
+    # Save as an SVG file
+    svg_path = out_dir / f"cluster_wordclouds_at_{resolution}.svg"
+    fig.savefig(svg_path, format="svg", bbox_inches="tight")
     plt.close(fig)
-    logger.info(f"[res={resolution}] Saved wordcloud figure → {png_path}")
+    logger.info(f"[res={resolution}] Saved vector wordcloud figure → {svg_path}")
 
-    metadata = utils.get_file_metadata(png_path)
-    return metadata
+    return utils.get_file_metadata(svg_path)
+# def save_wordcloud_figure(
+#     tfidf_matrix: tuple[scipy.sparse.csr_matrix, TfidfVectorizer, list],
+#     citation_network_with_layout: ig.Graph,
+#     resolution: float,
+#     top_n_clusters: int,
+#     top_n_words: int,
+#     wordcloud_width: int,
+#     wordcloud_height: int,
+# ) -> dict:
+#     """
+#     Render one figure per resolution:
+#       - faint scatter of all graph nodes as spatial background
+#       - one wordcloud per top-N cluster (by node count), centred on its centroid
+#         with size proportional to tfidf_score
+#       - saved as a PNG inside _out_dir(resolution)
+
+#     The wordcloud box half-width is derived from the 75th-percentile distance
+#     of each cluster's nodes from their centroid, so clouds scale naturally with
+#     cluster spread.
+
+#     Returns file-metadata dict (datasaver contract).
+#     """
+#     X, vectorizer, cluster_ids = tfidf_matrix
+#     feature_names = vectorizer.get_feature_names_out()
+#     cluster_attr = f"cpm_communities_at_res={resolution}"
+#     out_dir = _out_dir(resolution)
+
+#     # ── Build per-cluster keyword frequency dicts from the tfidf matrix ───────
+#     cluster_freqs: dict[float, dict[str, float]] = {}
+#     for i, cid in enumerate(cluster_ids):
+#         vec = X[i].toarray().flatten()
+#         scores = pd.Series(vec, index=feature_names)
+#         scores = scores[scores > 0].sort_values(ascending=False).head(top_n_words)
+#         if not scores.empty:
+#             cluster_freqs[float(cid)] = {kw.title(): float(sc) for kw, sc in scores.items()}
+
+#     if not cluster_freqs:
+#         logger.warning(f"[res={resolution}] No non-empty cluster frequency dicts. Skipping wordcloud.")
+#         metadata = utils.get_file_metadata(out_dir)
+#         return metadata
+
+#     # ── Select top N clusters by node count ───────────────────────────────────
+#     if cluster_attr not in citation_network_with_layout.vs.attribute_names():
+#         logger.warning(
+#             f"[res={resolution}] Vertex attribute '{cluster_attr}' not found in graph. "
+#             f"Skipping wordcloud figure."
+#         )
+#         metadata = utils.get_file_metadata(out_dir)
+#         return metadata
+
+#     memberships = np.array(citation_network_with_layout.vs[cluster_attr], dtype=float)
+#     unique_ids, counts = np.unique(memberships, return_counts=True)
+#     top_indices = np.argsort(counts)[::-1][:top_n_clusters]
+#     top_cluster_ids = set(unique_ids[top_indices].tolist())
+
+#     # Keep only clusters that have both layout data and tfidf scores
+#     drawable = sorted(top_cluster_ids & set(cluster_freqs.keys()))
+#     if not drawable:
+#         logger.warning(
+#             f"[res={resolution}] No overlap between top-{top_n_clusters} clusters by size "
+#             f"and clusters with TF-IDF scores. Skipping wordcloud figure."
+#         )
+#         metadata = utils.get_file_metadata(out_dir)
+#         return metadata
+
+#     logger.info(
+#         f"[res={resolution}] Drawing wordclouds for {len(drawable)} clusters: {drawable}"
+#     )
+
+#     # ── Compute centroids and radii for drawable clusters ─────────────────────
+#     layout_data = _cluster_centroids_and_radii(
+#         citation_network_with_layout, cluster_attr
+#     )
+
+#     # ── Render ────────────────────────────────────────────────────────────────
+#     all_x = np.array(citation_network_with_layout.vs["x"], dtype=float)
+#     all_y = np.array(citation_network_with_layout.vs["y"], dtype=float)
+
+#     fig, ax = plt.subplots(figsize=(18, 18))
+#     ax.set_facecolor("white")
+#     fig.patch.set_facecolor("white")
+
+#     # Background: all nodes as a faint scatter
+#     ax.scatter(all_x, all_y, s=2, c="#cccccc", alpha=0.4, zorder=1, linewidths=0)
+
+#     for cid in drawable:
+#         info = layout_data[cid]
+#         cx, cy, r = info["cx"], info["cy"], info["radius"]
+#         freqs = cluster_freqs[cid]
+
+#         wc = WordCloud(
+#             width=wordcloud_width,
+#             height=wordcloud_height,
+#             background_color=None,
+#             mode="RGBA",
+#             prefer_horizontal=0.9,
+#             max_words=top_n_words,
+#             colormap="tab10",
+#         ).generate_from_frequencies(freqs)
+
+#         img = wc.to_array()
+
+#         # Place the wordcloud centred on (cx, cy); extent uses data coordinates
+#         sacale = 3
+#         ax.imshow(
+#             img,
+#             extent=(cx - sacale*r, cx + sacale*r, cy - sacale*r, cy + sacale*r),
+#             origin="upper",
+#             aspect="auto",
+#             zorder=2,
+#             interpolation="bilinear",
+#         )
+#         # Mark the centroid
+#         ax.scatter(cx, cy, s=50, c="black", zorder=3, linewidths=0)
+#         logger.info(
+#             f"[res={resolution}] Rendered wordcloud for cluster {cid} "
+#             f"at centroid ({cx:.1f}, {cy:.1f}), radius={r:.1f}"
+#         )
+
+#     ax.axis("off")
+#     ax.set_title(f"Cluster wordclouds  |  resolution={resolution}", fontsize=14, pad=12)
+#     plt.tight_layout()
+
+#     png_path = out_dir / f"cluster_wordclouds_at_{resolution}.resolution.png"
+#     fig.savefig(png_path, dpi=300, bbox_inches="tight")
+#     plt.close(fig)
+#     logger.info(f"[res={resolution}] Saved wordcloud figure → {png_path}")
+
+#     metadata = utils.get_file_metadata(png_path)
+#     return metadata
 
 
 if __name__ == "__main__":
