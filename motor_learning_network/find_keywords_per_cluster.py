@@ -5,6 +5,7 @@ import json
 import logging
 from pathlib import Path
 from typing import Final
+from collections import defaultdict
 
 import numpy as np
 import pandas as pd
@@ -13,6 +14,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import TfidfVectorizer
+from fa2 import ForceAtlas2
+from wordcloud import WordCloud
 
 from hamilton.function_modifiers import (
     dataloader,
@@ -51,10 +54,10 @@ if EXECUTE:
 # ── Resolution sweep ──────────────────────────────────────────────────────────
 YEAR = 1990
 TD_IDF_SAVING_PATH = KEYWORDS_LEVEL_DATA_PATH / f"until_{YEAR}_test"
-TD_IDF_SAVING_PATH.mkdir(parents=True,exist_ok=True)
+TD_IDF_SAVING_PATH.mkdir(parents=True, exist_ok=True)
+TOP_N_CLUSTERS = 5
 RESOLUTIONS: list[float] = [0.001, 0.002]
 # RESOLUTIONS: list[float] = [round(0.001 + i * 0.001, 3) for i in range(1, 9)]
-# e.g. [0.002, 0.003, ..., 0.009]
 
 # ── Per-resolution output directory helper ────────────────────────────────────
 NORM: Final = "l2"
@@ -69,11 +72,13 @@ def _out_dir(resolution: float) -> Path:
     d.mkdir(parents=True, exist_ok=True)
     return d
 
+
 def _modularity_meta(resolution: float) -> dict:
     return {
         float(i): {"label": f"Community {i} at resolution {resolution}", "color": "#AAAAAA"}
         for i in range(50)
     }
+
 
 # Parameterize node names per resolution
 _res_node_names = [f"res_{str(r).replace('.', '_')}" for r in RESOLUTIONS]
@@ -102,13 +107,22 @@ def _main() -> int:
         norm=NORM,
         idf_bias=IDF_BIAS,
         synonyms_threshold=SYNONYMS_THRESHOLD,
-        citation_network_path=GRAPH_LEVEL_DATA_PATH/f"citation_network_until_{YEAR}.graphml",
-        synonym_dict_path=RAW_DATA_PATH/f"keyword_synonyms_{SYNONYMS_THRESHOLD}_with_transitivity.json",
+        citation_network_path=GRAPH_LEVEL_DATA_PATH / f"citation_network_until_{YEAR}_with_layout.graphml",
+        synonym_dict_path=RAW_DATA_PATH / f"keyword_synonyms_{SYNONYMS_THRESHOLD}_with_transitivity.json",
         top_n_histogram=40,
-        keyword_dividing_character="|"
+        keyword_dividing_character="|",
+        min_cluster_size=3,
+        # wordcloud inputs
+        forceatlas2_iterations=500,
+        top_n_clusters=TOP_N_CLUSTERS,
+        top_n_words=20,
+        wordcloud_width=400,
+        wordcloud_height=400,
     )
 
-    outputs = [f"save_combined_plot_{name}" for name in _res_node_names]
+    tfidf_outputs = [f"save_combined_plot_{name}" for name in _res_node_names]
+    wordcloud_outputs = [f"save_wordcloud_figure_{name}" for name in _res_node_names]
+    outputs = tfidf_outputs + wordcloud_outputs
 
     import __main__
 
@@ -234,6 +248,32 @@ def _aggregate_top_scores(
             )
     return combined
 
+
+def _cluster_centroids_and_radii(
+    graph: ig.Graph,
+    cluster_attr: str,
+    scale: float = 0.45,
+) -> dict[float, dict]:
+    """
+    For each cluster compute centroid (x, y) and a display half-width radius
+    based on the 75th-percentile distance of nodes from the centroid.
+
+    Returns { cluster_id -> {"cx": float, "cy": float, "radius": float} }
+    """
+    xs = np.array(graph.vs["x"], dtype=float)
+    ys = np.array(graph.vs["y"], dtype=float)
+    memberships = np.array(graph.vs[cluster_attr], dtype=float)
+
+    result = {}
+    for cid in np.unique(memberships):
+        mask = memberships == cid
+        cx, cy = float(xs[mask].mean()), float(ys[mask].mean())
+        dists = np.sqrt((xs[mask] - cx) ** 2 + (ys[mask] - cy) ** 2)
+        radius = float(np.percentile(dists, 75)) * scale
+        result[cid] = {"cx": cx, "cy": cy, "radius": radius}
+    return result
+
+
 #########################
 ##    DAG Definition   ##
 #########################
@@ -257,12 +297,69 @@ def synonym_dict(synonym_dict_path: Path) -> tuple[dict, dict]:
     return data, metadata
 
 
-# ── 2. Build canonical synonym map (shared across resolutions) ────────────────
+# ── 2. Layout (shared across all resolutions) ─────────────────────────────────
+
+def citation_network_with_layout(
+    citation_network: ig.Graph,
+    forceatlas2_iterations: int,
+) -> ig.Graph:
+    """
+    Ensure the graph has 'x' and 'y' vertex attributes for spatial positioning.
+
+    If both attributes are already present on every vertex, the existing layout
+    is reused and ForceAtlas2 is NOT run again — this avoids redundant computation
+    when the graphml was saved with layout coordinates.
+
+    If either attribute is missing or contains any null/None values, ForceAtlas2
+    is run from scratch on the undirected graph and the resulting coordinates are
+    stored as 'x' and 'y' vertex attributes.
+    """
+    attr_names = citation_network.vs.attribute_names()
+    has_x = "x" in attr_names
+    has_y = "y" in attr_names
+
+    if has_x and has_y:
+        x_vals = citation_network.vs["x"]
+        y_vals = citation_network.vs["y"]
+        any_null = any(v is None for v in x_vals) or any(v is None for v in y_vals)
+        if not any_null:
+            logger.info(
+                f"Graph already has 'x' and 'y' vertex attributes "
+                f"({citation_network.vcount()} vertices). "
+                f"Skipping ForceAtlas2 layout computation."
+            )
+            return citation_network
+        else:
+            logger.warning(
+                f"Graph has 'x' and 'y' attributes but {sum(v is None for v in x_vals + y_vals)} "
+                f"null values were found. Re-computing ForceAtlas2 layout."
+            )
+    else:
+        missing = [a for a in ("x", "y") if a not in attr_names]
+        logger.info(
+            f"Graph is missing vertex attribute(s) {missing}. "
+            f"Running ForceAtlas2 ({forceatlas2_iterations} iterations) "
+            f"on {citation_network.vcount()} vertices …"
+        )
+
+    forceatlas2 = ForceAtlas2(verbose=True)
+    layout = forceatlas2.forceatlas2_igraph_layout(
+        citation_network.as_undirected(), iterations=forceatlas2_iterations
+    )
+    citation_network.vs["x"] = [coord[0] for coord in layout]
+    citation_network.vs["y"] = [coord[1] for coord in layout]
+    logger.info(
+        f"ForceAtlas2 layout computed and stored on graph "
+        f"({citation_network.vcount()} vertices)."
+    )
+    return citation_network
+
+
+# ── 3. Build canonical synonym map (shared across resolutions) ────────────────
 
 def synonym_map(synonym_dict: dict) -> dict[str, str]:
     """
     Build a flat map from every variant (normalised) → canonical form (normalised).
-
     The dictionary key is chosen as the canonical name for its group.
     """
     canonical_map: dict[str, str] = {}
@@ -276,35 +373,28 @@ def synonym_map(synonym_dict: dict) -> dict[str, str]:
     return canonical_map
 
 
-# ── 3. Per-resolution nodes ───────────────────────────────────────────────────
-#
-# For each resolution we produce four nodes:
-#   filtered_df_<res>          – DataFrame filtered to that resolution's communities
-#   canonical_corpus_<res>     – {cluster_id: tab-joined canonical keyword string}
-#   tfidf_matrix_<res>         – (X, vectorizer, cluster_ids, qa_log)
-#   save_combined_plot_<res>   – side-effecting datasaver; returns metadata dict
-#
-# The @parameterize decorator fans out one function definition into N nodes.
+# ── 4. Per-resolution nodes ───────────────────────────────────────────────────
 
-@parameterize(**{f"filtered_df_{name}": {"resolution": value(res)} for name, res in zip(_res_node_names, RESOLUTIONS)})
+@parameterize(
+    **{
+        f"filtered_df_{name}": {"resolution": value(res)}
+        for name, res in zip(_res_node_names, RESOLUTIONS)
+    }
+)
 def filtered_df(
     citation_network: ig.Graph,
     resolution: float,
     keyword_dividing_character: str,
+    min_cluster_size: int,
 ) -> pd.DataFrame:
-    """Filter the dataframe to rows that belong to communities defined for this resolution."""
+    """
+    Extract vertex attributes from the graph into a DataFrame, split and clean
+    the keyword strings, then filter to rows whose community id is defined in
+    _modularity_meta for this resolution.
+    """
     community_col = f"cpm_communities_at_res={resolution}"
-    
-    # df["keywords"] = df["keywords"].fillna("").str.split(keyword_dividing_character)
-    # # df["keywords"] = df["keywords"].apply(lambda kws: [k.strip() for k in kws if k and k.strip()]).tolist()
-    # df["keywords"] = df["keywords"].apply(lambda kws: [
-    #     part.strip()
-    #     for k in kws
-    #     for part in re.split(r'\s*[&,]\s*', k)
-    #     if part and part.strip()
-    # ]).tolist()
 
-    df = pd.DataFrame({attr: citation_network.vs[attr] for attr in ["keywords",community_col]})
+    df = pd.DataFrame({attr: citation_network.vs[attr] for attr in ["keywords", community_col]})
     df["keywords"] = df["keywords"].fillna("").str.split(keyword_dividing_character)
     orig = df["keywords"].tolist()
     df["keywords"] = (
@@ -317,28 +407,35 @@ def filtered_df(
         ]).tolist()
     )
 
-    # compare and collect changed rows
-    changes = []
-    for i, (o, p) in enumerate(zip(orig, df["keywords"].astype(str).tolist())):
-        if o != [''] and o != p:
-            changes.append((i, o, p))
-
-    # write a simple text report
-    out_path = Path(TD_IDF_SAVING_PATH/"keyword_changes.txt")
+    # Write a keyword-change QA report
+    changes = [
+        (i, o, p)
+        for i, (o, p) in enumerate(zip(orig, df["keywords"].astype(str).tolist()))
+        if o != [''] and o != p
+    ]
+    out_path = TD_IDF_SAVING_PATH / "keyword_changes.txt"
     with out_path.open("w", encoding="utf-8") as f:
         f.write("row_index\toriginal\tprocessed\n")
         for idx, o, p in changes:
             f.write(f"{idx}\t{o}\t{p}\n")
+    logger.info(f"[res={resolution}] Saved {len(changes)} keyword changes → {out_path}")
 
-    print(f"Saved {len(changes)} changes to {out_path}")
     modularity_meta = _modularity_meta(resolution)
-    df = df.copy()
     df = df.drop(df[df["keywords"].isin(["Unknown keywords"])].index)
     df = df[df[community_col].isin(modularity_meta)]
     df = df.dropna().reset_index(drop=True)
     logger.info(
         f"[res={resolution}] Filtered dataframe: {len(df)} rows, "
         f"{df[community_col].nunique()} unique communities."
+    )
+    #drop clusters with lesst than min_cluster_size nodes
+    cluster_sizes = df[community_col].value_counts()
+    valid_clusters = cluster_sizes[cluster_sizes >= min_cluster_size].index
+    df = df[df[community_col].isin(valid_clusters)].reset_index(drop=True)
+    logger.info(
+        f"[res={resolution}] Dropped {(~df[community_col].isin(valid_clusters)).sum()} "  # already filtered, so log before
+        f"clusters with <= {min_cluster_size-1} nodes. "
+        f"{df[community_col].nunique()} clusters remaining."
     )
     return df
 
@@ -367,23 +464,18 @@ def canonical_corpus(
     """
     modularity_meta = _modularity_meta(resolution)
     community_col = f"cpm_communities_at_res={resolution}"
-    corpus: dict[int, list[str]] = {}
+    corpus: dict[int, set[str]] = {}
     qa_log: dict[str, str] = {}
     all_canonical: set[str] = set()
 
-    for keywords, cluster_id in zip(
-        filtered_df["keywords"], filtered_df[community_col]
-    ):
+    for keywords, cluster_id in zip(filtered_df["keywords"], filtered_df[community_col]):
         if cluster_id not in corpus:
             corpus[cluster_id] = set()
-
-        terms = tuple(keywords)
-        for raw_term in terms:
+        for raw_term in tuple(keywords):
             norm_term = _normalize_keyword(raw_term)
             canonical_term = synonym_map.get(norm_term, norm_term)
             corpus[cluster_id].add(canonical_term)
             all_canonical.add(canonical_term)
-
             if raw_term not in qa_log:
                 qa_log[raw_term] = canonical_term
             elif qa_log[raw_term] != canonical_term:
@@ -392,12 +484,10 @@ def canonical_corpus(
                     f"'{qa_log[raw_term]}' vs '{canonical_term}'"
                 )
 
-    # Stringify each cluster document
     corpus_str: dict[int, str] = {
         k: "\t".join(v) for k, v in sorted(corpus.items())
     }
 
-    # Save QA artefacts to the output directory
     out_dir = _out_dir(resolution)
 
     qa_log_path = out_dir / "qa_canonical_keyword_mapping.json"
@@ -434,12 +524,12 @@ def tfidf_matrix(
 ) -> tuple[scipy.sparse.csr_matrix, TfidfVectorizer, list]:
     """
     Fit a TF-IDF vectorizer on the per-cluster canonical corpus and apply the
-    IDF bias correction from the original script.
+    IDF bias correction.
 
     Returns:
-        X            – corrected sparse TF-IDF matrix (n_clusters × n_features)
-        vectorizer   – fitted TfidfVectorizer
-        cluster_ids  – ordered list of cluster IDs corresponding to X rows
+        X           – corrected sparse TF-IDF matrix (n_clusters × n_features)
+        vectorizer  – fitted TfidfVectorizer
+        cluster_ids – ordered list of cluster IDs corresponding to X rows
     """
     corpus_str, _ = canonical_corpus
     # cluster_ids = list(corpus_str.keys())
@@ -458,8 +548,7 @@ def tfidf_matrix(
     X = _correct_tfidf(X, vectorizer)
 
     logger.info(
-        f"[res={resolution}] TF-IDF matrix shape: {X.shape}  "
-        f"(clusters × features)"
+        f"[res={resolution}] TF-IDF matrix shape: {X.shape} (clusters × features)"
     )
     return X, vectorizer, cluster_ids
 
@@ -490,7 +579,6 @@ def save_combined_plot(
     out_dir = _out_dir(resolution)
     feature_names = vectorizer.get_feature_names_out()
 
-    # ── Per-cluster CSV + histogram ───────────────────────────────────────────
     for i, cluster_id in enumerate(cluster_ids):
         meta = modularity_meta.get(cluster_id, {})
         display_label = meta.get("label", f"Cluster {cluster_id}")
@@ -501,21 +589,15 @@ def save_combined_plot(
         scores = pd.Series(cluster_vector, index=feature_names)
         scores = scores[scores > 0].sort_values(ascending=False)
 
-        # CSV
-        df_out = pd.DataFrame(
-            {"canonical_keyword": scores.index, "tfidf_score": scores.values}
-        )
+        df_out = pd.DataFrame({"canonical_keyword": scores.index, "tfidf_score": scores.values})
         df_out["canonical_keyword"] = df_out["canonical_keyword"].str.title()
         csv_path = out_dir / f"cluster_{cluster_id}_{file_label}_tfidf_scores.csv"
         df_out.to_csv(csv_path, index=False)
         logger.info(f"[res={resolution}] Saved CSV → {csv_path.name}")
 
-        # Histogram
         top = df_out.head(top_n_histogram)
         if top.empty:
-            logger.warning(
-                f"[res={resolution}] No TF-IDF scores for {display_label}, skipping plot."
-            )
+            logger.warning(f"[res={resolution}] No TF-IDF scores for {display_label}, skipping plot.")
             continue
         labels = top["canonical_keyword"].tolist()[::-1]
         values = top["tfidf_score"].tolist()[::-1]
@@ -533,16 +615,11 @@ def save_combined_plot(
         plt.close()
         logger.info(f"[res={resolution}] Saved histogram → {png_path.name}")
 
-    # ── Combined top-3 overview ───────────────────────────────────────────────
-    combined_scores = _aggregate_top_scores(
-        X, vectorizer, cluster_ids, modularity_meta, top_n=3
-    )
+    combined_scores = _aggregate_top_scores(X, vectorizer, cluster_ids, modularity_meta, top_n=3)
 
     if combined_scores:
         df_combined = pd.DataFrame(combined_scores)
-        df_combined["sort_label"] = (
-            df_combined["cluster_label"].str.split(":").str[-1].str.strip()
-        )
+        df_combined["sort_label"] = df_combined["cluster_label"].str.split(":").str[-1].str.strip()
         df_combined = df_combined.sort_values(
             by=["sort_label", "score"], ascending=[False, True]
         ).drop(columns=["sort_label"])
@@ -569,20 +646,163 @@ def save_combined_plot(
         plt.barh(labels, values, color=colors)
         plt.xlabel("TF-IDF Score of cluster as a single document")
         plt.title("Top 3 Canonical Keywords by Cluster", loc="center")
-        plt.legend(
-            legend_handles,
-            legend_labels,
-            title="Cluster",
-            loc="lower right",
-            framealpha=0.8,
-        )
+        plt.legend(legend_handles, legend_labels, title="Cluster", loc="lower right", framealpha=0.8)
         plt.tight_layout()
         combined_png = out_dir / "combined_top_3_tfidf_histogram.png"
         plt.savefig(combined_png, dpi=150)
         plt.close()
         logger.info(f"[res={resolution}] Saved combined top-3 plot → {combined_png.name}")
 
-    metadata = utils.get_file_metadata(out_dir)
+    metadata = utils.get_file_metadata(combined_png)
+    return metadata
+
+
+# ── 5. Wordcloud nodes ────────────────────────────────────────────────────────
+#
+# citation_network_with_layout  – shared; computes/reuses (x, y) vertex coords
+# save_wordcloud_figure_<res>   – @datasaver per resolution; reads tfidf_matrix
+#                                 for word frequencies and the laid-out graph
+#                                 for centroid positions
+
+
+@parameterize(
+    **{
+        f"save_wordcloud_figure_{name}": {
+            "tfidf_matrix": source(f"tfidf_matrix_{name}"),
+            "resolution": value(res),
+        }
+        for name, res in zip(_res_node_names, RESOLUTIONS)
+    }
+)
+@datasaver()
+def save_wordcloud_figure(
+    tfidf_matrix: tuple[scipy.sparse.csr_matrix, TfidfVectorizer, list],
+    citation_network_with_layout: ig.Graph,
+    resolution: float,
+    top_n_clusters: int,
+    top_n_words: int,
+    wordcloud_width: int,
+    wordcloud_height: int,
+) -> dict:
+    """
+    Render one figure per resolution:
+      - faint scatter of all graph nodes as spatial background
+      - one wordcloud per top-N cluster (by node count), centred on its centroid
+        with size proportional to tfidf_score
+      - saved as a PNG inside _out_dir(resolution)
+
+    The wordcloud box half-width is derived from the 75th-percentile distance
+    of each cluster's nodes from their centroid, so clouds scale naturally with
+    cluster spread.
+
+    Returns file-metadata dict (datasaver contract).
+    """
+    X, vectorizer, cluster_ids = tfidf_matrix
+    feature_names = vectorizer.get_feature_names_out()
+    cluster_attr = f"cpm_communities_at_res={resolution}"
+    out_dir = _out_dir(resolution)
+
+    # ── Build per-cluster keyword frequency dicts from the tfidf matrix ───────
+    cluster_freqs: dict[float, dict[str, float]] = {}
+    for i, cid in enumerate(cluster_ids):
+        vec = X[i].toarray().flatten()
+        scores = pd.Series(vec, index=feature_names)
+        scores = scores[scores > 0].sort_values(ascending=False).head(top_n_words)
+        if not scores.empty:
+            cluster_freqs[float(cid)] = {kw.title(): float(sc) for kw, sc in scores.items()}
+
+    if not cluster_freqs:
+        logger.warning(f"[res={resolution}] No non-empty cluster frequency dicts. Skipping wordcloud.")
+        metadata = utils.get_file_metadata(out_dir)
+        return metadata
+
+    # ── Select top N clusters by node count ───────────────────────────────────
+    if cluster_attr not in citation_network_with_layout.vs.attribute_names():
+        logger.warning(
+            f"[res={resolution}] Vertex attribute '{cluster_attr}' not found in graph. "
+            f"Skipping wordcloud figure."
+        )
+        metadata = utils.get_file_metadata(out_dir)
+        return metadata
+
+    memberships = np.array(citation_network_with_layout.vs[cluster_attr], dtype=float)
+    unique_ids, counts = np.unique(memberships, return_counts=True)
+    top_indices = np.argsort(counts)[::-1][:top_n_clusters]
+    top_cluster_ids = set(unique_ids[top_indices].tolist())
+
+    # Keep only clusters that have both layout data and tfidf scores
+    drawable = sorted(top_cluster_ids & set(cluster_freqs.keys()))
+    if not drawable:
+        logger.warning(
+            f"[res={resolution}] No overlap between top-{top_n_clusters} clusters by size "
+            f"and clusters with TF-IDF scores. Skipping wordcloud figure."
+        )
+        metadata = utils.get_file_metadata(out_dir)
+        return metadata
+
+    logger.info(
+        f"[res={resolution}] Drawing wordclouds for {len(drawable)} clusters: {drawable}"
+    )
+
+    # ── Compute centroids and radii for drawable clusters ─────────────────────
+    layout_data = _cluster_centroids_and_radii(
+        citation_network_with_layout, cluster_attr
+    )
+
+    # ── Render ────────────────────────────────────────────────────────────────
+    all_x = np.array(citation_network_with_layout.vs["x"], dtype=float)
+    all_y = np.array(citation_network_with_layout.vs["y"], dtype=float)
+
+    fig, ax = plt.subplots(figsize=(18, 18))
+    ax.set_facecolor("white")
+    fig.patch.set_facecolor("white")
+
+    # Background: all nodes as a faint scatter
+    ax.scatter(all_x, all_y, s=2, c="#cccccc", alpha=0.4, zorder=1, linewidths=0)
+
+    for cid in drawable:
+        info = layout_data[cid]
+        cx, cy, r = info["cx"], info["cy"], info["radius"]
+        freqs = cluster_freqs[cid]
+
+        wc = WordCloud(
+            width=wordcloud_width,
+            height=wordcloud_height,
+            background_color=None,
+            mode="RGBA",
+            prefer_horizontal=0.9,
+            max_words=top_n_words,
+            colormap="tab10",
+        ).generate_from_frequencies(freqs)
+
+        img = wc.to_array()
+
+        # Place the wordcloud centred on (cx, cy); extent uses data coordinates
+        ax.imshow(
+            img,
+            extent=(cx - r, cx + r, cy - r, cy + r),
+            origin="upper",
+            aspect="auto",
+            zorder=2,
+            interpolation="bilinear",
+        )
+        # Mark the centroid
+        ax.scatter(cx, cy, s=50, c="black", zorder=3, linewidths=0)
+        logger.info(
+            f"[res={resolution}] Rendered wordcloud for cluster {cid} "
+            f"at centroid ({cx:.1f}, {cy:.1f}), radius={r:.1f}"
+        )
+
+    ax.axis("off")
+    ax.set_title(f"Cluster wordclouds  |  resolution={resolution}", fontsize=14, pad=12)
+    plt.tight_layout()
+
+    png_path = out_dir / f"cluster_wordclouds_at_{resolution}.resolution.png"
+    fig.savefig(png_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+    logger.info(f"[res={resolution}] Saved wordcloud figure → {png_path}")
+
+    metadata = utils.get_file_metadata(png_path)
     return metadata
 
 

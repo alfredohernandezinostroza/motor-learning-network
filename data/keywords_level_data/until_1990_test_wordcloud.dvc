@@ -1,0 +1,6 @@
+outs:
+- md5: 3bae3ebf368a03c4d7a042063e1db5ff.dir
+  size: 2190969
+  nfiles: 33
+  hash: md5
+  path: until_1990_test_wordcloud
