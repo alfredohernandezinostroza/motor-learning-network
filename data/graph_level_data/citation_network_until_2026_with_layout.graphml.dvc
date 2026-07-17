@@ -1,0 +1,5 @@
+outs:
+- md5: 9b0a675a9743f516695663efe1be8445
+  size: 106729454
+  hash: md5
+  path: citation_network_until_2026_with_layout.graphml
