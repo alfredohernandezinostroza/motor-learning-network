@@ -47,6 +47,8 @@ fa2 = ">=1.1.2, <2"
 cython = ">=3.2.4, <4"
 cdlib = ">=0.4.0, <0.5"
 leidenalg = ">=0.11.0, <0.12"
+shapely = ">=2.1.2, <3"
+pillow = "*"
 
 [feature.simple.dependencies]
 python = "3.12.12.*"
