@@ -1,0 +1,5 @@
+outs:
+- md5: 53cbf1b2ad40b814f18485816bb73a75
+  size: 219730
+  hash: md5
+  path: citation_network_until_1960_testing_specification.graphml
