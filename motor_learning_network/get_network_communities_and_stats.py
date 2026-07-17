@@ -1,4 +1,5 @@
 import leidenalg
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import cdlib
@@ -59,7 +60,11 @@ def _main() -> int:
         clean_unified_database_with_communities_path=GRAPH_LEVEL_DATA_PATH / "clean_unified_database_with_communities_low_res.parquet",
         new_citation_network_path=GRAPH_LEVEL_DATA_PATH / "citation_network_full_low_res.graphml",
     )
-    outputs = ["save_citation_network_as_graphml", "save_database_with_communities"]
+    outputs = [
+                # "save_citation_network_as_graphml",
+                # "save_database_with_communities",
+                "filtered_citation_network"
+                ]
     # outputs = [f"leiden_with_resolution_{resolution}" for resolution in resolutions]
     import __main__
     dr = (
@@ -94,6 +99,36 @@ def citation_network(citation_network_path: Path) -> tuple[ig.Graph, dict]:
     citation_network = ig.Graph.Read(citation_network_path)
     metadata = utils.get_file_metadata(citation_network_path)
     return citation_network, metadata
+
+def filtered_citation_network(citation_network: ig.Graph) -> ig.Graph:
+    degrees = citation_network.degree(mode='all',loops=False)
+    p05 = np.percentile(degrees, 20)# --- 1. Save the zoomed plot of the distribution ---
+    # Create discrete bins centered exactly on integer degrees
+    min_deg, max_deg = min(degrees), max(degrees)
+    discrete_bins = np.arange(min_deg, max_deg + 2) - 0.5
+    # Added edgecolors so individual bars are distinct
+    plt.hist(degrees, bins=discrete_bins, edgecolor='black', color='skyblue')
+    # Add a vertical line representing the low-degree cut
+    plt.axvline(x=p05, color='red', linestyle='dashed', linewidth=2, label=f'5th Percentile Cut ({p05:.1f})')
+    plt.legend()
+    # ZOOM: Restrict the x-axis to focus on the lowest degrees (e.g., from minimum degree up to the cut + 5)
+    zoom_right = p05 + 50
+    plt.xlim(min_deg - 1, zoom_right)
+    # Force the x-axis to only display integer ticks within our zoomed view
+    plt.xticks(np.arange(min_deg, int(zoom_right) + 1))
+    # Add titles/labels for clarity
+    plt.title("Zoomed Degree Distribution (Low-Degree Cut)")
+    plt.xlabel("Total Degree")
+    plt.ylabel("Node Count")
+    # Save and close
+    plt.savefig(FIGURES_PATH/f'{CURRENT_FILE_NAME}_degree_distribution.png', dpi=300, bbox_inches='tight')
+    plt.close()
+    nodes_to_delete = [v.index for v, d in zip(citation_network.vs, degrees) if d < p05]
+    citation_network.delete_vertices(nodes_to_delete)
+    logger.info(f"95th Percentile Cutoff: {p05:.1f} degrees")
+    logger.info(f"Deleted {len(nodes_to_delete)} nodes.")
+    logger.info(f"Nodes remaining in graph: {citation_network.vcount()}")
+    return 
 
 @parameterize(**{f"leiden_with_resolution_{resolution}": {"resolution": value(resolution)} for resolution in resolutions})
 def leiden_cpm_communities(citation_network: ig.Graph, resolution: list[float], n_iterations: int, seed: int) -> cdlib.NodeClustering:
@@ -171,7 +206,7 @@ def citation_network_with_attributes_and_communities(citation_network: ig.Graph,
 
 @datasaver()
 def save_citation_network_as_graphml(citation_network_with_attributes_and_communities: ig.Graph, new_citation_network_path: Path) -> dict:
-    """Persist the igraph citation network as a pickle file."""
+    """Persist the igraph citation network as a graphml file."""
     citation_network_with_attributes_and_communities.write(new_citation_network_path)
     metadata = utils.get_file_metadata(new_citation_network_path)
     return metadata
