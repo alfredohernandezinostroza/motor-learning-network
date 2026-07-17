@@ -3,54 +3,54 @@ digraph {
 	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
 	node [fillcolor="#ffffff"]
 	synonym_dict [label=<<b>synonym_dict</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"synonym_dict.loader" [label=<<b>synonym_dict.loader</b><br /><br /><i>synonym_dict()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	"citation_network.loader" [label=<<b>citation_network.loader</b><br /><br /><i>citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	canonical_corpus_res_0_002 [label=<<b>canonical_corpus_res_0_002</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	save_combined_plot_res_0_001 [label=<<b>save_combined_plot_res_0_001</b><br /><br /><i>save_combined_plot()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"synonym_dict.loader" [label=<<b>synonym_dict.loader</b><br /><br /><i>synonym_dict()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
 	citation_network_with_layout [label=<<b>citation_network_with_layout</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	save_combined_plot_res_0_002 [label=<<b>save_combined_plot_res_0_002</b><br /><br /><i>save_combined_plot()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	tfidf_matrix_res_0_002 [label=<<b>tfidf_matrix_res_0_002</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	filtered_df_res_0_002 [label=<<b>filtered_df_res_0_002</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	canonical_corpus_res_0_001 [label=<<b>canonical_corpus_res_0_001</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	canonical_corpus_res_0_002 [label=<<b>canonical_corpus_res_0_002</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_wordcloud_figure_res_0_001 [label=<<b>save_wordcloud_figure_res_0_001</b><br /><br /><i>save_wordcloud_figure()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"citation_network.loader" [label=<<b>citation_network.loader</b><br /><br /><i>citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	filtered_df_res_0_001 [label=<<b>filtered_df_res_0_001</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	synonym_map [label=<<b>synonym_map</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	tfidf_matrix_res_0_002 [label=<<b>tfidf_matrix_res_0_002</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	canonical_corpus_res_0_001 [label=<<b>canonical_corpus_res_0_001</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_wordcloud_figure_res_0_002 [label=<<b>save_wordcloud_figure_res_0_002</b><br /><br /><i>save_wordcloud_figure()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	filtered_df_res_0_002 [label=<<b>filtered_df_res_0_002</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	tfidf_matrix_res_0_001 [label=<<b>tfidf_matrix_res_0_001</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	citation_network [label=<<b>citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	save_wordcloud_figure_res_0_002 [label=<<b>save_wordcloud_figure_res_0_002</b><br /><br /><i>save_wordcloud_figure()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	filtered_df_res_0_001 [label=<<b>filtered_df_res_0_001</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	save_wordcloud_figure_res_0_001 [label=<<b>save_wordcloud_figure_res_0_001</b><br /><br /><i>save_wordcloud_figure()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	save_combined_plot_res_0_002 [label=<<b>save_combined_plot_res_0_002</b><br /><br /><i>save_combined_plot()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
 	"synonym_dict.loader" -> synonym_dict
-	"_synonym_dict.loader_inputs" [label=<<table border="0"><tr><td>synonym_dict_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_synonym_dict.loader_inputs" -> "synonym_dict.loader"
-	"_citation_network.loader_inputs" [label=<<table border="0"><tr><td>citation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_citation_network.loader_inputs" -> "citation_network.loader"
-	filtered_df_res_0_002 -> canonical_corpus_res_0_002
-	synonym_map -> canonical_corpus_res_0_002
 	tfidf_matrix_res_0_001 -> save_combined_plot_res_0_001
 	_save_combined_plot_res_0_001_inputs [label=<<table border="0"><tr><td>top_n_histogram</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
 	_save_combined_plot_res_0_001_inputs -> save_combined_plot_res_0_001
+	"_synonym_dict.loader_inputs" [label=<<table border="0"><tr><td>synonym_dict_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_synonym_dict.loader_inputs" -> "synonym_dict.loader"
 	citation_network -> citation_network_with_layout
 	_citation_network_with_layout_inputs [label=<<table border="0"><tr><td>forceatlas2_iterations</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
 	_citation_network_with_layout_inputs -> citation_network_with_layout
-	tfidf_matrix_res_0_002 -> save_combined_plot_res_0_002
-	_save_combined_plot_res_0_001_inputs -> save_combined_plot_res_0_002
-	canonical_corpus_res_0_002 -> tfidf_matrix_res_0_002
-	citation_network -> filtered_df_res_0_002
-	_filtered_df_res_0_002_inputs [label=<<table border="0"><tr><td>min_cluster_size</td><td>int</td></tr><tr><td>keyword_dividing_character</td><td>str</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	_filtered_df_res_0_002_inputs -> filtered_df_res_0_002
-	filtered_df_res_0_001 -> canonical_corpus_res_0_001
-	synonym_map -> canonical_corpus_res_0_001
-	synonym_dict -> synonym_map
-	canonical_corpus_res_0_001 -> tfidf_matrix_res_0_001
-	"citation_network.loader" -> citation_network
-	tfidf_matrix_res_0_002 -> save_wordcloud_figure_res_0_002
-	citation_network_with_layout -> save_wordcloud_figure_res_0_002
-	_save_wordcloud_figure_res_0_002_inputs [label=<<table border="0"><tr><td>top_n_clusters</td><td>int</td></tr><tr><td>top_n_words</td><td>int</td></tr><tr><td>wordcloud_height</td><td>int</td></tr><tr><td>wordcloud_width</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	_save_wordcloud_figure_res_0_002_inputs -> save_wordcloud_figure_res_0_002
-	citation_network -> filtered_df_res_0_001
-	_filtered_df_res_0_002_inputs -> filtered_df_res_0_001
+	filtered_df_res_0_002 -> canonical_corpus_res_0_002
+	synonym_map -> canonical_corpus_res_0_002
 	tfidf_matrix_res_0_001 -> save_wordcloud_figure_res_0_001
 	citation_network_with_layout -> save_wordcloud_figure_res_0_001
-	_save_wordcloud_figure_res_0_002_inputs -> save_wordcloud_figure_res_0_001
+	_save_wordcloud_figure_res_0_001_inputs [label=<<table border="0"><tr><td>top_n_clusters</td><td>int</td></tr><tr><td>top_n_words</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_wordcloud_figure_res_0_001_inputs -> save_wordcloud_figure_res_0_001
+	"_citation_network.loader_inputs" [label=<<table border="0"><tr><td>citation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_citation_network.loader_inputs" -> "citation_network.loader"
+	citation_network -> filtered_df_res_0_001
+	_filtered_df_res_0_001_inputs [label=<<table border="0"><tr><td>min_cluster_size</td><td>int</td></tr><tr><td>keyword_dividing_character</td><td>str</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_filtered_df_res_0_001_inputs -> filtered_df_res_0_001
+	synonym_dict -> synonym_map
+	canonical_corpus_res_0_002 -> tfidf_matrix_res_0_002
+	filtered_df_res_0_001 -> canonical_corpus_res_0_001
+	synonym_map -> canonical_corpus_res_0_001
+	tfidf_matrix_res_0_002 -> save_wordcloud_figure_res_0_002
+	citation_network_with_layout -> save_wordcloud_figure_res_0_002
+	_save_wordcloud_figure_res_0_001_inputs -> save_wordcloud_figure_res_0_002
+	citation_network -> filtered_df_res_0_002
+	_filtered_df_res_0_001_inputs -> filtered_df_res_0_002
+	canonical_corpus_res_0_001 -> tfidf_matrix_res_0_001
+	"citation_network.loader" -> citation_network
+	tfidf_matrix_res_0_002 -> save_combined_plot_res_0_002
+	_save_combined_plot_res_0_001_inputs -> save_combined_plot_res_0_002
 	subgraph cluster__legend {
 		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
 		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
