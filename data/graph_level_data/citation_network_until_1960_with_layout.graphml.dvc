@@ -1,0 +1,5 @@
+outs:
+- md5: 4044286985927fd1000faa0ddc8e3262
+  size: 136386
+  hash: md5
+  path: citation_network_until_1960_with_layout.graphml
