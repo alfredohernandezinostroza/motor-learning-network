@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from pathlib import Path 
 
 DATA_DIR = Path("data")
-GRAPHML_FILE = DATA_DIR / "graph_level_data" / "citation_network_with_topics_new.graphml"
+GRAPHML_FILE = DATA_DIR / "graph_level_data" / "citation_network_until_2026_with_layout.graphml"
 PARQUET_FILE = GRAPHML_FILE.with_suffix(".parquet")
 
 def split_keywords(keywords_value: str):

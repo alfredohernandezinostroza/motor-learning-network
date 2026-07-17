@@ -15,11 +15,13 @@ NORM: Final = 'l2'
 # NORM: Final = None
 IDF_BIAS: Final = 0.0
 SYNONYMS_THRESHOLD: Final = 0.99
-citation_network_df = pd.read_parquet(GRAPH_LEVEL_DATA_PATH / "clean_unified_database_with_communities_low_res.parquet")
-for RESOLUTION in [round(0.001 + i * 0.001, 3) for i in range(1, 9)]: #[0.01, ..., 0.1]
-    OUT_DIR: Final = Path("td-idf") / "per-cluster-as-document" / f"res-{RESOLUTION}-threshold-{SYNONYMS_THRESHOLD}-norm-{NORM}-fixidf-{IDF_BIAS}"
+citation_network_df = pd.read_parquet(GRAPH_LEVEL_DATA_PATH / "citation_network_until_2026_with_layout.parquet")
+RESOLUTIONS = [0.0004, 0.001]
+# RESOLUTIONS = [resolution in [round(0.001 + i * 0.001, 3) for i in range(1, 9)]] #[0.01, ..., 0.1]
+for resolution in RESOLUTIONS:
+    OUT_DIR: Final = Path("td-idf-until-2026") / "per-cluster-as-document" / f"res-{resolution}-threshold-{SYNONYMS_THRESHOLD}-norm-{NORM}-fixidf-{IDF_BIAS}"
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    MODULARITY_META = {float(i): {"label": f"Community {i} at resolution {RESOLUTION}", "color": "#AAAAAA"} for i in range(31)}
+    MODULARITY_META = {float(i): {"label": f"Community {i} at resolution {resolution}", "color": "#AAAAAA"} for i in range(31)}
 
     # MODULARITY_META = {
     #     2: {
@@ -171,7 +173,7 @@ for RESOLUTION in [round(0.001 + i * 0.001, 3) for i in range(1, 9)]: #[0.01, ..
         # Filtering
         df = citation_network_df
         df = df.drop(df[df['keywords'].isin(["Unknown keywords"])].index)
-        df = df[df[f"cpm_communities_at_res={RESOLUTION}"].isin(MODULARITY_META)]
+        df = df[df[f"cpm_communities_at_res={resolution}"].isin(MODULARITY_META)]
         df = df.dropna().reset_index(drop=True)
         # 2. Load and Prepare Synonym Map
         print(f"Loading synonym data from: {synonym_dict_path}")
@@ -188,7 +190,7 @@ for RESOLUTION in [round(0.001 + i * 0.001, 3) for i in range(1, 9)]: #[0.01, ..
         canonical_corpus = {}
         all_canonical_keywords = set([])
 
-        for raw_keywords_str, modularity_class in zip(df['keywords'], df[f"cpm_communities_at_res={RESOLUTION}"]):
+        for raw_keywords_str, modularity_class in zip(df['keywords'], df[f"cpm_communities_at_res={resolution}"]):
             if not canonical_corpus.get(modularity_class):
                 canonical_corpus[modularity_class] = []
                 
@@ -337,7 +339,7 @@ for RESOLUTION in [round(0.001 + i * 0.001, 3) for i in range(1, 9)]: #[0.01, ..
         
         # 1. Robust Cluster ID Mapping
         # Get the unique cluster IDs found in the DataFrame
-        df_cluster_ids = sorted(df[f"cpm_communities_at_res={RESOLUTION}"].unique())
+        df_cluster_ids = sorted(df[f"cpm_communities_at_res={resolution}"].unique())
         
         # Use the IDs that were actually processed, assuming they correspond to the rows of X
         if len(df_cluster_ids) != X.shape[0]:
