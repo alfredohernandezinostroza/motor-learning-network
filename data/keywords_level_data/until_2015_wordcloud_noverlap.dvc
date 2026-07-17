@@ -1,0 +1,6 @@
+outs:
+- md5: 343067c6dfc1b6f5d094d3caeae603d8.dir
+  size: 21509211
+  nfiles: 171
+  hash: md5
+  path: until_2015_wordcloud_noverlap
