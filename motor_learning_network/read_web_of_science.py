@@ -28,13 +28,6 @@ WOS_RAW_PATH_BIOSIS = RAW_DATA_PATH / "wos_biosis_ci"
 WOS_RAW_PATH_KCI = RAW_DATA_PATH / "wos_kci"
 CURRENT_FILE_NAME = Path(__file__).stem
 
-UI_CONFIG = adapters.HamiltonTracker(
-    project_id=DEFAULT_UI_PROJECT_ID,
-    username=DEFAULT_UI_USERNAME,
-    dag_name=CURRENT_FILE_NAME,
-    tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
-)
-
 hamilton.log_setup.setup_logging(logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -142,6 +135,13 @@ if __name__ == "__main__":
     output_files = []
     import __main__
     from hamilton.io.materialization import to
+    UI_CONFIG = adapters.HamiltonTracker(
+        project_id=DEFAULT_UI_PROJECT_ID,
+        username=DEFAULT_UI_USERNAME,
+        dag_name=CURRENT_FILE_NAME,
+        tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
+    )
+
     dr = (
         driver.Builder()
         .with_modules(__main__)

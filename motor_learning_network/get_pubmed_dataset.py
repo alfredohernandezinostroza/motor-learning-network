@@ -27,12 +27,6 @@ from hamilton_sdk import adapters
 ##   Constants   ##
 ###################
 CURRENT_FILE_NAME = Path(__file__).stem
-UI_CONFIG = adapters.HamiltonTracker(
-    project_id=DEFAULT_UI_PROJECT_ID,
-    username=DEFAULT_UI_USERNAME,
-    dag_name=CURRENT_FILE_NAME,
-    tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
-)
 SAVED_DB_PATH = Path(RAW_DATA_PATH, "articles.pkl")
 class LoadingFrom(Enum):
     LOCAL = 0
@@ -63,6 +57,13 @@ def _main() -> int:
     ##   Sanity checks   ##
     #######################
     import __main__
+
+    UI_CONFIG = adapters.HamiltonTracker(
+        project_id=DEFAULT_UI_PROJECT_ID,
+        username=DEFAULT_UI_USERNAME,
+        dag_name=CURRENT_FILE_NAME,
+        tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
+    )
 
     dr = (
         driver.Builder()

@@ -20,12 +20,6 @@ if EXECUTE:
     logger.info("Executing the DAG!")
 
 CURRENT_FILE_NAME = Path(__file__).stem
-UI_CONFIG = adapters.HamiltonTracker(
-    project_id=DEFAULT_UI_PROJECT_ID,
-    username=DEFAULT_UI_USERNAME,
-    dag_name=CURRENT_FILE_NAME,
-    tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
-)
 #####################
 ##  Aux Functions  ##
 #####################
@@ -42,6 +36,13 @@ def _main() -> int:
     inputs = dict()
     outputs = []
     import __main__
+    UI_CONFIG = adapters.HamiltonTracker(
+        project_id=DEFAULT_UI_PROJECT_ID,
+        username=DEFAULT_UI_USERNAME,
+        dag_name=CURRENT_FILE_NAME,
+        tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
+    )
+
     dr = (
         driver.Builder()
         .with_modules(__main__)
