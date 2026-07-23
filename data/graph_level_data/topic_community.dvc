@@ -1,0 +1,6 @@
+outs:
+- md5: 8118e1fb0fe7edeced5031b9266978cc.dir
+  size: 125377
+  nfiles: 3
+  hash: md5
+  path: topic_community

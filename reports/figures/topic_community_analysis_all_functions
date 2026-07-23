@@ -1,0 +1,34 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	topic_community_metrics [label=<<b>topic_community_metrics</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_topic_community_metrics_csv [label=<<b>save_topic_community_metrics_csv</b><br /><br /><i>save_topic_community_metrics_csv()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"citation_network.loader" [label=<<b>citation_network.loader</b><br /><br /><i>citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	disconnected_communities [label=<<b>disconnected_communities</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_disconnected_communities_csv [label=<<b>save_disconnected_communities_csv</b><br /><br /><i>save_disconnected_communities_csv()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	save_topic_community_metrics_json [label=<<b>save_topic_community_metrics_json</b><br /><br /><i>save_topic_community_metrics_json()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	topic_labels [label=<<b>topic_labels</b><br /><br /><i>ndarray</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	community_labels [label=<<b>community_labels</b><br /><br /><i>ndarray</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	analyze_topic_communities [label=<<b>analyze_topic_communities</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	citation_network [label=<<b>citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	analyze_topic_communities -> topic_community_metrics
+	topic_community_metrics -> save_topic_community_metrics_csv
+	"_citation_network.loader_inputs" [label=<<table border="0"><tr><td>citation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_citation_network.loader_inputs" -> "citation_network.loader"
+	analyze_topic_communities -> disconnected_communities
+	disconnected_communities -> save_disconnected_communities_csv
+	topic_community_metrics -> save_topic_community_metrics_json
+	citation_network -> topic_labels
+	citation_network -> community_labels
+	citation_network -> analyze_topic_communities
+	topic_labels -> analyze_topic_communities
+	community_labels -> analyze_topic_communities
+	"citation_network.loader" -> citation_network
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}
