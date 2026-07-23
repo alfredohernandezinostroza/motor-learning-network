@@ -1,0 +1,5 @@
+outs:
+- md5: df53a3a173baabee58ad7bceb9872e62
+  size: 23075129
+  hash: md5
+  path: paper_text_for_embeddings_all.parquet
