@@ -18,6 +18,11 @@ EXECUTE = True
 if EXECUTE:
     logger.info("Executing the DAG!")
 
+# Only build the Hamilton UI tracker when we actually want to ship run metadata to
+# the UI server. Constructing HamiltonTracker validates auth against localhost, so
+# leaving it on breaks offline runs / imports for no benefit when it isn't attached.
+USE_TRACKER = False
+
 #####################
 ##  Aux Functions  ##
 #####################
@@ -27,31 +32,30 @@ if EXECUTE:
 ##################
 def _main() -> int:
     ########################
-    ##  UI configuration  ##
-    ########################
-
-    UI_CONFIG = adapters.HamiltonTracker(
-        project_id=DEFAULT_UI_PROJECT_ID,
-        username=DEFAULT_UI_USERNAME,
-        dag_name=CURRENT_FILE_NAME,
-        tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
-    )
-
-    ########################
     ## Inputs and Outputs ##
     ########################
     inputs = dict()
     outputs = []
     import __main__
-    dr = (
+
+    ########################
+    ##  Driver + UI cfg   ##
+    ########################
+    builder = (
         driver.Builder()
         .with_modules(__main__)
         # .with_config()
         # .with_cache()
-        #  .with_adapters(UI_CONFIG)
-        .build()
-        )
-    
+    )
+    if USE_TRACKER:
+        builder = builder.with_adapters(adapters.HamiltonTracker(
+            project_id=DEFAULT_UI_PROJECT_ID,
+            username=DEFAULT_UI_USERNAME,
+            dag_name=CURRENT_FILE_NAME,
+            tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
+        ))
+    dr = builder.build()
+
     #######################
     ##   Sanity checks   ##
     #######################
