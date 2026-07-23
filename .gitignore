@@ -204,3 +204,6 @@ notebooks/
 td-idf*/
 
 data/**/*_test*/
+
+# generated servable website bundle (regenerate via build_website.py)
+reports/website/

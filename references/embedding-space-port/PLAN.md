@@ -110,6 +110,7 @@ Per module:
 | `embedding_space_layout.py` (4) | Planned | blocked: same; also low value here (feeds the excluded website) |
 | `topic_modeling_gemini.py` (2) | Planned | blocked: live Gemini API |
 | LLM summaries (community / bridge) | Planned | blocked: live Gemini API |
+| `build_website.py` (site generator) | **Done, committed** | 7 unit tests green; full DAG run → servable site, all files 200 over HTTP |
 
 Modules 1 and 5 were the two that are both highest scientific value *and* fully verifiable in the
 `default` env with no LLM. The rest are gated as below.
