@@ -1,4 +1,7 @@
 [core]
-    remote = main_remote
+    remote = dagshub
 ['remote "main_remote"']
     url = gdrive://1p5EhPrqgwxLesUISx99QbyAzkaQGnVUB
+['remote "dagshub"']
+    url = s3://dvc
+    endpointurl = https://dagshub.com/alfredohernandezinostroza/motor-learning-network.s3
