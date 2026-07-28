@@ -2,42 +2,57 @@
 digraph {
 	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
 	node [fillcolor="#ffffff"]
-	save_edges_bins [label=<<b>save_edges_bins</b><br /><br /><i>save_edges_bins()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	edges [label=<<b>edges</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	topic_metrics [label=<<b>topic_metrics</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_resolution_metrics_json [label=<<b>save_resolution_metrics_json</b><br /><br /><i>save_resolution_metrics_json()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	save_clusters_json [label=<<b>save_clusters_json</b><br /><br /><i>save_clusters_json()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	save_abstracts_json [label=<<b>save_abstracts_json</b><br /><br /><i>save_abstracts_json()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
 	raw_nodes [label=<<b>raw_nodes</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	clusters_legend [label=<<b>clusters_legend</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	assembled_website [label=<<b>assembled_website</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	parsed_graphml [label=<<b>parsed_graphml</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	node_records [label=<<b>node_records</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	save_clusters_json [label=<<b>save_clusters_json</b><br /><br /><i>save_clusters_json()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	communities_legend [label=<<b>communities_legend</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	save_nodes_json [label=<<b>save_nodes_json</b><br /><br /><i>save_nodes_json()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	save_communities_json [label=<<b>save_communities_json</b><br /><br /><i>save_communities_json()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	save_abstracts_json [label=<<b>save_abstracts_json</b><br /><br /><i>save_abstracts_json()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	per_partition_quality_df [label=<<b>per_partition_quality_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	edges [label=<<b>edges</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_edges_bins [label=<<b>save_edges_bins</b><br /><br /><i>save_edges_bins()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	per_community_quality_df [label=<<b>per_community_quality_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	community_quality_lookup [label=<<b>community_quality_lookup</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	communities_legend_by_resolution [label=<<b>communities_legend_by_resolution</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	parsed_graphml [label=<<b>parsed_graphml</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	abstracts [label=<<b>abstracts</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	node_records -> save_edges_bins
-	edges -> save_edges_bins
-	parsed_graphml -> edges
-	_topic_metrics_inputs [label=<<table border="0"><tr><td>topic_metrics_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	_topic_metrics_inputs -> topic_metrics
+	save_nodes_json [label=<<b>save_nodes_json</b><br /><br /><i>save_nodes_json()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	resolution_metrics_records [label=<<b>resolution_metrics_records</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	assembled_website [label=<<b>assembled_website</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	topic_metrics [label=<<b>topic_metrics</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_communities_by_resolution_json [label=<<b>save_communities_by_resolution_json</b><br /><br /><i>save_communities_by_resolution_json()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	resolution_metrics_records -> save_resolution_metrics_json
+	clusters_legend -> save_clusters_json
+	abstracts -> save_abstracts_json
 	parsed_graphml -> raw_nodes
 	node_records -> clusters_legend
 	topic_metrics -> clusters_legend
-	save_nodes_json -> assembled_website
-	save_clusters_json -> assembled_website
-	save_communities_json -> assembled_website
-	save_abstracts_json -> assembled_website
-	save_edges_bins -> assembled_website
+	raw_nodes -> node_records
+	_per_partition_quality_df_inputs [label=<<table border="0"><tr><td>per_partition_metrics_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_per_partition_quality_df_inputs -> per_partition_quality_df
+	parsed_graphml -> edges
+	node_records -> save_edges_bins
+	edges -> save_edges_bins
+	_per_community_quality_df_inputs [label=<<table border="0"><tr><td>per_community_metrics_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_per_community_quality_df_inputs -> per_community_quality_df
+	per_community_quality_df -> community_quality_lookup
+	node_records -> communities_legend_by_resolution
+	community_quality_lookup -> communities_legend_by_resolution
 	_parsed_graphml_inputs [label=<<table border="0"><tr><td>graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
 	_parsed_graphml_inputs -> parsed_graphml
-	raw_nodes -> node_records
-	clusters_legend -> save_clusters_json
-	node_records -> communities_legend
-	node_records -> save_nodes_json
-	communities_legend -> save_communities_json
-	abstracts -> save_abstracts_json
 	raw_nodes -> abstracts
+	node_records -> save_nodes_json
+	per_partition_quality_df -> resolution_metrics_records
+	per_community_quality_df -> resolution_metrics_records
+	save_nodes_json -> assembled_website
+	save_clusters_json -> assembled_website
+	save_communities_by_resolution_json -> assembled_website
+	save_resolution_metrics_json -> assembled_website
+	save_abstracts_json -> assembled_website
+	save_edges_bins -> assembled_website
+	_topic_metrics_inputs [label=<<table border="0"><tr><td>topic_metrics_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_topic_metrics_inputs -> topic_metrics
+	communities_legend_by_resolution -> save_communities_by_resolution_json
 	subgraph cluster__legend {
 		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
 		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
