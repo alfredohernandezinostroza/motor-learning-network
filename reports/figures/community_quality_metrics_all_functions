@@ -1,0 +1,130 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	community_quality_metrics_all_resolutions [label=<<b>community_quality_metrics_all_resolutions</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"community_membership_at_resolution_0.007" [label=<<b>community_membership_at_resolution_0.007</b><br /><br /><i>ndarray</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"community_membership_at_resolution_0.003" [label=<<b>community_membership_at_resolution_0.003</b><br /><br /><i>ndarray</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"community_membership_at_resolution_0.005" [label=<<b>community_membership_at_resolution_0.005</b><br /><br /><i>ndarray</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"community_quality_metrics_at_resolution_0.003" [label=<<b>community_quality_metrics_at_resolution_0.003</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	citation_network_with_community_metrics [label=<<b>citation_network_with_community_metrics</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"community_membership_at_resolution_0.004" [label=<<b>community_membership_at_resolution_0.004</b><br /><br /><i>ndarray</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	per_partition_quality_metrics_df [label=<<b>per_partition_quality_metrics_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	community_memberships_by_resolution [label=<<b>community_memberships_by_resolution</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	undirected_networkx_graph [label=<<b>undirected_networkx_graph</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	resolution_plateau_flags [label=<<b>resolution_plateau_flags</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_per_partition_quality_metrics [label=<<b>save_per_partition_quality_metrics</b><br /><br /><i>save_per_partition_quality_metrics()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"community_membership_at_resolution_0.001" [label=<<b>community_membership_at_resolution_0.001</b><br /><br /><i>ndarray</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	citation_network [label=<<b>citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"citation_network.loader" [label=<<b>citation_network.loader</b><br /><br /><i>citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"community_quality_metrics_at_resolution_0.009" [label=<<b>community_quality_metrics_at_resolution_0.009</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"community_quality_metrics_at_resolution_0.008" [label=<<b>community_quality_metrics_at_resolution_0.008</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	reciprocal_edge_pair_count [label=<<b>reciprocal_edge_pair_count</b><br /><br /><i>int</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"community_quality_metrics_at_resolution_0.006" [label=<<b>community_quality_metrics_at_resolution_0.006</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"community_membership_at_resolution_0.002" [label=<<b>community_membership_at_resolution_0.002</b><br /><br /><i>ndarray</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"community_membership_at_resolution_0.006" [label=<<b>community_membership_at_resolution_0.006</b><br /><br /><i>ndarray</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_citation_network_with_community_metrics [label=<<b>save_citation_network_with_community_metrics</b><br /><br /><i>save_citation_network_with_community_metrics()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"community_quality_metrics_at_resolution_0.004" [label=<<b>community_quality_metrics_at_resolution_0.004</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_per_community_quality_metrics [label=<<b>save_per_community_quality_metrics</b><br /><br /><i>save_per_community_quality_metrics()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"community_quality_metrics_at_resolution_0.007" [label=<<b>community_quality_metrics_at_resolution_0.007</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"community_membership_at_resolution_0.009" [label=<<b>community_membership_at_resolution_0.009</b><br /><br /><i>ndarray</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"community_quality_metrics_at_resolution_0.005" [label=<<b>community_quality_metrics_at_resolution_0.005</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	per_community_quality_metrics_df [label=<<b>per_community_quality_metrics_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"community_quality_metrics_at_resolution_0.002" [label=<<b>community_quality_metrics_at_resolution_0.002</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"community_quality_metrics_at_resolution_0.001" [label=<<b>community_quality_metrics_at_resolution_0.001</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"community_membership_at_resolution_0.008" [label=<<b>community_membership_at_resolution_0.008</b><br /><br /><i>ndarray</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"community_quality_metrics_at_resolution_0.001" -> community_quality_metrics_all_resolutions
+	"community_quality_metrics_at_resolution_0.002" -> community_quality_metrics_all_resolutions
+	"community_quality_metrics_at_resolution_0.003" -> community_quality_metrics_all_resolutions
+	"community_quality_metrics_at_resolution_0.004" -> community_quality_metrics_all_resolutions
+	"community_quality_metrics_at_resolution_0.005" -> community_quality_metrics_all_resolutions
+	"community_quality_metrics_at_resolution_0.006" -> community_quality_metrics_all_resolutions
+	"community_quality_metrics_at_resolution_0.007" -> community_quality_metrics_all_resolutions
+	"community_quality_metrics_at_resolution_0.008" -> community_quality_metrics_all_resolutions
+	"community_quality_metrics_at_resolution_0.009" -> community_quality_metrics_all_resolutions
+	citation_network -> "community_membership_at_resolution_0.007"
+	citation_network -> "community_membership_at_resolution_0.003"
+	citation_network -> "community_membership_at_resolution_0.005"
+	citation_network -> "community_quality_metrics_at_resolution_0.003"
+	undirected_networkx_graph -> "community_quality_metrics_at_resolution_0.003"
+	"community_membership_at_resolution_0.003" -> "community_quality_metrics_at_resolution_0.003"
+	resolution_plateau_flags -> "community_quality_metrics_at_resolution_0.003"
+	"_community_quality_metrics_at_resolution_0.003_inputs" [label=<<table border="0"><tr><td>stability_seeds</td><td>list</td></tr><tr><td>n_iterations</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_community_quality_metrics_at_resolution_0.003_inputs" -> "community_quality_metrics_at_resolution_0.003"
+	citation_network -> citation_network_with_community_metrics
+	community_quality_metrics_all_resolutions -> citation_network_with_community_metrics
+	community_memberships_by_resolution -> citation_network_with_community_metrics
+	reciprocal_edge_pair_count -> citation_network_with_community_metrics
+	citation_network -> "community_membership_at_resolution_0.004"
+	community_quality_metrics_all_resolutions -> per_partition_quality_metrics_df
+	"community_membership_at_resolution_0.001" -> community_memberships_by_resolution
+	"community_membership_at_resolution_0.002" -> community_memberships_by_resolution
+	"community_membership_at_resolution_0.003" -> community_memberships_by_resolution
+	"community_membership_at_resolution_0.004" -> community_memberships_by_resolution
+	"community_membership_at_resolution_0.005" -> community_memberships_by_resolution
+	"community_membership_at_resolution_0.006" -> community_memberships_by_resolution
+	"community_membership_at_resolution_0.007" -> community_memberships_by_resolution
+	"community_membership_at_resolution_0.008" -> community_memberships_by_resolution
+	"community_membership_at_resolution_0.009" -> community_memberships_by_resolution
+	citation_network -> undirected_networkx_graph
+	community_memberships_by_resolution -> resolution_plateau_flags
+	per_partition_quality_metrics_df -> save_per_partition_quality_metrics
+	citation_network -> "community_membership_at_resolution_0.001"
+	"citation_network.loader" -> citation_network
+	"_citation_network.loader_inputs" [label=<<table border="0"><tr><td>citation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_citation_network.loader_inputs" -> "citation_network.loader"
+	citation_network -> "community_quality_metrics_at_resolution_0.009"
+	undirected_networkx_graph -> "community_quality_metrics_at_resolution_0.009"
+	"community_membership_at_resolution_0.009" -> "community_quality_metrics_at_resolution_0.009"
+	resolution_plateau_flags -> "community_quality_metrics_at_resolution_0.009"
+	"_community_quality_metrics_at_resolution_0.003_inputs" -> "community_quality_metrics_at_resolution_0.009"
+	citation_network -> "community_quality_metrics_at_resolution_0.008"
+	undirected_networkx_graph -> "community_quality_metrics_at_resolution_0.008"
+	"community_membership_at_resolution_0.008" -> "community_quality_metrics_at_resolution_0.008"
+	resolution_plateau_flags -> "community_quality_metrics_at_resolution_0.008"
+	"_community_quality_metrics_at_resolution_0.003_inputs" -> "community_quality_metrics_at_resolution_0.008"
+	citation_network -> reciprocal_edge_pair_count
+	citation_network -> "community_quality_metrics_at_resolution_0.006"
+	undirected_networkx_graph -> "community_quality_metrics_at_resolution_0.006"
+	"community_membership_at_resolution_0.006" -> "community_quality_metrics_at_resolution_0.006"
+	resolution_plateau_flags -> "community_quality_metrics_at_resolution_0.006"
+	"_community_quality_metrics_at_resolution_0.003_inputs" -> "community_quality_metrics_at_resolution_0.006"
+	citation_network -> "community_membership_at_resolution_0.002"
+	citation_network -> "community_membership_at_resolution_0.006"
+	citation_network_with_community_metrics -> save_citation_network_with_community_metrics
+	citation_network -> "community_quality_metrics_at_resolution_0.004"
+	undirected_networkx_graph -> "community_quality_metrics_at_resolution_0.004"
+	"community_membership_at_resolution_0.004" -> "community_quality_metrics_at_resolution_0.004"
+	resolution_plateau_flags -> "community_quality_metrics_at_resolution_0.004"
+	"_community_quality_metrics_at_resolution_0.003_inputs" -> "community_quality_metrics_at_resolution_0.004"
+	per_community_quality_metrics_df -> save_per_community_quality_metrics
+	citation_network -> "community_quality_metrics_at_resolution_0.007"
+	undirected_networkx_graph -> "community_quality_metrics_at_resolution_0.007"
+	"community_membership_at_resolution_0.007" -> "community_quality_metrics_at_resolution_0.007"
+	resolution_plateau_flags -> "community_quality_metrics_at_resolution_0.007"
+	"_community_quality_metrics_at_resolution_0.003_inputs" -> "community_quality_metrics_at_resolution_0.007"
+	citation_network -> "community_membership_at_resolution_0.009"
+	citation_network -> "community_quality_metrics_at_resolution_0.005"
+	undirected_networkx_graph -> "community_quality_metrics_at_resolution_0.005"
+	"community_membership_at_resolution_0.005" -> "community_quality_metrics_at_resolution_0.005"
+	resolution_plateau_flags -> "community_quality_metrics_at_resolution_0.005"
+	"_community_quality_metrics_at_resolution_0.003_inputs" -> "community_quality_metrics_at_resolution_0.005"
+	community_quality_metrics_all_resolutions -> per_community_quality_metrics_df
+	citation_network -> "community_quality_metrics_at_resolution_0.002"
+	undirected_networkx_graph -> "community_quality_metrics_at_resolution_0.002"
+	"community_membership_at_resolution_0.002" -> "community_quality_metrics_at_resolution_0.002"
+	resolution_plateau_flags -> "community_quality_metrics_at_resolution_0.002"
+	"_community_quality_metrics_at_resolution_0.003_inputs" -> "community_quality_metrics_at_resolution_0.002"
+	citation_network -> "community_quality_metrics_at_resolution_0.001"
+	undirected_networkx_graph -> "community_quality_metrics_at_resolution_0.001"
+	"community_membership_at_resolution_0.001" -> "community_quality_metrics_at_resolution_0.001"
+	resolution_plateau_flags -> "community_quality_metrics_at_resolution_0.001"
+	"_community_quality_metrics_at_resolution_0.003_inputs" -> "community_quality_metrics_at_resolution_0.001"
+	citation_network -> "community_membership_at_resolution_0.008"
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}
