@@ -1,0 +1,6 @@
+outs:
+- md5: 34cf9265128e2b0341fd720d688b14d1.dir
+  size: 347790
+  nfiles: 2
+  hash: md5
+  path: community_quality_metrics

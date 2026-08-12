@@ -31,3 +31,5 @@
 /citation_network_until_2026_with_layout.parquet
 /missing_links
 /topic_community
+/citation_network_with_community_metrics.graphml
+/community_quality_metrics
