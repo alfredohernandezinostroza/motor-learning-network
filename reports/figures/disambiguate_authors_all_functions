@@ -1,0 +1,88 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	author_clusters [label=<<b>author_clusters</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	anchored_author_mentions [label=<<b>anchored_author_mentions</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	loaded_wos_database [label=<<b>loaded_wos_database</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	scopus_author_anchors [label=<<b>scopus_author_anchors</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	pairwise_match_probabilities [label=<<b>pairwise_match_probabilities</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_disambiguated_authors [label=<<b>save_disambiguated_authors</b><br /><br /><i>save_disambiguated_authors()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	raw_author_mentions [label=<<b>raw_author_mentions</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	disambiguated_author_table [label=<<b>disambiguated_author_table</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	pairwise_match_model [label=<<b>pairwise_match_model</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	wos_researcher_id_anchors [label=<<b>wos_researcher_id_anchors</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_author_clusters [label=<<b>save_author_clusters</b><br /><br /><i>save_author_clusters()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	pair_supervision_labels [label=<<b>pair_supervision_labels</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	author_disambiguation_report [label=<<b>author_disambiguation_report</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	wos_orcid_anchors [label=<<b>wos_orcid_anchors</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	normalized_author_mentions [label=<<b>normalized_author_mentions</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	loaded_scopus_database [label=<<b>loaded_scopus_database</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	pairwise_disambiguation_features [label=<<b>pairwise_disambiguation_features</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"loaded_clean_database.loader" [label=<<b>loaded_clean_database.loader</b><br /><br /><i>loaded_clean_database()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	held_out_author_clusters [label=<<b>held_out_author_clusters</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	anchor_evaluation_split [label=<<b>anchor_evaluation_split</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"loaded_wos_database.loader" [label=<<b>loaded_wos_database.loader</b><br /><br /><i>loaded_wos_database()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	loaded_clean_database [label=<<b>loaded_clean_database</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"loaded_scopus_database.loader" [label=<<b>loaded_scopus_database.loader</b><br /><br /><i>loaded_scopus_database()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	mention_context_index [label=<<b>mention_context_index</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_author_disambiguation_report [label=<<b>save_author_disambiguation_report</b><br /><br /><i>save_author_disambiguation_report()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	candidate_mention_pairs [label=<<b>candidate_mention_pairs</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	constrained_author_clusters [label=<<b>constrained_author_clusters</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	external_author_anchors [label=<<b>external_author_anchors</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	disambiguated_author_table -> author_clusters
+	normalized_author_mentions -> anchored_author_mentions
+	external_author_anchors -> anchored_author_mentions
+	"loaded_wos_database.loader" -> loaded_wos_database
+	loaded_scopus_database -> scopus_author_anchors
+	pairwise_disambiguation_features -> pairwise_match_probabilities
+	pairwise_match_model -> pairwise_match_probabilities
+	disambiguated_author_table -> save_disambiguated_authors
+	loaded_clean_database -> raw_author_mentions
+	anchored_author_mentions -> disambiguated_author_table
+	constrained_author_clusters -> disambiguated_author_table
+	pairwise_disambiguation_features -> pairwise_match_model
+	pair_supervision_labels -> pairwise_match_model
+	loaded_wos_database -> wos_researcher_id_anchors
+	author_clusters -> save_author_clusters
+	candidate_mention_pairs -> pair_supervision_labels
+	anchored_author_mentions -> pair_supervision_labels
+	anchor_evaluation_split -> pair_supervision_labels
+	disambiguated_author_table -> author_disambiguation_report
+	held_out_author_clusters -> author_disambiguation_report
+	anchor_evaluation_split -> author_disambiguation_report
+	pairwise_match_model -> author_disambiguation_report
+	author_clusters -> author_disambiguation_report
+	loaded_wos_database -> wos_orcid_anchors
+	raw_author_mentions -> normalized_author_mentions
+	"loaded_scopus_database.loader" -> loaded_scopus_database
+	candidate_mention_pairs -> pairwise_disambiguation_features
+	anchored_author_mentions -> pairwise_disambiguation_features
+	mention_context_index -> pairwise_disambiguation_features
+	"_loaded_clean_database.loader_inputs" [label=<<table border="0"><tr><td>clean_database_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_loaded_clean_database.loader_inputs" -> "loaded_clean_database.loader"
+	anchored_author_mentions -> held_out_author_clusters
+	pairwise_match_probabilities -> held_out_author_clusters
+	anchor_evaluation_split -> held_out_author_clusters
+	anchored_author_mentions -> anchor_evaluation_split
+	"_loaded_wos_database.loader_inputs" [label=<<table border="0"><tr><td>wos_database_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_loaded_wos_database.loader_inputs" -> "loaded_wos_database.loader"
+	"loaded_clean_database.loader" -> loaded_clean_database
+	"_loaded_scopus_database.loader_inputs" [label=<<table border="0"><tr><td>scopus_database_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_loaded_scopus_database.loader_inputs" -> "loaded_scopus_database.loader"
+	anchored_author_mentions -> mention_context_index
+	loaded_scopus_database -> mention_context_index
+	author_disambiguation_report -> save_author_disambiguation_report
+	anchored_author_mentions -> candidate_mention_pairs
+	anchored_author_mentions -> constrained_author_clusters
+	pairwise_match_probabilities -> constrained_author_clusters
+	scopus_author_anchors -> external_author_anchors
+	wos_orcid_anchors -> external_author_anchors
+	wos_researcher_id_anchors -> external_author_anchors
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}

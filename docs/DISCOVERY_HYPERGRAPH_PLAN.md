@@ -6,7 +6,10 @@ human-aware artificial intelligence*, Nature Human Behaviour 7:1682–1696
 literature corpus.
 
 Branch: `feature/discovery-hypergraph`
-Status: **plan only — nothing implemented yet.** Written 2026-08-21.
+Written 2026-08-21.
+
+Status: **Phase 1 (author disambiguation) is built and validated**; Phases 0 and
+2–5 are still plan only. See §4.4 for measured results.
 
 ---
 
@@ -356,6 +359,65 @@ author_disambiguation_report # metrics below
 - **Sensitivity.** Re-run the §7 headline prediction under (a) full disambiguation,
   (b) exact-string-match authors, (c) last-name+initial only. If the discovery-prediction
   result is insensitive to this, that is important to know and to report.
+
+### 4.4 Measured results (implemented 2026-08-21)
+
+`motor_learning_network/disambiguate_authors.py`, 48 unit tests in
+`tests/test_disambiguate_authors.py`. Runs end to end in ~35 s on CPU.
+
+| Quantity | Value |
+|---|---|
+| Author mentions | 153,239 (after dropping 158 placeholder names) |
+| Blocks / candidate pairs | 78,123 / 554,175 |
+| Mentions anchored to an external identity | **121,865 (79.5%)** |
+| Anchor-supervised training pairs | 279,798 (66.8% positive) |
+| Canonical authors | **104,572** |
+| **Held-out pairwise precision / recall / F1** | **0.9976 / 0.9696 / 0.9834** |
+| **Held-out B-cubed precision / recall / F1** | **0.9977 / 0.9881 / 0.9929** |
+| Evaluated on | 24,088 mentions across 15,774 held-out identities |
+
+For comparison, the paper's integrative Scopus + PubMed Knowledge Graph
+disambiguation reports 98.0% F1 / 98.62% precision / 97.56% recall. This
+pipeline lands in the same range, at slightly higher precision and slightly
+lower recall — the intended trade, since a lumped author creates a false bridge
+in the hypergraph while a split one merely omits an edge.
+
+**Three findings worth recording.**
+
+1. **The first run scored a perfect 1.000 on every held-out metric — because it
+   was leaking.** Held-out identities were still being consumed by the
+   must-link pass, so the evaluation re-read the very identifiers it was meant
+   to predict. Fixed by clustering twice: a *production* run that uses every
+   anchor (the shipped artifact) and a *held-out* run that hides the evaluation
+   identities and must recover them from features alone. This is precisely the
+   failure §8.3 warns about, and it appeared within an hour of writing that
+   section — treat the leakage audits there as mandatory, not decorative.
+
+2. **Concatenated initials were splitting prolific researchers.** WoS writes
+   `Ivry, RB` where Scopus writes `Ivry, Richard B.`; read naively, `rb` looks
+   *contradictory* against `richard b`. Ivry, Wolpert, Shea, Magill and Haith
+   each carried a splintered duplicate identity. Handling the case merged 1,955
+   clusters and improved precision *and* recall simultaneously, confirming the
+   merges were real.
+
+3. **`log_block_size` fits with a positive weight**, i.e. crowded blocks make a
+   match *more* likely — the opposite of the intended penalty. It is a genuine
+   corpus property, not a bug: the largest blocks belong to prolific motor
+   learning researchers (104 of the 106 mentions in `wulf|g` are one person),
+   not to common surnames. Re-check the sign on any corpus where that does not
+   hold.
+
+**Known residual.** A handful of single-paper, initials-only mentions
+(`Wulf, G`, `Wolpert, DM`) stay separate from their main cluster: with no
+affiliation or shared coauthor to go on, they do not clear the deliberately high
+0.90 merge threshold. This is the precision-favouring trade working as intended
+and is already priced into the 0.970 recall. Face validity is strong — the
+largest canonical authors are Wulf (104 papers), Cohen (92), De Zeeuw (89),
+Newell (89), Wolpert (83), Masters (75), Swinnen (72), Bastian (70),
+Shadmehr (66), Krakauer (65).
+
+The output parquets under `data/processed/author_disambiguation/` are **not**
+committed; they need a `dvc add` on a machine with a working DVC remote.
 
 ---
 
