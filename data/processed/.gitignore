@@ -14,3 +14,5 @@
 /citation_network_without_layout.graphml
 /paper_text_for_embeddings_all.parquet
 /paper_text_for_embeddings_ready.parquet
+/neighbor_metadata.parquet
+/neighbor_metadata_errors.parquet

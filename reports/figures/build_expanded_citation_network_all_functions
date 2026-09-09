@@ -1,0 +1,40 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	"base_graph.loader" [label=<<b>base_graph.loader</b><br /><br /><i>base_graph()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	kept_external_dois [label=<<b>kept_external_dois</b><br /><br /><i>set</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	neighbor_metadata_df [label=<<b>neighbor_metadata_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	base_graph [label=<<b>base_graph</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	references_df [label=<<b>references_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_expanded_citation_network [label=<<b>save_expanded_citation_network</b><br /><br /><i>save_expanded_citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	graph_dois [label=<<b>graph_dois</b><br /><br /><i>set</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"neighbor_metadata_df.loader" [label=<<b>neighbor_metadata_df.loader</b><br /><br /><i>neighbor_metadata_df()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"references_df.loader" [label=<<b>references_df.loader</b><br /><br /><i>references_df()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	expanded_citation_network [label=<<b>expanded_citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"_base_graph.loader_inputs" [label=<<table border="0"><tr><td>base_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_base_graph.loader_inputs" -> "base_graph.loader"
+	neighbor_metadata_df -> kept_external_dois
+	"neighbor_metadata_df.loader" -> neighbor_metadata_df
+	"base_graph.loader" -> base_graph
+	"references_df.loader" -> references_df
+	expanded_citation_network -> save_expanded_citation_network
+	_save_expanded_citation_network_inputs [label=<<table border="0"><tr><td>output_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_expanded_citation_network_inputs -> save_expanded_citation_network
+	base_graph -> graph_dois
+	"_neighbor_metadata_df.loader_inputs" [label=<<table border="0"><tr><td>neighbor_metadata_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_neighbor_metadata_df.loader_inputs" -> "neighbor_metadata_df.loader"
+	"_references_df.loader_inputs" [label=<<table border="0"><tr><td>references_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_references_df.loader_inputs" -> "references_df.loader"
+	base_graph -> expanded_citation_network
+	neighbor_metadata_df -> expanded_citation_network
+	references_df -> expanded_citation_network
+	graph_dois -> expanded_citation_network
+	kept_external_dois -> expanded_citation_network
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}
