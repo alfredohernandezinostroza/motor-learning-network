@@ -3,39 +3,39 @@ digraph {
 	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
 	node [fillcolor="#ffffff"]
 	metadata_on_disk [label=<<b>metadata_on_disk</b><br /><br /><i>False</i>> fontname=Helvetica shape=note style=filled]
+	graph_dois [label=<<b>graph_dois</b><br /><br /><i>set</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	fetch_openalex_metadata [label=<<b>fetch_openalex_metadata</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	fetched_metadata_df [label=<<b>fetched_metadata_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	external_citation_counts [label=<<b>external_citation_counts</b><br /><br /><i>Counter</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	kept_external_dois [label=<<b>kept_external_dois</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	"references_df.loader" [label=<<b>references_df.loader</b><br /><br /><i>references_df()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	dois_to_query [label=<<b>dois_to_query: metadata_on_disk</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	error_metadata_df [label=<<b>error_metadata_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"citation_network.loader" [label=<<b>citation_network.loader</b><br /><br /><i>citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
 	references_df [label=<<b>references_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	citation_network [label=<<b>citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	dois_to_query [label=<<b>dois_to_query: metadata_on_disk</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	kept_external_dois [label=<<b>kept_external_dois</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	fetch_openalex_metadata [label=<<b>fetch_openalex_metadata</b><br /><br /><i>tuple</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	external_citation_counts [label=<<b>external_citation_counts</b><br /><br /><i>Counter</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	save_neighbor_metadata [label=<<b>save_neighbor_metadata</b><br /><br /><i>save_neighbor_metadata()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
 	save_neighbor_metadata_errors [label=<<b>save_neighbor_metadata_errors</b><br /><br /><i>save_neighbor_metadata_errors()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	graph_dois [label=<<b>graph_dois</b><br /><br /><i>set</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"citation_network.loader" [label=<<b>citation_network.loader</b><br /><br /><i>citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	fetched_metadata_df [label=<<b>fetched_metadata_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"_references_df.loader_inputs" [label=<<table border="0"><tr><td>references_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_references_df.loader_inputs" -> "references_df.loader"
-	fetch_openalex_metadata -> error_metadata_df
-	"references_df.loader" -> references_df
-	"citation_network.loader" -> citation_network
-	kept_external_dois -> dois_to_query
-	external_citation_counts -> kept_external_dois
+	citation_network -> graph_dois
 	dois_to_query -> fetch_openalex_metadata
+	fetch_openalex_metadata -> fetched_metadata_df
 	references_df -> external_citation_counts
 	graph_dois -> external_citation_counts
+	external_citation_counts -> kept_external_dois
+	"_references_df.loader_inputs" [label=<<table border="0"><tr><td>references_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_references_df.loader_inputs" -> "references_df.loader"
+	kept_external_dois -> dois_to_query
+	fetch_openalex_metadata -> error_metadata_df
+	"_citation_network.loader_inputs" [label=<<table border="0"><tr><td>citation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_citation_network.loader_inputs" -> "citation_network.loader"
+	"references_df.loader" -> references_df
+	"citation_network.loader" -> citation_network
 	fetched_metadata_df -> save_neighbor_metadata
 	_save_neighbor_metadata_inputs [label=<<table border="0"><tr><td>neighbor_metadata_path</td><td>Path</td></tr><tr><td>loaded_neighbor_metadata_df</td><td>DataFrame</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
 	_save_neighbor_metadata_inputs -> save_neighbor_metadata
 	error_metadata_df -> save_neighbor_metadata_errors
 	_save_neighbor_metadata_errors_inputs [label=<<table border="0"><tr><td>neighbor_metadata_errors_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
 	_save_neighbor_metadata_errors_inputs -> save_neighbor_metadata_errors
-	citation_network -> graph_dois
-	"_citation_network.loader_inputs" [label=<<table border="0"><tr><td>citation_network_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_citation_network.loader_inputs" -> "citation_network.loader"
-	fetch_openalex_metadata -> fetched_metadata_df
 	subgraph cluster__legend {
 		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
 		config [fontname=Helvetica shape=note style=filled]
