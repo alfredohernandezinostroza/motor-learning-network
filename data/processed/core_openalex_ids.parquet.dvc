@@ -1,0 +1,5 @@
+outs:
+- md5: 3d223e72a2a121a8cdf7654bce0ae8cb
+  size: 411369
+  hash: md5
+  path: core_openalex_ids.parquet

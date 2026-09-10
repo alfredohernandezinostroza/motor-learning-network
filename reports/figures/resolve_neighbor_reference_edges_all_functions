@@ -1,0 +1,55 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	core_openalex_ids_on_disk [label=<<b>core_openalex_ids_on_disk</b><br /><br /><i>True</i>> fontname=Helvetica shape=note style=filled]
+	core_dois_to_query [label=<<b>core_dois_to_query: core_openalex_ids_on_disk</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	openalex_id_to_doi [label=<<b>openalex_id_to_doi</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"neighbor_metadata_df.loader" [label=<<b>neighbor_metadata_df.loader</b><br /><br /><i>neighbor_metadata_df()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"loaded_core_openalex_ids_df.loader" [label=<<b>loaded_core_openalex_ids_df.loader</b><br /><br /><i>loaded_core_openalex_ids_df()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	core_openalex_ids_df [label=<<b>core_openalex_ids_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_expanded_citation_network_with_reference_edges [label=<<b>save_expanded_citation_network_with_reference_edges</b><br /><br /><i>save_expanded_citation_network_with_reference_edges()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	expanded_citation_network_with_reference_edges [label=<<b>expanded_citation_network_with_reference_edges</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_core_openalex_ids [label=<<b>save_core_openalex_ids</b><br /><br /><i>save_core_openalex_ids()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	expanded_graph [label=<<b>expanded_graph</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	reference_edges [label=<<b>reference_edges</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	fetched_core_metadata_df [label=<<b>fetched_core_metadata_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	core_dois [label=<<b>core_dois</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"expanded_graph.loader" [label=<<b>expanded_graph.loader</b><br /><br /><i>expanded_graph()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	loaded_core_openalex_ids_df [label=<<b>loaded_core_openalex_ids_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	neighbor_metadata_df [label=<<b>neighbor_metadata_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	core_dois -> core_dois_to_query
+	loaded_core_openalex_ids_df -> core_dois_to_query
+	neighbor_metadata_df -> openalex_id_to_doi
+	core_openalex_ids_df -> openalex_id_to_doi
+	"_neighbor_metadata_df.loader_inputs" [label=<<table border="0"><tr><td>neighbor_metadata_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_neighbor_metadata_df.loader_inputs" -> "neighbor_metadata_df.loader"
+	"_loaded_core_openalex_ids_df.loader_inputs" [label=<<table border="0"><tr><td>core_openalex_ids_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_loaded_core_openalex_ids_df.loader_inputs" -> "loaded_core_openalex_ids_df.loader"
+	fetched_core_metadata_df -> core_openalex_ids_df
+	loaded_core_openalex_ids_df -> core_openalex_ids_df
+	expanded_citation_network_with_reference_edges -> save_expanded_citation_network_with_reference_edges
+	_save_expanded_citation_network_with_reference_edges_inputs [label=<<table border="0"><tr><td>output_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_expanded_citation_network_with_reference_edges_inputs -> save_expanded_citation_network_with_reference_edges
+	expanded_graph -> expanded_citation_network_with_reference_edges
+	reference_edges -> expanded_citation_network_with_reference_edges
+	core_openalex_ids_df -> save_core_openalex_ids
+	_save_core_openalex_ids_inputs [label=<<table border="0"><tr><td>core_openalex_ids_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_core_openalex_ids_inputs -> save_core_openalex_ids
+	"expanded_graph.loader" -> expanded_graph
+	neighbor_metadata_df -> reference_edges
+	openalex_id_to_doi -> reference_edges
+	core_dois_to_query -> fetched_core_metadata_df
+	expanded_graph -> core_dois
+	"_expanded_graph.loader_inputs" [label=<<table border="0"><tr><td>expanded_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_expanded_graph.loader_inputs" -> "expanded_graph.loader"
+	"loaded_core_openalex_ids_df.loader" -> loaded_core_openalex_ids_df
+	"neighbor_metadata_df.loader" -> neighbor_metadata_df
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		config [fontname=Helvetica shape=note style=filled]
+		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}

@@ -34,3 +34,4 @@
 /citation_network_with_community_metrics.graphml
 /community_quality_metrics
 /citation_network_expanded_with_neighbors.graphml
+/citation_network_expanded_with_reference_edges.graphml
