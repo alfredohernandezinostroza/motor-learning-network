@@ -1,0 +1,5 @@
+outs:
+- md5: 94d9cf091459fcee3075884a227f7949
+  size: 40135
+  hash: md5
+  path: quality_metrics_per_partition.parquet
