@@ -2,23 +2,23 @@
 digraph {
 	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
 	node [fillcolor="#ffffff"]
-	base_graph [label=<<b>base_graph</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	laid_out_citation_network [label=<<b>laid_out_citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"base_graph.loader" [label=<<b>base_graph.loader</b><br /><br /><i>base_graph()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	seed_positions [label=<<b>seed_positions</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	relaxed_neighbor_positions [label=<<b>relaxed_neighbor_positions</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	base_graph [label=<<b>base_graph</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	save_laid_out_citation_network [label=<<b>save_laid_out_citation_network</b><br /><br /><i>save_laid_out_citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	"base_graph.loader" -> base_graph
-	base_graph -> laid_out_citation_network
-	relaxed_neighbor_positions -> laid_out_citation_network
-	"_base_graph.loader_inputs" [label=<<table border="0"><tr><td>input_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_base_graph.loader_inputs" -> "base_graph.loader"
-	base_graph -> seed_positions
+	"base_graph.loader" [label=<<b>base_graph.loader</b><br /><br /><i>base_graph()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	laid_out_citation_network [label=<<b>laid_out_citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	seed_positions [label=<<b>seed_positions</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	base_graph -> relaxed_neighbor_positions
 	seed_positions -> relaxed_neighbor_positions
+	"base_graph.loader" -> base_graph
 	laid_out_citation_network -> save_laid_out_citation_network
 	_save_laid_out_citation_network_inputs [label=<<table border="0"><tr><td>output_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
 	_save_laid_out_citation_network_inputs -> save_laid_out_citation_network
+	"_base_graph.loader_inputs" [label=<<table border="0"><tr><td>input_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_base_graph.loader_inputs" -> "base_graph.loader"
+	base_graph -> laid_out_citation_network
+	relaxed_neighbor_positions -> laid_out_citation_network
+	base_graph -> seed_positions
 	subgraph cluster__legend {
 		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
 		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]

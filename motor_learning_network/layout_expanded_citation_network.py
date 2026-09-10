@@ -9,22 +9,32 @@ core edges (see get_neighbor_metadata.py). Two stages instead:
 
   1. Deterministic seed (fast, no simulation). Every neighbor gets an angle
      (direction from the core's centroid to the centroid of its own core
-     anchors) and a radius (just outside the core's spatial extent, closer
-     in for "hub" neighbors with many core anchors, farther out for niche
-     ones) -- this alone guarantees a neighbor lands near the part of the
-     corpus it's actually connected to, not at a random angle.
-  2. Short force-directed relaxation, core pinned. `networkx.spring_layout`
-     with `fixed=<core node names>`, seeded from stage 1, using only edges
-     that touch at least one neighbor (core-core edges are dropped -- both
-     endpoints are frozen, so they contribute nothing to the relaxation).
-     Real neighbor-neighbor/neighbor-core edges (from
-     resolve_neighbor_reference_edges.py) now pull thematically-linked
-     neighbors together, not just toward their core anchors.
+     anchors) and a radius just outside the core's *local* spatial extent in
+     that direction. "Local" matters: the core isn't a disk around one
+     centroid, it's an irregular, elongated, multi-lobed shape (thin spokes
+     radiating out at various angles, a couple of separate island clusters)
+     -- a single global boundary distance badly misrepresents that, and in
+     several directions "just past the global boundary" is still deep
+     inside the real core mass. The boundary radius is computed per angular
+     bin instead. Radius also scales with hub-ness: closer in for
+     high-core-degree neighbors, farther out for niche ones.
+  2. Short force-directed relaxation restricted to the neighbor subgraph
+     ONLY. Core vertices and any edge touching one are excluded entirely,
+     not just frozen -- the first version pinned the core and kept
+     neighbor-core edges as attractive forces, and even a handful of
+     iterations dragged most neighbors right back into the core interior
+     (their core anchors are scattered throughout the interior, not on a
+     clean edge), undoing the seed almost completely. Restricting the
+     relaxation to neighbor-neighbor edges only lets thematically-linked
+     neighbors (from resolve_neighbor_reference_edges.py) cluster near each
+     other without anything pulling them back inward. This also cuts the
+     relaxation's O(n^2) repulsion cost roughly in proportion to
+     (31,774 / 54,756)^2, since core vertices aren't in that computation at all.
 
 Output: data/graph_level_data/citation_network_expanded_with_layout.graphml
   Same graph as citation_network_expanded_with_reference_edges.graphml;
-  core vertices' x/y are byte-identical (frozen), neighbor vertices get new
-  x/y from this module.
+  core vertices' x/y are byte-identical (untouched), neighbor vertices get
+  new x/y from this module.
 """
 
 import logging
@@ -66,21 +76,29 @@ OUTPUT_GRAPHML: Final[Path] = (
     GRAPH_LEVEL_DATA_PATH / "citation_network_expanded_with_layout.graphml"
 )
 
-# Percentile (not max) of core-vertex distances from the core centroid, so a
-# handful of outlier core nodes don't blow up the boundary radius.
+# Core-vertex distances from the centroid are binned by angle (10 degrees
+# each) so the boundary radius follows the core's actual (non-circular)
+# shape; within each bin, this percentile (not max) is used so a handful of
+# outlier core nodes don't blow up that bin's radius.
+NUM_ANGLE_BINS: Final[int] = 36
 CORE_BOUNDARY_PERCENTILE: Final[int] = 95
-# Seed radius = core_boundary_radius * (RADIUS_NEAR + RADIUS_SPREAD * (1 - hub_score)):
-# a pure hub (max core-degree) lands at RADIUS_NEAR x the boundary, a pure
-# niche neighbor (min core-degree) at (RADIUS_NEAR + RADIUS_SPREAD) x.
+# A handful of bins can still legitimately contain a thin, far-reaching
+# spoke of core papers (779-1,162 of them, not noise) rather than a small
+# sample -- measured up to ~5.4x the median bin radius. Left uncapped, a
+# neighbor whose anchor angle happens to point into one of those bins would
+# be seeded 5x farther out than everywhere else, blowing up the whole
+# plot's scale and squashing every other point into invisibility. Cap each
+# bin against the overall median so one spoke direction can't dominate.
+CORE_BOUNDARY_RADIUS_CAP_MULTIPLE: Final[float] = 2.0
+# Seed radius = local_boundary_radius * (RADIUS_NEAR + RADIUS_SPREAD * (1 - hub_score)):
+# a pure hub (max core-degree) lands at RADIUS_NEAR x the local boundary, a
+# pure niche neighbor (min core-degree) at (RADIUS_NEAR + RADIUS_SPREAD) x.
 RADIUS_NEAR: Final[float] = 1.05
 RADIUS_SPREAD: Final[float] = 0.6
 # Quick pass: the seed already encodes the meaningful structure; a short
-# relaxation just declutters local overlap without drifting far from it.
-# Measured on the real graph (54,756 vertices): networkx's spring_layout
-# computes repulsion densely (O(n^2)) internally, ~93s/iteration at this
-# scale -- 5 iterations (~8 min) is the "quick pass"; raise deliberately,
-# not by default, since cost scales linearly with iteration count.
-RELAXATION_ITERATIONS: Final[int] = 5
+# relaxation just lets neighbor-neighbor edges cluster related neighbors
+# without drifting far from it.
+RELAXATION_ITERATIONS: Final[int] = 10
 RELAXATION_SEED: Final[int] = 42
 
 #####################
@@ -94,14 +112,54 @@ def _core_centroid(graph: ig.Graph) -> tuple[float, float]:
     return (float(np.mean(xs)), float(np.mean(ys)))
 
 
-def _core_boundary_radius(
-    graph: ig.Graph, core_centroid: tuple[float, float], percentile: int = CORE_BOUNDARY_PERCENTILE
-) -> float:
+def _angle_bin(angle: float, num_bins: int) -> int:
+    bin_width = 2 * math.pi / num_bins
+    return int(((angle + math.pi) // bin_width) % num_bins)
+
+
+def _core_boundary_radii_by_angle(
+    graph: ig.Graph,
+    core_centroid: tuple[float, float],
+    num_bins: int = NUM_ANGLE_BINS,
+    percentile: int = CORE_BOUNDARY_PERCENTILE,
+) -> list[float]:
+    """Per-angle-bin boundary radius around core_centroid, following the
+    core's actual (non-circular) shape instead of one global distance."""
     cx, cy = core_centroid
-    distances = [
-        math.hypot(v["x"] - cx, v["y"] - cy) for v in graph.vs if v["is_original_node"] is True
-    ]
-    return float(np.percentile(distances, percentile))
+    bins: list[list[float]] = [[] for _ in range(num_bins)]
+    for v in graph.vs:
+        if v["is_original_node"] is not True:
+            continue
+        dx, dy = v["x"] - cx, v["y"] - cy
+        bins[_angle_bin(math.atan2(dy, dx), num_bins)].append(math.hypot(dx, dy))
+
+    radii = [float(np.percentile(b, percentile)) if b else None for b in bins]
+    if all(r is None for r in radii):
+        raise ValueError("No core vertices found to compute boundary radii.")
+
+    median_radius = float(np.median([r for r in radii if r is not None]))
+    cap = CORE_BOUNDARY_RADIUS_CAP_MULTIPLE * median_radius
+    radii = [min(r, cap) if r is not None else None for r in radii]
+
+    # Fill any empty bins (angular gaps with no core vertices) from the
+    # nearest non-empty bin, wrapping around the circle.
+    filled = list(radii)
+    for i, r in enumerate(radii):
+        if r is not None:
+            continue
+        for offset in range(1, num_bins):
+            for candidate in (i - offset, i + offset):
+                candidate %= num_bins
+                if radii[candidate] is not None:
+                    filled[i] = radii[candidate]
+                    break
+            if filled[i] is not None:
+                break
+    return filled
+
+
+def _boundary_radius_at_angle(angle: float, boundary_radii: list[float]) -> float:
+    return boundary_radii[_angle_bin(angle, len(boundary_radii))]
 
 
 def _core_anchor_stats(graph: ig.Graph) -> dict[str, dict]:
@@ -127,15 +185,9 @@ def _core_anchor_stats(graph: ig.Graph) -> dict[str, dict]:
     return stats
 
 
-def _seed_position(
-    anchor_centroid: tuple[float, float],
-    core_centroid: tuple[float, float],
-    core_degree: int,
-    core_boundary_radius: float,
-    min_core_degree: int,
-    max_core_degree: int,
-    doi: str,
-) -> tuple[float, float]:
+def _anchor_angle(
+    anchor_centroid: tuple[float, float], core_centroid: tuple[float, float], doi: str
+) -> float:
     cx, cy = core_centroid
     ax, ay = anchor_centroid
     dx, dy = ax - cx, ay - cy
@@ -143,10 +195,19 @@ def _seed_position(
         # Degenerate: anchors happen to average out to the core centroid
         # exactly. Fall back to a deterministic angle from the DOI so the
         # seed is still stable across reruns, rather than 0 for every such case.
-        angle = 2 * math.pi * (hash(doi) % 1000) / 1000
-    else:
-        angle = math.atan2(dy, dx)
+        return 2 * math.pi * (hash(doi) % 1000) / 1000 - math.pi
+    return math.atan2(dy, dx)
 
+
+def _seed_position(
+    angle: float,
+    core_centroid: tuple[float, float],
+    core_degree: int,
+    boundary_radius: float,
+    min_core_degree: int,
+    max_core_degree: int,
+) -> tuple[float, float]:
+    cx, cy = core_centroid
     if max_core_degree > min_core_degree:
         hub_score = (math.log(core_degree) - math.log(min_core_degree)) / (
             math.log(max_core_degree) - math.log(min_core_degree)
@@ -155,28 +216,79 @@ def _seed_position(
     else:
         hub_score = 0.0
 
-    radius = core_boundary_radius * (RADIUS_NEAR + RADIUS_SPREAD * (1 - hub_score))
+    radius = boundary_radius * (RADIUS_NEAR + RADIUS_SPREAD * (1 - hub_score))
     return (cx + radius * math.cos(angle), cy + radius * math.sin(angle))
 
 
 def _seed_positions(graph: ig.Graph) -> dict[str, tuple[float, float]]:
     core_centroid = _core_centroid(graph)
-    core_boundary_radius = _core_boundary_radius(graph, core_centroid)
+    boundary_radii = _core_boundary_radii_by_angle(graph, core_centroid)
     anchor_stats = _core_anchor_stats(graph)
     core_degrees = [stats["core_degree"] for stats in anchor_stats.values()]
     min_core_degree, max_core_degree = min(core_degrees), max(core_degrees)
 
-    return {
-        doi: _seed_position(
-            stats["centroid"],
+    positions = {}
+    for doi, stats in anchor_stats.items():
+        angle = _anchor_angle(stats["centroid"], core_centroid, doi)
+        boundary_radius = _boundary_radius_at_angle(angle, boundary_radii)
+        positions[doi] = _seed_position(
+            angle,
             core_centroid,
             stats["core_degree"],
-            core_boundary_radius,
+            boundary_radius,
             min_core_degree,
             max_core_degree,
-            doi,
         )
-        for doi, stats in anchor_stats.items()
+    return positions
+
+
+def _rescale_to_match(
+    reference: dict[str, tuple[float, float]], target: dict[str, tuple[float, float]]
+) -> dict[str, tuple[float, float]]:
+    """Rescale + recenter `target` so its centroid and average spread from
+    that centroid match `reference`'s. `networkx.spring_layout` silently
+    rescales its output to fit a unit circle around the origin whenever
+    `fixed` isn't set (it only preserves absolute coordinates when there
+    are frozen nodes to anchor the scale to) -- since the relaxation graph
+    has no core nodes at all, that rescale would otherwise collapse the
+    seed step's real-world coordinates into a tiny region overlapping the
+    core, invisible at that scale. This undoes the rescale while keeping
+    the *relative* rearrangement the relaxation produced."""
+    ref_keys = list(reference.keys())
+    ref_center = (
+        float(np.mean([reference[k][0] for k in ref_keys])),
+        float(np.mean([reference[k][1] for k in ref_keys])),
+    )
+    ref_spread = float(
+        np.mean(
+            [
+                math.hypot(reference[k][0] - ref_center[0], reference[k][1] - ref_center[1])
+                for k in ref_keys
+            ]
+        )
+    )
+
+    tgt_keys = list(target.keys())
+    tgt_center = (
+        float(np.mean([target[k][0] for k in tgt_keys])),
+        float(np.mean([target[k][1] for k in tgt_keys])),
+    )
+    tgt_spread = float(
+        np.mean(
+            [
+                math.hypot(target[k][0] - tgt_center[0], target[k][1] - tgt_center[1])
+                for k in tgt_keys
+            ]
+        )
+    )
+
+    scale = ref_spread / tgt_spread if tgt_spread > 0 else 1.0
+    return {
+        k: (
+            ref_center[0] + (target[k][0] - tgt_center[0]) * scale,
+            ref_center[1] + (target[k][1] - tgt_center[1]) * scale,
+        )
+        for k in tgt_keys
     }
 
 
@@ -186,34 +298,28 @@ def _relaxed_neighbor_positions(
     iterations: int = RELAXATION_ITERATIONS,
     seed: int = RELAXATION_SEED,
 ) -> dict[str, tuple[float, float]]:
-    """Force-directed relaxation with the core frozen in place. Core-core
-    edges are dropped from the relaxation graph -- both endpoints are fixed,
-    so they can't move and contribute no force to anything that can."""
+    """Force-directed relaxation restricted to the neighbor subgraph only --
+    core vertices and any edge touching one are excluded entirely, not just
+    frozen. The seed step already captured the core-anchor relationship (via
+    the anchor-derived angle/radius); keeping neighbor-core edges as
+    attractive forces here would just drag neighbors back toward those
+    (interior, not boundary) core points, undoing the seed."""
     is_core = {v["name"]: v["is_original_node"] is True for v in graph.vs}
-    core_positions = {
-        name: (v["x"], v["y"]) for v in graph.vs for name in [v["name"]] if is_core[name]
-    }
 
     relaxation_graph = nx.Graph()
-    relaxation_graph.add_nodes_from(is_core.keys())
+    relaxation_graph.add_nodes_from(seed_positions.keys())
     for e in graph.es:
         source_name = graph.vs[e.source]["name"]
         target_name = graph.vs[e.target]["name"]
-        if is_core[source_name] and is_core[target_name]:
+        if is_core[source_name] or is_core[target_name]:
             continue
         relaxation_graph.add_edge(source_name, target_name)
 
-    initial_positions = {**core_positions, **seed_positions}
-    fixed_nodes = list(core_positions.keys())
-
     new_positions = nx.spring_layout(
-        relaxation_graph,
-        pos=initial_positions,
-        fixed=fixed_nodes,
-        iterations=iterations,
-        seed=seed,
+        relaxation_graph, pos=seed_positions, iterations=iterations, seed=seed
     )
-    return {doi: tuple(new_positions[doi]) for doi in seed_positions}
+    neighbor_positions = {doi: tuple(new_positions[doi]) for doi in seed_positions}
+    return _rescale_to_match(seed_positions, neighbor_positions)
 
 
 def _apply_neighbor_positions(
