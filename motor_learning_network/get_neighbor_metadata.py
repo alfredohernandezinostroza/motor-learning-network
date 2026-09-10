@@ -36,17 +36,21 @@ from hamilton import driver
 from hamilton.function_modifiers import config, dataloader, datasaver, unpack_fields
 from hamilton.io import utils
 import hamilton.log_setup
+from hamilton_sdk import adapters
 import igraph as ig
 import pandas as pd
 import requests
 from tqdm import tqdm
 
 from motor_learning_network.constants import (
+    DEFAULT_UI_PROJECT_ID,
+    DEFAULT_UI_USERNAME,
     EMAIL,
     FIGURES_PATH,
     GRAPH_LEVEL_DATA_PATH,
     OPENALEX_API_KEY,
     PROCESSED_DATA_PATH,
+    TEAM_NAME,
 )
 
 ###################
@@ -249,10 +253,17 @@ def _main() -> int:
 
     import __main__
 
+    UI_CONFIG = adapters.HamiltonTracker(
+        project_id=DEFAULT_UI_PROJECT_ID,
+        username=DEFAULT_UI_USERNAME,
+        dag_name=CURRENT_FILE_NAME,
+        tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
+    )
     dr = (
         driver.Builder()
         .with_modules(__main__)
         .with_config(dict(metadata_on_disk=metadata_on_disk))
+        .with_adapters(UI_CONFIG)
         .build()
     )
 
