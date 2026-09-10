@@ -1,0 +1,175 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	"leiden_with_resolution_0.09" [label=<<b>leiden_with_resolution_0.09</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.003" [label=<<b>leiden_with_resolution_0.003</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.3" [label=<<b>leiden_with_resolution_0.3</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.005" [label=<<b>leiden_with_resolution_0.005</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.04" [label=<<b>leiden_with_resolution_0.04</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.008" [label=<<b>leiden_with_resolution_0.008</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.03" [label=<<b>leiden_with_resolution_0.03</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.06" [label=<<b>leiden_with_resolution_0.06</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	expanded_graph [label=<<b>expanded_graph</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.12" [label=<<b>leiden_with_resolution_0.12</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.5" [label=<<b>leiden_with_resolution_0.5</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.1" [label=<<b>leiden_with_resolution_0.1</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.007" [label=<<b>leiden_with_resolution_0.007</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.002" [label=<<b>leiden_with_resolution_0.002</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.07" [label=<<b>leiden_with_resolution_0.07</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.08" [label=<<b>leiden_with_resolution_0.08</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.02" [label=<<b>leiden_with_resolution_0.02</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.01" [label=<<b>leiden_with_resolution_0.01</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	neighbor_subgraph_with_communities [label=<<b>neighbor_subgraph_with_communities</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.18" [label=<<b>leiden_with_resolution_0.18</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.4" [label=<<b>leiden_with_resolution_0.4</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.15" [label=<<b>leiden_with_resolution_0.15</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.13" [label=<<b>leiden_with_resolution_0.13</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.2" [label=<<b>leiden_with_resolution_0.2</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.14" [label=<<b>leiden_with_resolution_0.14</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.8" [label=<<b>leiden_with_resolution_0.8</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.006" [label=<<b>leiden_with_resolution_0.006</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.004" [label=<<b>leiden_with_resolution_0.004</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.19" [label=<<b>leiden_with_resolution_0.19</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_communities_parquet [label=<<b>save_communities_parquet</b><br /><br /><i>save_communities_parquet()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	save_neighbor_citation_network_with_communities [label=<<b>save_neighbor_citation_network_with_communities</b><br /><br /><i>save_neighbor_citation_network_with_communities()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"leiden_with_resolution_0.05" [label=<<b>leiden_with_resolution_0.05</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.009" [label=<<b>leiden_with_resolution_0.009</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.9" [label=<<b>leiden_with_resolution_0.9</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.16" [label=<<b>leiden_with_resolution_0.16</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.11" [label=<<b>leiden_with_resolution_0.11</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.7" [label=<<b>leiden_with_resolution_0.7</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"expanded_graph.loader" [label=<<b>expanded_graph.loader</b><br /><br /><i>expanded_graph()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	neighbor_subgraph [label=<<b>neighbor_subgraph</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	communities_per_resolution_df [label=<<b>communities_per_resolution_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.6" [label=<<b>leiden_with_resolution_0.6</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.17" [label=<<b>leiden_with_resolution_0.17</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"leiden_with_resolution_0.001" [label=<<b>leiden_with_resolution_0.001</b><br /><br /><i>NodeClustering</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	neighbor_subgraph -> "leiden_with_resolution_0.09"
+	"_leiden_with_resolution_0.09_inputs" [label=<<table border="0"><tr><td>n_iterations</td><td>int</td></tr><tr><td>seed</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.09"
+	neighbor_subgraph -> "leiden_with_resolution_0.003"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.003"
+	neighbor_subgraph -> "leiden_with_resolution_0.3"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.3"
+	neighbor_subgraph -> "leiden_with_resolution_0.005"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.005"
+	neighbor_subgraph -> "leiden_with_resolution_0.04"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.04"
+	neighbor_subgraph -> "leiden_with_resolution_0.008"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.008"
+	neighbor_subgraph -> "leiden_with_resolution_0.03"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.03"
+	neighbor_subgraph -> "leiden_with_resolution_0.06"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.06"
+	"expanded_graph.loader" -> expanded_graph
+	neighbor_subgraph -> "leiden_with_resolution_0.12"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.12"
+	neighbor_subgraph -> "leiden_with_resolution_0.5"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.5"
+	neighbor_subgraph -> "leiden_with_resolution_0.1"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.1"
+	neighbor_subgraph -> "leiden_with_resolution_0.007"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.007"
+	neighbor_subgraph -> "leiden_with_resolution_0.002"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.002"
+	neighbor_subgraph -> "leiden_with_resolution_0.07"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.07"
+	neighbor_subgraph -> "leiden_with_resolution_0.08"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.08"
+	neighbor_subgraph -> "leiden_with_resolution_0.02"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.02"
+	neighbor_subgraph -> "leiden_with_resolution_0.01"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.01"
+	neighbor_subgraph -> neighbor_subgraph_with_communities
+	communities_per_resolution_df -> neighbor_subgraph_with_communities
+	neighbor_subgraph -> "leiden_with_resolution_0.18"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.18"
+	neighbor_subgraph -> "leiden_with_resolution_0.4"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.4"
+	neighbor_subgraph -> "leiden_with_resolution_0.15"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.15"
+	neighbor_subgraph -> "leiden_with_resolution_0.13"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.13"
+	neighbor_subgraph -> "leiden_with_resolution_0.2"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.2"
+	neighbor_subgraph -> "leiden_with_resolution_0.14"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.14"
+	neighbor_subgraph -> "leiden_with_resolution_0.8"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.8"
+	neighbor_subgraph -> "leiden_with_resolution_0.006"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.006"
+	neighbor_subgraph -> "leiden_with_resolution_0.004"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.004"
+	neighbor_subgraph -> "leiden_with_resolution_0.19"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.19"
+	communities_per_resolution_df -> save_communities_parquet
+	_save_communities_parquet_inputs [label=<<table border="0"><tr><td>communities_parquet_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_communities_parquet_inputs -> save_communities_parquet
+	neighbor_subgraph_with_communities -> save_neighbor_citation_network_with_communities
+	_save_neighbor_citation_network_with_communities_inputs [label=<<table border="0"><tr><td>output_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_neighbor_citation_network_with_communities_inputs -> save_neighbor_citation_network_with_communities
+	neighbor_subgraph -> "leiden_with_resolution_0.05"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.05"
+	neighbor_subgraph -> "leiden_with_resolution_0.009"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.009"
+	neighbor_subgraph -> "leiden_with_resolution_0.9"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.9"
+	neighbor_subgraph -> "leiden_with_resolution_0.16"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.16"
+	neighbor_subgraph -> "leiden_with_resolution_0.11"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.11"
+	neighbor_subgraph -> "leiden_with_resolution_0.7"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.7"
+	"_expanded_graph.loader_inputs" [label=<<table border="0"><tr><td>input_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_expanded_graph.loader_inputs" -> "expanded_graph.loader"
+	expanded_graph -> neighbor_subgraph
+	"leiden_with_resolution_0.001" -> communities_per_resolution_df
+	"leiden_with_resolution_0.002" -> communities_per_resolution_df
+	"leiden_with_resolution_0.003" -> communities_per_resolution_df
+	"leiden_with_resolution_0.004" -> communities_per_resolution_df
+	"leiden_with_resolution_0.005" -> communities_per_resolution_df
+	"leiden_with_resolution_0.006" -> communities_per_resolution_df
+	"leiden_with_resolution_0.007" -> communities_per_resolution_df
+	"leiden_with_resolution_0.008" -> communities_per_resolution_df
+	"leiden_with_resolution_0.009" -> communities_per_resolution_df
+	"leiden_with_resolution_0.01" -> communities_per_resolution_df
+	"leiden_with_resolution_0.02" -> communities_per_resolution_df
+	"leiden_with_resolution_0.03" -> communities_per_resolution_df
+	"leiden_with_resolution_0.04" -> communities_per_resolution_df
+	"leiden_with_resolution_0.05" -> communities_per_resolution_df
+	"leiden_with_resolution_0.06" -> communities_per_resolution_df
+	"leiden_with_resolution_0.07" -> communities_per_resolution_df
+	"leiden_with_resolution_0.08" -> communities_per_resolution_df
+	"leiden_with_resolution_0.09" -> communities_per_resolution_df
+	"leiden_with_resolution_0.1" -> communities_per_resolution_df
+	"leiden_with_resolution_0.11" -> communities_per_resolution_df
+	"leiden_with_resolution_0.12" -> communities_per_resolution_df
+	"leiden_with_resolution_0.13" -> communities_per_resolution_df
+	"leiden_with_resolution_0.14" -> communities_per_resolution_df
+	"leiden_with_resolution_0.15" -> communities_per_resolution_df
+	"leiden_with_resolution_0.16" -> communities_per_resolution_df
+	"leiden_with_resolution_0.17" -> communities_per_resolution_df
+	"leiden_with_resolution_0.18" -> communities_per_resolution_df
+	"leiden_with_resolution_0.19" -> communities_per_resolution_df
+	"leiden_with_resolution_0.2" -> communities_per_resolution_df
+	"leiden_with_resolution_0.3" -> communities_per_resolution_df
+	"leiden_with_resolution_0.4" -> communities_per_resolution_df
+	"leiden_with_resolution_0.5" -> communities_per_resolution_df
+	"leiden_with_resolution_0.6" -> communities_per_resolution_df
+	"leiden_with_resolution_0.7" -> communities_per_resolution_df
+	"leiden_with_resolution_0.8" -> communities_per_resolution_df
+	"leiden_with_resolution_0.9" -> communities_per_resolution_df
+	neighbor_subgraph -> "leiden_with_resolution_0.6"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.6"
+	neighbor_subgraph -> "leiden_with_resolution_0.17"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.17"
+	neighbor_subgraph -> "leiden_with_resolution_0.001"
+	"_leiden_with_resolution_0.09_inputs" -> "leiden_with_resolution_0.001"
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}
