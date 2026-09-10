@@ -1,0 +1,33 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	save_merged_citation_network [label=<<b>save_merged_citation_network</b><br /><br /><i>save_merged_citation_network()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	neighbor_graph [label=<<b>neighbor_graph</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	neighbor_vertex_metrics_df [label=<<b>neighbor_vertex_metrics_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	base_graph [label=<<b>base_graph</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	merged_citation_network [label=<<b>merged_citation_network</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	neighbor_graph_level_attributes [label=<<b>neighbor_graph_level_attributes</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"neighbor_graph.loader" [label=<<b>neighbor_graph.loader</b><br /><br /><i>neighbor_graph()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"base_graph.loader" [label=<<b>base_graph.loader</b><br /><br /><i>base_graph()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	merged_citation_network -> save_merged_citation_network
+	_save_merged_citation_network_inputs [label=<<table border="0"><tr><td>output_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_merged_citation_network_inputs -> save_merged_citation_network
+	"neighbor_graph.loader" -> neighbor_graph
+	neighbor_graph -> neighbor_vertex_metrics_df
+	"base_graph.loader" -> base_graph
+	base_graph -> merged_citation_network
+	neighbor_vertex_metrics_df -> merged_citation_network
+	neighbor_graph_level_attributes -> merged_citation_network
+	neighbor_graph -> neighbor_graph_level_attributes
+	"_neighbor_graph.loader_inputs" [label=<<table border="0"><tr><td>neighbor_metrics_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_neighbor_graph.loader_inputs" -> "neighbor_graph.loader"
+	"_base_graph.loader_inputs" [label=<<table border="0"><tr><td>layout_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_base_graph.loader_inputs" -> "base_graph.loader"
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}
