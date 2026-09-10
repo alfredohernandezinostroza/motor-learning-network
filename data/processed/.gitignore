@@ -16,3 +16,4 @@
 /paper_text_for_embeddings_ready.parquet
 /neighbor_metadata.parquet
 /neighbor_metadata_errors.parquet
+/core_openalex_ids.parquet
