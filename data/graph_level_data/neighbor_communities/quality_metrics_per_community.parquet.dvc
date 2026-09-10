@@ -1,0 +1,5 @@
+outs:
+- md5: b3a080dcf180f3d4e7646a293207c621
+  size: 179792
+  hash: md5
+  path: quality_metrics_per_community.parquet
