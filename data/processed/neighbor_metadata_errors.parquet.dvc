@@ -1,5 +1,5 @@
 outs:
-- md5: f5c5f31458caba67b53ceb87f663c236
-  size: 5293
+- md5: f5b37320f95f55143efb286dcd74e253
+  size: 3852
   hash: md5
   path: neighbor_metadata_errors.parquet

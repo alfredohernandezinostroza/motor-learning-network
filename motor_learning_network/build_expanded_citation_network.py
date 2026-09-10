@@ -22,13 +22,17 @@ from hamilton import driver
 from hamilton.function_modifiers import dataloader, datasaver
 from hamilton.io import utils
 import hamilton.log_setup
+from hamilton_sdk import adapters
 import igraph as ig
 import pandas as pd
 
 from motor_learning_network.constants import (
+    DEFAULT_UI_PROJECT_ID,
+    DEFAULT_UI_USERNAME,
     FIGURES_PATH,
     GRAPH_LEVEL_DATA_PATH,
     PROCESSED_DATA_PATH,
+    TEAM_NAME,
 )
 from motor_learning_network.get_neighbor_metadata import _normalize_doi
 
@@ -142,7 +146,13 @@ def _main() -> int:
 
     import __main__
 
-    dr = driver.Builder().with_modules(__main__).build()
+    UI_CONFIG = adapters.HamiltonTracker(
+        project_id=DEFAULT_UI_PROJECT_ID,
+        username=DEFAULT_UI_USERNAME,
+        dag_name=CURRENT_FILE_NAME,
+        tags={"environment": "DEV", "team": TEAM_NAME, "version": "0.1"},
+    )
+    dr = driver.Builder().with_modules(__main__).with_adapters(UI_CONFIG).build()
 
     dr.validate_execution(outputs, inputs=inputs)
     dr.display_all_functions(
