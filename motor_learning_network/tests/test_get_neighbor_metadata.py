@@ -85,6 +85,11 @@ def test_openalex_work_to_row_maps_expected_fields():
         "primary_location": {"source": {"display_name": "Journal of Motor Behavior"}},
         "ids": {"pmid": "https://pubmed.ncbi.nlm.nih.gov/12345678"},
         "publication_year": 2019,
+        "id": "https://openalex.org/W2100837269",
+        "referenced_works": [
+            "https://openalex.org/W1980521345",
+            "https://openalex.org/W2016739232",
+        ],
     }
 
     row = _openalex_work_to_row(work)
@@ -98,6 +103,8 @@ def test_openalex_work_to_row_maps_expected_fields():
     assert row["source_database"] == "OpenAlex"
     assert row["pubmed_id"] == "12345678"
     assert row["year"] == 2019
+    assert row["openalex_id"] == "W2100837269"
+    assert row["referenced_openalex_ids"] == ("W1980521345", "W2016739232")
 
 
 def test_openalex_work_to_row_handles_missing_optional_fields():
@@ -111,6 +118,8 @@ def test_openalex_work_to_row_handles_missing_optional_fields():
     assert row["journal"] == ""
     assert row["pubmed_id"] is None
     assert row["year"] is None
+    assert row["openalex_id"] is None
+    assert row["referenced_openalex_ids"] == ()
 
 
 def test_openalex_work_to_row_falls_back_to_host_venue():

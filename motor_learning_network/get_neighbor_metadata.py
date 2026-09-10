@@ -12,8 +12,14 @@ build_expanded_citation_network.py can attach them to the graph as new vertices.
 
 Outputs (data/processed/):
   neighbor_metadata.parquet         one row per successfully fetched external DOI,
-                                     same columns as clean_unified_database.parquet
-                                     (minus the leftover `index` column),
+                                     the same columns as clean_unified_database.parquet
+                                     (minus the leftover `index` column) plus
+                                     `openalex_id` and `referenced_openalex_ids`
+                                     (that neighbor's own outbound reference list, as
+                                     OpenAlex work IDs -- the OpenAlex response already
+                                     carries this alongside the descriptive metadata, so
+                                     capturing it here is free; resolving those IDs to
+                                     DOIs/graph edges is a separate follow-up step).
                                      source_database="OpenAlex".
   neighbor_metadata_errors.parquet  DOIs OpenAlex had no record for, or that
                                      failed to fetch -- retried on the next run.
@@ -69,7 +75,10 @@ NEIGHBOR_METADATA_ERRORS_PATH: Final[Path] = (
     PROCESSED_DATA_PATH / "neighbor_metadata_errors.parquet"
 )
 
-# Same column set as clean_unified_database.parquet, minus the leftover `index` column.
+# Same column set as clean_unified_database.parquet (minus the leftover `index`
+# column), plus openalex_id/referenced_openalex_ids -- the neighbor's own OpenAlex
+# identity and outbound reference list, absent from the main corpus (which has no
+# OpenAlex IDs) but free to capture here since it's already in the API response.
 METADATA_COLUMNS: Final[list[str]] = [
     "doi",
     "title",
@@ -80,6 +89,8 @@ METADATA_COLUMNS: Final[list[str]] = [
     "source_database",
     "pubmed_id",
     "year",
+    "openalex_id",
+    "referenced_openalex_ids",
 ]
 
 #####################
@@ -118,10 +129,17 @@ def _reconstruct_abstract_from_inverted_index(inverted_index: dict[str, list[int
     return " ".join(position_to_word[i] for i in sorted(position_to_word))
 
 
+def _strip_openalex_prefix(openalex_url: str) -> str:
+    return openalex_url.removeprefix("https://openalex.org/")
+
+
 def _openalex_work_to_row(work: dict) -> dict:
     """Map one OpenAlex `works` record to the shared metadata schema. `authors`
     joins display names (OpenAlex doesn't expose split first/last name parts,
-    so this is an approximation of the "Last, First" format used elsewhere)."""
+    so this is an approximation of the "Last, First" format used elsewhere).
+    `referenced_openalex_ids` is this work's own outbound reference list --
+    the OpenAlex response carries it alongside the descriptive fields, same
+    call, no extra request."""
     authors = "|".join(
         authorship.get("author", {}).get("display_name") or ""
         for authorship in work.get("authorships") or []
@@ -135,6 +153,7 @@ def _openalex_work_to_row(work: dict) -> dict:
     pmid = (work.get("ids") or {}).get("pmid")
     if pmid:
         pmid = pmid.removeprefix("https://pubmed.ncbi.nlm.nih.gov/").rstrip("/")
+    openalex_id = work.get("id")
     return {
         "doi": _normalize_doi(work.get("doi") or ""),
         "title": work.get("title") or "",
@@ -145,6 +164,10 @@ def _openalex_work_to_row(work: dict) -> dict:
         "source_database": "OpenAlex",
         "pubmed_id": pmid,
         "year": work.get("publication_year"),
+        "openalex_id": _strip_openalex_prefix(openalex_id) if openalex_id else None,
+        "referenced_openalex_ids": tuple(
+            _strip_openalex_prefix(ref) for ref in work.get("referenced_works") or []
+        ),
     }
 
 
@@ -175,6 +198,13 @@ def _fetch_openalex_metadata(dois_to_query: list[str]) -> tuple[pd.DataFrame, pd
                 {"doi": doi, "error_message": f"request error: {e}"} for doi in batch
             )
             continue
+        if result.status_code == 401 and "api_key" in params:
+            # OpenAlex's premium key can be rejected independently of the free
+            # "polite pool" (mailto-only) route -- fall back rather than fail
+            # the whole batch, since the polite pool alone is enough at our volume.
+            logger.warning("OpenAlex API key rejected (401); retrying this batch without it.")
+            params.pop("api_key")
+            result = requests.get(api_call, params=params)
         if result.status_code != 200:
             logger.warning(f"Status {result.status_code} for batch starting {batch[0]}")
             error_rows.extend(
