@@ -1,0 +1,5 @@
+outs:
+- md5: 06429043d073cb0f5db73e8b7f2c8c53
+  size: 309357765
+  hash: md5
+  path: neighbor_citation_network_with_community_keywords.graphml
