@@ -38,6 +38,7 @@ def tiny_neighbor_graph() -> ig.Graph:
     g.vs["internal_edge_surprise_at_res=0.003"] = [1.2, 1.2]
     g.vs["internal_directed_edge_count_at_res=0.003"] = [1, 1]
     g.vs["boundary_edge_count_at_res=0.003"] = [0, 0]
+    g.vs["top_keywords_at_res=0.003"] = ["Motor Learning; Cerebellum", "Motor Learning; Cerebellum"]
     g["modularity_at_res=0.003"] = 0.42
     g["number_of_communities_at_res=0.003"] = 1
     g["some_unrelated_graph_attribute"] = "not resolution-tagged, must not transfer"
@@ -74,6 +75,23 @@ def test_merge_neighbor_vertex_attributes_leaves_core_untouched_and_nan(
     assert neighbor_col_by_name["n2"] == 0
 
 
+def test_merge_neighbor_vertex_attributes_blanks_string_columns_for_core(
+    tiny_base_graph, tiny_neighbor_graph
+):
+    """String columns (top_keywords) get "" for core vertices, not NaN --
+    reindex fills every missing cell with float NaN regardless of dtype, and
+    a mixed str/float column silently loses the whole attribute on GraphML
+    write (see _merge_neighbor_vertex_attributes's docstring)."""
+    metrics_df = _neighbor_vertex_metrics_df(tiny_neighbor_graph, resolutions=[0.003])
+    merged = _merge_neighbor_vertex_attributes(tiny_base_graph, metrics_df)
+
+    top_keywords_by_name = dict(
+        zip(merged.vs["name"], merged.vs["neighbor_top_keywords_at_res=0.003"])
+    )
+    assert top_keywords_by_name["core-a"] == ""
+    assert top_keywords_by_name["n1"] == "Motor Learning; Cerebellum"
+
+
 def test_merge_neighbor_vertex_attributes_transfers_all_metric_columns(
     tiny_base_graph, tiny_neighbor_graph
 ):
@@ -89,6 +107,7 @@ def test_merge_neighbor_vertex_attributes_transfers_all_metric_columns(
         "internal_edge_surprise",
         "internal_directed_edge_count",
         "boundary_edge_count",
+        "top_keywords",
     ]:
         assert f"neighbor_{metric}_at_res=0.003" in merged.vs.attributes()
 

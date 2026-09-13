@@ -1,8 +1,9 @@
-"""Merge the neighbor-only community assignments + quality metrics (at the
-7-resolution plateau scored by `neighbor_community_quality_metrics.py`) onto
-the laid-out, combined core+neighbor graph from
-`layout_expanded_citation_network.py`, so a single graphml carries both the
-halo layout and the neighbor communities for one Gephi load.
+"""Merge the neighbor-only community assignments + quality metrics + top
+differentiating keywords (at the 7-resolution plateau scored by
+`neighbor_community_quality_metrics.py` and named by
+`neighbor_community_keywords.py`) onto the laid-out, combined core+neighbor
+graph from `layout_expanded_citation_network.py`, so a single graphml carries
+the halo layout, the neighbor communities, and their names for one Gephi load.
 
 Every transferred column is prefixed `neighbor_`. This is not cosmetic: the
 neighbor-only detection (`detect_neighbor_communities.py`) is a SEPARATE
@@ -62,7 +63,7 @@ LAYOUT_GRAPHML: Final[Path] = (
 NEIGHBOR_METRICS_GRAPHML: Final[Path] = (
     GRAPH_LEVEL_DATA_PATH
     / "neighbor_communities"
-    / "neighbor_citation_network_with_community_metrics.graphml"
+    / "neighbor_citation_network_with_community_keywords.graphml"
 )
 OUTPUT_GRAPHML: Final[Path] = (
     GRAPH_LEVEL_DATA_PATH
@@ -72,6 +73,8 @@ OUTPUT_GRAPHML: Final[Path] = (
 # The per-vertex quality-metric columns neighbor_community_quality_metrics.py
 # writes onto each scored resolution, in addition to the community
 # assignment itself (handled separately since it's renamed, not just prefixed).
+# "top_keywords" is neighbor_community_keywords.py's addition -- nan for
+# vertices whose community fell below SUBSTANTIVE_COMMUNITY_MIN_SIZE there.
 NEIGHBOR_VERTEX_METRIC_NAMES: Final[list[str]] = [
     "community_size",
     "conductance",
@@ -81,6 +84,7 @@ NEIGHBOR_VERTEX_METRIC_NAMES: Final[list[str]] = [
     "internal_edge_surprise",
     "internal_directed_edge_count",
     "boundary_edge_count",
+    "top_keywords",
 ]
 
 #####################
@@ -109,10 +113,18 @@ def _merge_neighbor_vertex_attributes(
     base_graph: ig.Graph, neighbor_metrics_df: pd.DataFrame
 ) -> ig.Graph:
     """Left-join `neighbor_metrics_df` onto `base_graph` by vertex name;
-    core vertices (absent from the neighbor-only index) get nan."""
+    core vertices (absent from the neighbor-only index) get nan on numeric
+    columns. String columns (e.g. `top_keywords`) get "" instead: `reindex`
+    fills every missing cell with float NaN regardless of column dtype, and a
+    string column mixing `str` and `float` silently loses the whole
+    attribute when igraph writes the graphml (it isn't just stringified like
+    a scalar None -- the attribute never round-trips at all)."""
     ordered = neighbor_metrics_df.reindex(base_graph.vs["name"])
     for column in ordered.columns:
-        base_graph.vs[column] = ordered[column].tolist()
+        if pd.api.types.is_numeric_dtype(ordered[column]):
+            base_graph.vs[column] = ordered[column].tolist()
+        else:
+            base_graph.vs[column] = ordered[column].fillna("").tolist()
     return base_graph
 
 
