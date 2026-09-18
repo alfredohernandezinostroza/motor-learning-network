@@ -5,3 +5,4 @@
 /quality_metrics_per_partition.parquet
 /neighbor_citation_network_with_community_keywords.graphml
 /community_keywords_per_resolution.parquet
+/neighbor_citation_network_with_author_keywords.graphml

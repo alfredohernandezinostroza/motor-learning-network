@@ -1,0 +1,53 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	neighbor_graph_with_author_keywords [label=<<b>neighbor_graph_with_author_keywords</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_neighbor_graph_with_author_keywords [label=<<b>save_neighbor_graph_with_author_keywords</b><br /><br /><i>save_neighbor_graph_with_author_keywords()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	pmids_to_query [label=<<b>pmids_to_query</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_author_keywords_parquet [label=<<b>save_author_keywords_parquet</b><br /><br /><i>save_author_keywords_parquet()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	save_layout_graph_with_author_keywords [label=<<b>save_layout_graph_with_author_keywords</b><br /><br /><i>save_layout_graph_with_author_keywords()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	neighbor_metadata_df [label=<<b>neighbor_metadata_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	author_keywords_df [label=<<b>author_keywords_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"neighbor_metadata_df.loader" [label=<<b>neighbor_metadata_df.loader</b><br /><br /><i>neighbor_metadata_df()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	layout_graph_with_author_keywords [label=<<b>layout_graph_with_author_keywords</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	neighbor_communities_graph [label=<<b>neighbor_communities_graph</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"layout_graph.loader" [label=<<b>layout_graph.loader</b><br /><br /><i>layout_graph()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	author_keywords_by_doi [label=<<b>author_keywords_by_doi</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	layout_graph [label=<<b>layout_graph</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"neighbor_communities_graph.loader" [label=<<b>neighbor_communities_graph.loader</b><br /><br /><i>neighbor_communities_graph()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	author_keywords_by_pmid [label=<<b>author_keywords_by_pmid</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	neighbor_communities_graph -> neighbor_graph_with_author_keywords
+	author_keywords_by_doi -> neighbor_graph_with_author_keywords
+	neighbor_graph_with_author_keywords -> save_neighbor_graph_with_author_keywords
+	_save_neighbor_graph_with_author_keywords_inputs [label=<<table border="0"><tr><td>output_neighbor_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_neighbor_graph_with_author_keywords_inputs -> save_neighbor_graph_with_author_keywords
+	neighbor_metadata_df -> pmids_to_query
+	author_keywords_df -> save_author_keywords_parquet
+	_save_author_keywords_parquet_inputs [label=<<table border="0"><tr><td>author_keywords_parquet_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_author_keywords_parquet_inputs -> save_author_keywords_parquet
+	layout_graph_with_author_keywords -> save_layout_graph_with_author_keywords
+	_save_layout_graph_with_author_keywords_inputs [label=<<table border="0"><tr><td>output_layout_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_layout_graph_with_author_keywords_inputs -> save_layout_graph_with_author_keywords
+	"neighbor_metadata_df.loader" -> neighbor_metadata_df
+	neighbor_metadata_df -> author_keywords_df
+	author_keywords_by_pmid -> author_keywords_df
+	"_neighbor_metadata_df.loader_inputs" [label=<<table border="0"><tr><td>neighbor_metadata_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_neighbor_metadata_df.loader_inputs" -> "neighbor_metadata_df.loader"
+	layout_graph -> layout_graph_with_author_keywords
+	author_keywords_by_doi -> layout_graph_with_author_keywords
+	"neighbor_communities_graph.loader" -> neighbor_communities_graph
+	"_layout_graph.loader_inputs" [label=<<table border="0"><tr><td>layout_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_layout_graph.loader_inputs" -> "layout_graph.loader"
+	author_keywords_df -> author_keywords_by_doi
+	"layout_graph.loader" -> layout_graph
+	"_neighbor_communities_graph.loader_inputs" [label=<<table border="0"><tr><td>neighbor_communities_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_neighbor_communities_graph.loader_inputs" -> "neighbor_communities_graph.loader"
+	pmids_to_query -> author_keywords_by_pmid
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}

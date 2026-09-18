@@ -17,3 +17,4 @@
 /neighbor_metadata.parquet
 /neighbor_metadata_errors.parquet
 /core_openalex_ids.parquet
+/neighbor_author_keywords.parquet

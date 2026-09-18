@@ -31,7 +31,7 @@ def neighbor_metadata_df() -> pd.DataFrame:
             "title": ["External Paper 1", "External Paper 2"],
             "authors": ["Doe, Jane", "Smith, John"],
             "abstract": ["", ""],
-            "keywords": ["", ""],
+            "openalex_topics": ["", ""],
             "journal": ["Some Journal", "Another Journal"],
             "source_database": ["OpenAlex", "OpenAlex"],
             "year": [2020, 2021],

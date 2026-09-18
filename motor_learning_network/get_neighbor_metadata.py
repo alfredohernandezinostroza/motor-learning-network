@@ -83,12 +83,19 @@ NEIGHBOR_METADATA_ERRORS_PATH: Final[Path] = (
 # column), plus openalex_id/referenced_openalex_ids -- the neighbor's own OpenAlex
 # identity and outbound reference list, absent from the main corpus (which has no
 # OpenAlex IDs) but free to capture here since it's already in the API response.
+#
+# NOTE: `openalex_topics` (not `keywords`) -- OpenAlex has no author-supplied
+# keyword field. What it calls "topics" is an algorithmically-assigned label
+# (BERT classifier over title/abstract/citations, trained on citation-network
+# clusters), not the genuine author keywords the core corpus's `keywords`
+# column holds. See fetch_neighbor_author_keywords.py for the real thing,
+# fetched separately from PubMed.
 METADATA_COLUMNS: Final[list[str]] = [
     "doi",
     "title",
     "authors",
     "abstract",
-    "keywords",
+    "openalex_topics",
     "journal",
     "source_database",
     "pubmed_id",
@@ -150,7 +157,7 @@ def _openalex_work_to_row(work: dict) -> dict:
     )
     location = work.get("primary_location") or work.get("host_venue") or {}
     source = location.get("source") or location
-    keywords = "|".join(
+    openalex_topics = "|".join(
         entry.get("display_name") or ""
         for entry in (work.get("topics") or work.get("concepts") or [])
     )
@@ -163,7 +170,7 @@ def _openalex_work_to_row(work: dict) -> dict:
         "title": work.get("title") or "",
         "authors": authors,
         "abstract": _reconstruct_abstract_from_inverted_index(work.get("abstract_inverted_index")),
-        "keywords": keywords,
+        "openalex_topics": openalex_topics,
         "journal": (source or {}).get("display_name") or "",
         "source_database": "OpenAlex",
         "pubmed_id": pmid,

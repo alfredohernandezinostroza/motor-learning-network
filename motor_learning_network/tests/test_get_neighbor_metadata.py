@@ -98,7 +98,7 @@ def test_openalex_work_to_row_maps_expected_fields():
     assert row["title"] == "A Study of Motor Learning"
     assert row["authors"] == "Jane Doe|John Smith"
     assert row["abstract"] == "Motor learning."
-    assert row["keywords"] == "Motor control|Cerebellum"
+    assert row["openalex_topics"] == "Motor control|Cerebellum"
     assert row["journal"] == "Journal of Motor Behavior"
     assert row["source_database"] == "OpenAlex"
     assert row["pubmed_id"] == "12345678"
@@ -114,7 +114,7 @@ def test_openalex_work_to_row_handles_missing_optional_fields():
     assert row["title"] == ""
     assert row["authors"] == ""
     assert row["abstract"] == ""
-    assert row["keywords"] == ""
+    assert row["openalex_topics"] == ""
     assert row["journal"] == ""
     assert row["pubmed_id"] is None
     assert row["year"] is None
