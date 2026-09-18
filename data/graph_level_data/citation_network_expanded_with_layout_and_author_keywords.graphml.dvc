@@ -1,0 +1,5 @@
+outs:
+- md5: 68122ffae6f45aae107271a453e116fb
+  size: 187100644
+  hash: md5
+  path: citation_network_expanded_with_layout_and_author_keywords.graphml

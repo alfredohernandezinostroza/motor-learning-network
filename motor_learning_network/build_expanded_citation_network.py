@@ -60,7 +60,7 @@ NEIGHBOR_METADATA_ATTRIBUTES: Final[list[str]] = [
     "title",
     "authors",
     "abstract",
-    "keywords",
+    "openalex_topics",
     "journal",
     "source_database",
     "year",
