@@ -32,11 +32,17 @@ Gephi's GraphML importer has no data model for graph-level attributes (see
 [[expand-citation-network-neighbors-workstream]] memory), so a graph-level
 "community -> keywords" map would be silently dropped on import.
 
+Names are computed over GENUINE author keywords (Scopus, with PubMed as
+fallback -- 54.4% of neighbours), so they are the same kind of object as the
+core corpus's own community names. Coverage is partial but sufficient: every
+community at or above `SUBSTANTIVE_COMMUNITY_MIN_SIZE` still has at least 3
+keyworded members (median 53% of a community's members carry keywords).
+
 Outputs (data/graph_level_data/neighbor_communities/):
-  neighbor_citation_network_with_community_keywords.graphml
-      neighbor_citation_network_with_community_metrics.graphml plus
+  neighbor_citation_network_with_author_keyword_names.graphml
+      neighbor_citation_network_with_scopus_keywords.graphml plus
       `top_keywords_at_res=<r>` vertex columns for each of the 7 resolutions.
-  community_keywords_per_resolution.parquet
+  community_author_keywords_per_resolution.parquet
       one row per (resolution, community_id) with its size and top keywords,
       for quick human review without opening the graphml.
 """
@@ -89,12 +95,26 @@ MIN_COMMUNITY_SIZE: Final[int] = SUBSTANTIVE_COMMUNITY_MIN_SIZE
 _res_node_names: Final[list[str]] = [f"res_{str(r).replace('.', '_')}" for r in RESOLUTIONS]
 
 OUTPUT_DIR: Final[Path] = GRAPH_LEVEL_DATA_PATH / "neighbor_communities"
-INPUT_GRAPHML: Final[Path] = OUTPUT_DIR / "neighbor_citation_network_with_community_metrics.graphml"
+# Reads the graph carrying REAL author keywords (Scopus, PubMed fallback),
+# not the bare community-metrics graph. Until 2026-09-21 the `keywords`
+# attribute on the neighbour graphs silently held OpenAlex's algorithmic Topic
+# labels, so the community names this module produced were TF-IDF over topics
+# -- a different kind of label from the core corpus's author-supplied
+# keywords, and not comparable with it. See fetch_neighbor_scopus_keywords.py.
+INPUT_GRAPHML: Final[Path] = OUTPUT_DIR / "neighbor_citation_network_with_scopus_keywords.graphml"
 SYNONYM_DICT_PATH: Final[Path] = (
     RAW_DATA_PATH / f"keyword_synonyms_{SYNONYMS_THRESHOLD}_with_transitivity.json"
 )
-OUTPUT_GRAPHML: Final[Path] = OUTPUT_DIR / "neighbor_citation_network_with_community_keywords.graphml"
-COMMUNITY_KEYWORDS_PARQUET: Final[Path] = OUTPUT_DIR / "community_keywords_per_resolution.parquet"
+# Distinct from the superseded topic-based artifacts
+# (neighbor_citation_network_with_community_keywords.graphml /
+# community_keywords_per_resolution.parquet), which are kept so the two
+# namings can be compared rather than silently replaced.
+OUTPUT_GRAPHML: Final[Path] = (
+    OUTPUT_DIR / "neighbor_citation_network_with_author_keyword_names.graphml"
+)
+COMMUNITY_KEYWORDS_PARQUET: Final[Path] = (
+    OUTPUT_DIR / "community_author_keywords_per_resolution.parquet"
+)
 
 #####################
 ##  Aux Functions  ##
