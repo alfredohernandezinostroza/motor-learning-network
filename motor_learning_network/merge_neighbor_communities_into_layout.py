@@ -63,7 +63,7 @@ LAYOUT_GRAPHML: Final[Path] = (
 NEIGHBOR_METRICS_GRAPHML: Final[Path] = (
     GRAPH_LEVEL_DATA_PATH
     / "neighbor_communities"
-    / "neighbor_citation_network_with_scopus_keywords.graphml"
+    / "neighbor_citation_network_with_author_keyword_names.graphml"
 )
 OUTPUT_GRAPHML: Final[Path] = (
     GRAPH_LEVEL_DATA_PATH

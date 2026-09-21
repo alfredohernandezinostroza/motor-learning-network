@@ -2,50 +2,78 @@
 digraph {
 	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
 	node [fillcolor="#ffffff"]
-	canonical_corpus_res_0_007 [label=<<b>canonical_corpus_res_0_007</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	top_keywords_by_community_res_0_003 [label=<<b>top_keywords_by_community_res_0_003</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	canonical_corpus_res_0_009 [label=<<b>canonical_corpus_res_0_009</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	synonym_map [label=<<b>synonym_map</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"neighbor_graph.loader" [label=<<b>neighbor_graph.loader</b><br /><br /><i>neighbor_graph()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	filtered_keywords_df_res_0_008 [label=<<b>filtered_keywords_df_res_0_008</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	top_keywords_per_resolution [label=<<b>top_keywords_per_resolution</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	synonym_dict [label=<<b>synonym_dict</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	top_keywords_by_community_res_0_006 [label=<<b>top_keywords_by_community_res_0_006</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	filtered_keywords_df_res_0_007 [label=<<b>filtered_keywords_df_res_0_007</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	top_keywords_by_community_res_0_008 [label=<<b>top_keywords_by_community_res_0_008</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	canonical_corpus_res_0_004 [label=<<b>canonical_corpus_res_0_004</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	filtered_keywords_df_res_0_009 [label=<<b>filtered_keywords_df_res_0_009</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	top_keywords_by_community_res_0_004 [label=<<b>top_keywords_by_community_res_0_004</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	canonical_corpus_res_0_005 [label=<<b>canonical_corpus_res_0_005</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	canonical_corpus_res_0_006 [label=<<b>canonical_corpus_res_0_006</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	top_keywords_by_community_res_0_009 [label=<<b>top_keywords_by_community_res_0_009</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	"synonym_dict.loader" [label=<<b>synonym_dict.loader</b><br /><br /><i>synonym_dict()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	save_community_keywords_parquet [label=<<b>save_community_keywords_parquet</b><br /><br /><i>save_community_keywords_parquet()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	filtered_keywords_df_res_0_004 [label=<<b>filtered_keywords_df_res_0_004</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	community_keywords_df [label=<<b>community_keywords_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	canonical_corpus_res_0_003 [label=<<b>canonical_corpus_res_0_003</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	canonical_corpus_res_0_008 [label=<<b>canonical_corpus_res_0_008</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	top_keywords_by_community_res_0_005 [label=<<b>top_keywords_by_community_res_0_005</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	filtered_keywords_df_res_0_005 [label=<<b>filtered_keywords_df_res_0_005</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	filtered_keywords_df_res_0_006 [label=<<b>filtered_keywords_df_res_0_006</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	filtered_keywords_df_res_0_003 [label=<<b>filtered_keywords_df_res_0_003</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	top_keywords_by_community_res_0_007 [label=<<b>top_keywords_by_community_res_0_007</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	neighbor_graph_with_keywords [label=<<b>neighbor_graph_with_keywords</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
-	neighbor_graph [label=<<b>neighbor_graph</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	top_keywords_by_community_res_0_003 [label=<<b>top_keywords_by_community_res_0_003</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"synonym_dict.loader" [label=<<b>synonym_dict.loader</b><br /><br /><i>synonym_dict()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	synonym_map [label=<<b>synonym_map</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	filtered_keywords_df_res_0_006 [label=<<b>filtered_keywords_df_res_0_006</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_community_keywords_parquet [label=<<b>save_community_keywords_parquet</b><br /><br /><i>save_community_keywords_parquet()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	canonical_corpus_res_0_008 [label=<<b>canonical_corpus_res_0_008</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	canonical_corpus_res_0_003 [label=<<b>canonical_corpus_res_0_003</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	canonical_corpus_res_0_005 [label=<<b>canonical_corpus_res_0_005</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	filtered_keywords_df_res_0_003 [label=<<b>filtered_keywords_df_res_0_003</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
 	save_neighbor_graph_with_keywords [label=<<b>save_neighbor_graph_with_keywords</b><br /><br /><i>save_neighbor_graph_with_keywords()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
-	filtered_keywords_df_res_0_007 -> canonical_corpus_res_0_007
-	synonym_map -> canonical_corpus_res_0_007
+	top_keywords_by_community_res_0_006 [label=<<b>top_keywords_by_community_res_0_006</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	canonical_corpus_res_0_004 [label=<<b>canonical_corpus_res_0_004</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	filtered_keywords_df_res_0_008 [label=<<b>filtered_keywords_df_res_0_008</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	top_keywords_by_community_res_0_004 [label=<<b>top_keywords_by_community_res_0_004</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	community_keywords_df [label=<<b>community_keywords_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	synonym_dict [label=<<b>synonym_dict</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	neighbor_graph [label=<<b>neighbor_graph</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	filtered_keywords_df_res_0_005 [label=<<b>filtered_keywords_df_res_0_005</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	filtered_keywords_df_res_0_009 [label=<<b>filtered_keywords_df_res_0_009</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	top_keywords_per_resolution [label=<<b>top_keywords_per_resolution</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	filtered_keywords_df_res_0_007 [label=<<b>filtered_keywords_df_res_0_007</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	top_keywords_by_community_res_0_005 [label=<<b>top_keywords_by_community_res_0_005</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	canonical_corpus_res_0_007 [label=<<b>canonical_corpus_res_0_007</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	top_keywords_by_community_res_0_009 [label=<<b>top_keywords_by_community_res_0_009</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	filtered_keywords_df_res_0_004 [label=<<b>filtered_keywords_df_res_0_004</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	top_keywords_by_community_res_0_008 [label=<<b>top_keywords_by_community_res_0_008</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	canonical_corpus_res_0_006 [label=<<b>canonical_corpus_res_0_006</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	canonical_corpus_res_0_009 [label=<<b>canonical_corpus_res_0_009</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"neighbor_graph.loader" [label=<<b>neighbor_graph.loader</b><br /><br /><i>neighbor_graph()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	neighbor_graph_with_keywords [label=<<b>neighbor_graph_with_keywords</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	canonical_corpus_res_0_007 -> top_keywords_by_community_res_0_007
+	_top_keywords_by_community_res_0_007_inputs [label=<<table border="0"><tr><td>top_n_keywords</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_top_keywords_by_community_res_0_007_inputs -> top_keywords_by_community_res_0_007
 	canonical_corpus_res_0_003 -> top_keywords_by_community_res_0_003
-	_top_keywords_by_community_res_0_003_inputs [label=<<table border="0"><tr><td>top_n_keywords</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	_top_keywords_by_community_res_0_003_inputs -> top_keywords_by_community_res_0_003
-	filtered_keywords_df_res_0_009 -> canonical_corpus_res_0_009
-	synonym_map -> canonical_corpus_res_0_009
+	_top_keywords_by_community_res_0_007_inputs -> top_keywords_by_community_res_0_003
+	"_synonym_dict.loader_inputs" [label=<<table border="0"><tr><td>synonym_dict_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_synonym_dict.loader_inputs" -> "synonym_dict.loader"
 	synonym_dict -> synonym_map
-	"_neighbor_graph.loader_inputs" [label=<<table border="0"><tr><td>input_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_neighbor_graph.loader_inputs" -> "neighbor_graph.loader"
+	neighbor_graph -> filtered_keywords_df_res_0_006
+	_filtered_keywords_df_res_0_006_inputs [label=<<table border="0"><tr><td>min_community_size</td><td>int</td></tr><tr><td>keyword_dividing_character</td><td>str</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_filtered_keywords_df_res_0_006_inputs -> filtered_keywords_df_res_0_006
+	community_keywords_df -> save_community_keywords_parquet
+	_save_community_keywords_parquet_inputs [label=<<table border="0"><tr><td>community_keywords_parquet_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_community_keywords_parquet_inputs -> save_community_keywords_parquet
+	filtered_keywords_df_res_0_008 -> canonical_corpus_res_0_008
+	synonym_map -> canonical_corpus_res_0_008
+	filtered_keywords_df_res_0_003 -> canonical_corpus_res_0_003
+	synonym_map -> canonical_corpus_res_0_003
+	filtered_keywords_df_res_0_005 -> canonical_corpus_res_0_005
+	synonym_map -> canonical_corpus_res_0_005
+	neighbor_graph -> filtered_keywords_df_res_0_003
+	_filtered_keywords_df_res_0_006_inputs -> filtered_keywords_df_res_0_003
+	neighbor_graph_with_keywords -> save_neighbor_graph_with_keywords
+	_save_neighbor_graph_with_keywords_inputs [label=<<table border="0"><tr><td>output_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_neighbor_graph_with_keywords_inputs -> save_neighbor_graph_with_keywords
+	canonical_corpus_res_0_006 -> top_keywords_by_community_res_0_006
+	_top_keywords_by_community_res_0_007_inputs -> top_keywords_by_community_res_0_006
+	filtered_keywords_df_res_0_004 -> canonical_corpus_res_0_004
+	synonym_map -> canonical_corpus_res_0_004
 	neighbor_graph -> filtered_keywords_df_res_0_008
-	_filtered_keywords_df_res_0_008_inputs [label=<<table border="0"><tr><td>keyword_dividing_character</td><td>str</td></tr><tr><td>min_community_size</td><td>int</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	_filtered_keywords_df_res_0_008_inputs -> filtered_keywords_df_res_0_008
+	_filtered_keywords_df_res_0_006_inputs -> filtered_keywords_df_res_0_008
+	canonical_corpus_res_0_004 -> top_keywords_by_community_res_0_004
+	_top_keywords_by_community_res_0_007_inputs -> top_keywords_by_community_res_0_004
+	neighbor_graph -> community_keywords_df
+	top_keywords_per_resolution -> community_keywords_df
+	"synonym_dict.loader" -> synonym_dict
+	"neighbor_graph.loader" -> neighbor_graph
+	neighbor_graph -> filtered_keywords_df_res_0_005
+	_filtered_keywords_df_res_0_006_inputs -> filtered_keywords_df_res_0_005
+	neighbor_graph -> filtered_keywords_df_res_0_009
+	_filtered_keywords_df_res_0_006_inputs -> filtered_keywords_df_res_0_009
 	top_keywords_by_community_res_0_003 -> top_keywords_per_resolution
 	top_keywords_by_community_res_0_004 -> top_keywords_per_resolution
 	top_keywords_by_community_res_0_005 -> top_keywords_per_resolution
@@ -53,54 +81,26 @@ digraph {
 	top_keywords_by_community_res_0_007 -> top_keywords_per_resolution
 	top_keywords_by_community_res_0_008 -> top_keywords_per_resolution
 	top_keywords_by_community_res_0_009 -> top_keywords_per_resolution
-	"synonym_dict.loader" -> synonym_dict
-	canonical_corpus_res_0_006 -> top_keywords_by_community_res_0_006
-	_top_keywords_by_community_res_0_003_inputs -> top_keywords_by_community_res_0_006
 	neighbor_graph -> filtered_keywords_df_res_0_007
-	_filtered_keywords_df_res_0_008_inputs -> filtered_keywords_df_res_0_007
+	_filtered_keywords_df_res_0_006_inputs -> filtered_keywords_df_res_0_007
+	canonical_corpus_res_0_005 -> top_keywords_by_community_res_0_005
+	_top_keywords_by_community_res_0_007_inputs -> top_keywords_by_community_res_0_005
+	filtered_keywords_df_res_0_007 -> canonical_corpus_res_0_007
+	synonym_map -> canonical_corpus_res_0_007
+	canonical_corpus_res_0_009 -> top_keywords_by_community_res_0_009
+	_top_keywords_by_community_res_0_007_inputs -> top_keywords_by_community_res_0_009
+	neighbor_graph -> filtered_keywords_df_res_0_004
+	_filtered_keywords_df_res_0_006_inputs -> filtered_keywords_df_res_0_004
 	canonical_corpus_res_0_008 -> top_keywords_by_community_res_0_008
-	_top_keywords_by_community_res_0_003_inputs -> top_keywords_by_community_res_0_008
-	filtered_keywords_df_res_0_004 -> canonical_corpus_res_0_004
-	synonym_map -> canonical_corpus_res_0_004
-	neighbor_graph -> filtered_keywords_df_res_0_009
-	_filtered_keywords_df_res_0_008_inputs -> filtered_keywords_df_res_0_009
-	canonical_corpus_res_0_004 -> top_keywords_by_community_res_0_004
-	_top_keywords_by_community_res_0_003_inputs -> top_keywords_by_community_res_0_004
-	filtered_keywords_df_res_0_005 -> canonical_corpus_res_0_005
-	synonym_map -> canonical_corpus_res_0_005
+	_top_keywords_by_community_res_0_007_inputs -> top_keywords_by_community_res_0_008
 	filtered_keywords_df_res_0_006 -> canonical_corpus_res_0_006
 	synonym_map -> canonical_corpus_res_0_006
-	canonical_corpus_res_0_009 -> top_keywords_by_community_res_0_009
-	_top_keywords_by_community_res_0_003_inputs -> top_keywords_by_community_res_0_009
-	"_synonym_dict.loader_inputs" [label=<<table border="0"><tr><td>synonym_dict_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	"_synonym_dict.loader_inputs" -> "synonym_dict.loader"
-	community_keywords_df -> save_community_keywords_parquet
-	_save_community_keywords_parquet_inputs [label=<<table border="0"><tr><td>community_keywords_parquet_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	_save_community_keywords_parquet_inputs -> save_community_keywords_parquet
-	neighbor_graph -> filtered_keywords_df_res_0_004
-	_filtered_keywords_df_res_0_008_inputs -> filtered_keywords_df_res_0_004
-	neighbor_graph -> community_keywords_df
-	top_keywords_per_resolution -> community_keywords_df
-	filtered_keywords_df_res_0_003 -> canonical_corpus_res_0_003
-	synonym_map -> canonical_corpus_res_0_003
-	filtered_keywords_df_res_0_008 -> canonical_corpus_res_0_008
-	synonym_map -> canonical_corpus_res_0_008
-	canonical_corpus_res_0_005 -> top_keywords_by_community_res_0_005
-	_top_keywords_by_community_res_0_003_inputs -> top_keywords_by_community_res_0_005
-	neighbor_graph -> filtered_keywords_df_res_0_005
-	_filtered_keywords_df_res_0_008_inputs -> filtered_keywords_df_res_0_005
-	neighbor_graph -> filtered_keywords_df_res_0_006
-	_filtered_keywords_df_res_0_008_inputs -> filtered_keywords_df_res_0_006
-	neighbor_graph -> filtered_keywords_df_res_0_003
-	_filtered_keywords_df_res_0_008_inputs -> filtered_keywords_df_res_0_003
-	canonical_corpus_res_0_007 -> top_keywords_by_community_res_0_007
-	_top_keywords_by_community_res_0_003_inputs -> top_keywords_by_community_res_0_007
+	filtered_keywords_df_res_0_009 -> canonical_corpus_res_0_009
+	synonym_map -> canonical_corpus_res_0_009
+	"_neighbor_graph.loader_inputs" [label=<<table border="0"><tr><td>input_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_neighbor_graph.loader_inputs" -> "neighbor_graph.loader"
 	neighbor_graph -> neighbor_graph_with_keywords
 	top_keywords_per_resolution -> neighbor_graph_with_keywords
-	"neighbor_graph.loader" -> neighbor_graph
-	neighbor_graph_with_keywords -> save_neighbor_graph_with_keywords
-	_save_neighbor_graph_with_keywords_inputs [label=<<table border="0"><tr><td>output_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
-	_save_neighbor_graph_with_keywords_inputs -> save_neighbor_graph_with_keywords
 	subgraph cluster__legend {
 		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
 		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
