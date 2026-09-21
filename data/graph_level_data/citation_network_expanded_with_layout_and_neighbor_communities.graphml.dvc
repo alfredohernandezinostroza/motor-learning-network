@@ -1,5 +1,5 @@
 outs:
-- md5: bf60bf511131306f50c19e81ae65527c
-  size: 391208680
+- md5: 3f698c4308e1a22a60fd280464b54e3b
+  size: 383139750
   hash: md5
   path: citation_network_expanded_with_layout_and_neighbor_communities.graphml

@@ -1,0 +1,5 @@
+outs:
+- md5: 0031e85d6fdd3ad15d3a356a5e74bc06
+  size: 313676752
+  hash: md5
+  path: neighbor_citation_network_with_scopus_keywords.graphml

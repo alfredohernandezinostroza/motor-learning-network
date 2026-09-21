@@ -1,0 +1,5 @@
+outs:
+- md5: 46ea4dcade7e1b9cc886e6476288e0d0
+  size: 191021987
+  hash: md5
+  path: citation_network_expanded_with_layout_and_scopus_keywords.graphml
