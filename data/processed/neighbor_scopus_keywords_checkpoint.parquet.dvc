@@ -1,0 +1,5 @@
+outs:
+- md5: da8a8d75aff62a46809cdc49993fb63b
+  size: 1077836
+  hash: md5
+  path: neighbor_scopus_keywords_checkpoint.parquet

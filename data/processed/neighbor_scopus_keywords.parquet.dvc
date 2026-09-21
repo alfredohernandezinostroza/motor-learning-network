@@ -1,0 +1,5 @@
+outs:
+- md5: 95436ca89ed3561635b89505f54efbfa
+  size: 2049510
+  hash: md5
+  path: neighbor_scopus_keywords.parquet

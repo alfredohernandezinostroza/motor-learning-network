@@ -6,3 +6,6 @@
 /neighbor_citation_network_with_community_keywords.graphml
 /community_keywords_per_resolution.parquet
 /neighbor_citation_network_with_author_keywords.graphml
+/neighbor_citation_network_with_scopus_keywords.graphml
+/neighbor_citation_network_with_author_keyword_names.graphml
+/community_author_keywords_per_resolution.parquet

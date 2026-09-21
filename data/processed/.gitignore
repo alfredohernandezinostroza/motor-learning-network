@@ -18,3 +18,5 @@
 /neighbor_metadata_errors.parquet
 /core_openalex_ids.parquet
 /neighbor_author_keywords.parquet
+/neighbor_scopus_keywords.parquet
+/neighbor_scopus_keywords_checkpoint.parquet

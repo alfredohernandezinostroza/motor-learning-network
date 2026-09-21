@@ -1,0 +1,5 @@
+outs:
+- md5: 6fe96bb16e0e71b3d93ca963b9d47db7
+  size: 22110
+  hash: md5
+  path: community_author_keywords_per_resolution.parquet
