@@ -58,12 +58,12 @@ logger = logging.getLogger(__name__)
 EXECUTE = True
 
 LAYOUT_GRAPHML: Final[Path] = (
-    GRAPH_LEVEL_DATA_PATH / "citation_network_expanded_with_layout_and_author_keywords.graphml"
+    GRAPH_LEVEL_DATA_PATH / "citation_network_expanded_with_layout_and_scopus_keywords.graphml"
 )
 NEIGHBOR_METRICS_GRAPHML: Final[Path] = (
     GRAPH_LEVEL_DATA_PATH
     / "neighbor_communities"
-    / "neighbor_citation_network_with_author_keywords.graphml"
+    / "neighbor_citation_network_with_scopus_keywords.graphml"
 )
 OUTPUT_GRAPHML: Final[Path] = (
     GRAPH_LEVEL_DATA_PATH

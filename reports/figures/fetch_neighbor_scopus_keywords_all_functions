@@ -1,0 +1,65 @@
+// Dependency Graph
+digraph {
+	graph [compound=true concentrate=true rankdir=LR ranksep=0.4 style=filled]
+	node [fillcolor="#ffffff"]
+	neighbor_graph [label=<<b>neighbor_graph</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"neighbor_metadata_df.loader" [label=<<b>neighbor_metadata_df.loader</b><br /><br /><i>neighbor_metadata_df()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	keywords_source_by_doi [label=<<b>keywords_source_by_doi</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	neighbor_metadata_df [label=<<b>neighbor_metadata_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"pubmed_keywords_df.loader" [label=<<b>pubmed_keywords_df.loader</b><br /><br /><i>pubmed_keywords_df()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	save_neighbor_graph_with_scopus_keywords [label=<<b>save_neighbor_graph_with_scopus_keywords</b><br /><br /><i>save_neighbor_graph_with_scopus_keywords()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	layout_graph [label=<<b>layout_graph</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	pubmed_keywords_df [label=<<b>pubmed_keywords_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	layout_graph_with_scopus_keywords [label=<<b>layout_graph_with_scopus_keywords</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	neighbor_graph_with_scopus_keywords [label=<<b>neighbor_graph_with_scopus_keywords</b><br /><br /><i>Graph</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"layout_graph.loader" [label=<<b>layout_graph.loader</b><br /><br /><i>layout_graph()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	neighbor_dois [label=<<b>neighbor_dois</b><br /><br /><i>list</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	scopus_keywords_by_doi [label=<<b>scopus_keywords_by_doi</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_layout_graph_with_scopus_keywords [label=<<b>save_layout_graph_with_scopus_keywords</b><br /><br /><i>save_layout_graph_with_scopus_keywords()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	author_keywords_by_doi [label=<<b>author_keywords_by_doi</b><br /><br /><i>dict</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	save_scopus_keywords_parquet [label=<<b>save_scopus_keywords_parquet</b><br /><br /><i>save_scopus_keywords_parquet()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	combined_keywords_df [label=<<b>combined_keywords_df</b><br /><br /><i>DataFrame</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+	"neighbor_graph.loader" [label=<<b>neighbor_graph.loader</b><br /><br /><i>neighbor_graph()</i>> fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=cylinder style="rounded,filled"]
+	"neighbor_graph.loader" -> neighbor_graph
+	"_neighbor_metadata_df.loader_inputs" [label=<<table border="0"><tr><td>neighbor_metadata_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_neighbor_metadata_df.loader_inputs" -> "neighbor_metadata_df.loader"
+	combined_keywords_df -> keywords_source_by_doi
+	"neighbor_metadata_df.loader" -> neighbor_metadata_df
+	"_pubmed_keywords_df.loader_inputs" [label=<<table border="0"><tr><td>pubmed_keywords_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_pubmed_keywords_df.loader_inputs" -> "pubmed_keywords_df.loader"
+	neighbor_graph_with_scopus_keywords -> save_neighbor_graph_with_scopus_keywords
+	_save_neighbor_graph_with_scopus_keywords_inputs [label=<<table border="0"><tr><td>output_neighbor_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_neighbor_graph_with_scopus_keywords_inputs -> save_neighbor_graph_with_scopus_keywords
+	"layout_graph.loader" -> layout_graph
+	"pubmed_keywords_df.loader" -> pubmed_keywords_df
+	layout_graph -> layout_graph_with_scopus_keywords
+	author_keywords_by_doi -> layout_graph_with_scopus_keywords
+	keywords_source_by_doi -> layout_graph_with_scopus_keywords
+	neighbor_graph -> neighbor_graph_with_scopus_keywords
+	author_keywords_by_doi -> neighbor_graph_with_scopus_keywords
+	keywords_source_by_doi -> neighbor_graph_with_scopus_keywords
+	"_layout_graph.loader_inputs" [label=<<table border="0"><tr><td>layout_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_layout_graph.loader_inputs" -> "layout_graph.loader"
+	neighbor_metadata_df -> neighbor_dois
+	neighbor_dois -> scopus_keywords_by_doi
+	_scopus_keywords_by_doi_inputs [label=<<table border="0"><tr><td>proxy_url</td><td>str</td></tr><tr><td>checkpoint_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_scopus_keywords_by_doi_inputs -> scopus_keywords_by_doi
+	layout_graph_with_scopus_keywords -> save_layout_graph_with_scopus_keywords
+	_save_layout_graph_with_scopus_keywords_inputs [label=<<table border="0"><tr><td>output_layout_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_layout_graph_with_scopus_keywords_inputs -> save_layout_graph_with_scopus_keywords
+	combined_keywords_df -> author_keywords_by_doi
+	combined_keywords_df -> save_scopus_keywords_parquet
+	_save_scopus_keywords_parquet_inputs [label=<<table border="0"><tr><td>scopus_keywords_parquet_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	_save_scopus_keywords_parquet_inputs -> save_scopus_keywords_parquet
+	neighbor_metadata_df -> combined_keywords_df
+	scopus_keywords_by_doi -> combined_keywords_df
+	pubmed_keywords_df -> combined_keywords_df
+	"_neighbor_graph.loader_inputs" [label=<<table border="0"><tr><td>neighbor_graphml_path</td><td>Path</td></tr></table>> fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+	"_neighbor_graph.loader_inputs" -> "neighbor_graph.loader"
+	subgraph cluster__legend {
+		graph [fillcolor="#ffffff" fontname=helvetica label=Legend rank=same]
+		input [fontname=Helvetica margin=0.15 shape=rectangle style="filled,dashed"]
+		function [fillcolor="#b4d8e4" fontname=Helvetica margin=0.15 shape=rectangle style="rounded,filled"]
+		materializer [fontname=Helvetica margin="0.15,0.1" shape=cylinder style=filled]
+	}
+}
